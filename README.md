@@ -7,7 +7,7 @@ endure scorn for using `not-empty` instead of `seq`. Also for people
 who think the semicolon is the prince of punctuation.
 
 
-<a title="By Euterpia (Own work) [CC0], via Wikimedia Commons" href="http://commons.wikimedia.org/wiki/File%3ADoge_homemade_meme.jpg"><img width="256" alt="Doge homemade meme" src="//upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg"/></a>
+[![By Euterpia (Own work) [CC0], via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)]
 
 [![Build Status](https://travis-ci.org/marick/suchwow.png?branch=master)](https://travis-ci.org/marick/suchwow)
 
