@@ -1,4 +1,4 @@
-# Such Wow
+## Such Wow
 
 Clojure functions for those *proud* of always having to stop and think
 before using `some`; disinclined to remember which functions take
@@ -6,11 +6,12 @@ namespaces, which take symbols, and which take both; and willing to
 endure scorn for using `not-empty` instead of `seq`. Also for people
 who think the semicolon is the prince of punctuation.
 
-![Doge](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg#/media/File:Doge_homemade_meme.jpg)
+
+<a title="By Euterpia (Own work) [CC0], via Wikimedia Commons" href="http://commons.wikimedia.org/wiki/File%3ADoge_homemade_meme.jpg"><img width="256" alt="Doge homemade meme" src="//upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg"/></a>
 
 [![Build Status](https://travis-ci.org/marick/suchwow.png?branch=master)](https://travis-ci.org/marick/suchwow)
 
-# Such Usage
+## Such Usage
 
 Available via [clojars](http://clojars.org/search?q=suchwow)   
 For lein: [marick/suchwow "0.1.0"]     
@@ -18,19 +19,19 @@ For lein: [marick/suchwow "0.1.0"]
 The functions are packaged so that you can do the usual `(:require
 [such.types :as wow])` thing. Alternately, you can compose them into
 your own private addition to `clojure.core`, whereupon you can adorn
-any namespace with:
+any namespace declaration with:
 
     (:use marick.clojure.core) ; yes: `use`. Glorious, terse `use`.
 
-The file `test/such/clojure/core.clj` shows you how to arrange for that.
+The file `test/such/clojure/core.clj` shows how to arrange for that to work.
 
 
-# Such License
+## Such License
 
 This software is covered by the [Unlicense](http://unlicense.org/)
 and, as such, is in the public domain.
 
-# Such Contributing
+## Such Contributing
 
 Pull requests accepted, provided:
 
