@@ -1,13 +1,13 @@
 ## Such Wow
 
 Clojure functions for those *proud* of always having to stop and think
-before using `some`; disinclined to remember which functions take
-namespaces, which take symbols, and which take both; and willing to
+before using `some`; those disinclined to remember which functions take
+namespaces, which take symbols, and which take both; and those willing to
 endure scorn for using `not-empty` instead of `seq`. Also for people
 who think the semicolon is the prince of punctuation.
 
 
-[![By Euterpia (Own work) [CC0], via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)]
+![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)
 
 [![Build Status](https://travis-ci.org/marick/suchwow.png?branch=master)](https://travis-ci.org/marick/suchwow)
 
