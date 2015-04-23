@@ -5,18 +5,10 @@
 
 (defn- move-var! [var sym]
   (when (vars/has-root-value? var)
-    (let [already-exists (find-var (symbol (name (ns-name *ns*)) (name sym)))]
-      (cond (not already-exists)
-            (apply intern
-                   *ns*
-                   (with-meta sym (assoc (meta var)
-                                         :ns *ns*
-                                         :created-by-move-var? true))
-                   (if (.hasRoot var)
-                     (vector (vars/root-value var))
-                     []))
-            (not (-> already-exists meta :created-by-move-var?))
-            (println (format "Note: `%s` already exists in `%s`. Not replacing." sym *ns*))))))
+    (ns-unmap *ns* sym)
+    (intern *ns*
+            (with-meta sym (meta var))
+            (vars/root-value var))))
 
 (defn namespaces
   "Create a public var in this namespace for each public var in the

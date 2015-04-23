@@ -1,5 +1,8 @@
 (ns such.shorthand)
 
+
+(def this-var-has-no-value-and-is-used-in-testing)
+
 (defn any?
   "Return true if `pred` is true of any value in `coll`, false otherwise."
   [pred coll]
