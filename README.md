@@ -8,7 +8,7 @@ who think the semicolon is the prince of punctuation.
 
 
 ![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)     
-[Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)
+[via Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)
 
 [![Build Status](https://travis-ci.org/marick/suchwow.png?branch=master)](https://travis-ci.org/marick/suchwow)
 
