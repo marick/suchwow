@@ -1,9 +1,11 @@
 ## Such Wow
 
 Clojure functions for those *proud* of always having to stop and think
-before using `some`; those disinclined to remember which functions take
-namespaces, which take symbols, and which take both; and those willing to
-endure scorn for using `not-empty` instead of `seq`. Also for people
+before using `some`; for those disinclined to remember which functions take
+namespaces, which take symbols, and which take both; and for those willing to
+endure scorn for using `not-empty` instead of `seq`.
+
+Also for people
 who think the semicolon is the prince of punctuation.
 
 
@@ -24,7 +26,7 @@ any namespace declaration with:
 
     (:use marick.clojure.core) ; yes: `use`. Glorious, terse `use`.
 
-The file `test/such/clojure/core.clj` shows how to arrange for that to work.
+The file [`test/such/clojure/core.clj`] shows how to arrange for that to work.
 
 
 ## Such License
