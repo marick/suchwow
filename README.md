@@ -17,7 +17,7 @@ who think the semicolon is the prince of punctuation.
 ## Such Usage
 
 Available via [clojars](http://clojars.org/search?q=suchwow)   
-For lein: [marick/suchwow "0.1.0"]     
+For lein: [marick/suchwow "0.2.0"]     
 
 The functions are packaged so that you can do the usual `(:require
 [such.types :as wow])` thing. Alternately, you can compose them into
@@ -26,7 +26,7 @@ any namespace declaration with:
 
     (:use marick.clojure.core) ; yes: `use`. Glorious, terse `use`.
 
-The file [`test/such/clojure/core.clj`] shows how to arrange for that to work.
+The file [`test/such/clojure/core.clj`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj) shows how to arrange for that to work.
 
 
 ## Such License
