@@ -1,6 +1,11 @@
 (ns such.ns
-  (:refer-clojure :exclude [find-ns in-ns]))
+  (use such.types))
+
+(defmacro with-scratch-namespace [& body]
+  `(try
+     (create-ns 'scratch.namespace)
+     ~@body
+   (finally
+     (remove-ns 'scratch.namespace))))
 
 
-
-(defn find-ns [])
