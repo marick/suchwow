@@ -1,26 +1,44 @@
 (ns such.casts
   (:use such.types))
 
+(defn- badtype [name]
+  (throw (new Exception (str "Bad argument type for " name))))
+
+(defn- var-name [var] (:name (meta var)))
+(defn- no-namespace [sym] (symbol (name sym)))
+
 ;; Util
-(defn- as-ns-symbol
-  "If the arg is a namespace, cast it to a symbol naming it.
-   A symbol arg is returned unchanged.
-   In all other cases, an Exception is thrown.
-   Use with namespace functions that require a symbol (find-ns, etc.)"
-  [ns-or-symbol]
-  (cond (namespace? ns-or-symbol) (ns-name ns-or-symbol)
-        (symbol? ns-or-symbol) symbol
-        :else (throw (new Exception "`ns-name` takes a symbol or namespace"))))
+(defn as-ns-symbol
+  "The argument *must* be a symbol, namespace, or string. In all cases, 
+   the result is a symbol with no namespace:
 
-(defn- as-var-name-symbol
-  "If the arg is a var, cast it to a symbol with the same name.
-   Note that the symbol will not be namespace-qualified.
-   If the arg is a symbol, a symbol without any namespace qualification is returned.
-   In all other cases, an Exception is thrown.
-   Use with namespace functions that require a symbol (ns-resolve, etc.)"
-  [symbol-or-var]
-  (if (symbol? symbol-or-var)
-    symbol-or-var
-    (:name (meta symbol-or-var))))
+       (as-ns-symbol *ns*) => 'such.casts    
+       (as-ns-symbol \"clojure.core\") => 'clojure.core    
+       (as-ns-symbol 'clojure.core) => 'clojure.core    
+       (as-ns-symbol 'clojure.core/food.dinner) => 'food.dinner
 
+   Use with namespace functions that require a symbol ([[find-ns]], etc.) or 
+   with functions that return some sort of reference to a namespace. (For example, 
+   `(namespace 'a/a)` returns a string.)"
+  [arg]
+  (cond (namespace? arg) (ns-name arg)
+        (symbol? arg) (no-namespace arg)
+        (string? arg) (symbol arg)
+        :else (badtype 'as-ns-symbol)))
+
+(defn as-var-name-symbol
+  "The argument *must* be a symbol, string, or var. In all cases, the 
+   result is a symbol without a namespace:
+
+       (as-var-name-symbol 'clojure.core/even?) => 'even?
+       (as-var-name-symbol #'clojure.core/even?) => 'even?
+       (as-var-name-symbol \"even?\") => 'even?
+
+   Use with namespace functions that require a symbol ([[ns-resolve]], etc.)"
+  [arg]
+  (cond (var? arg) (var-name arg)
+        (symbol? arg) (no-namespace arg)
+        (string? arg) (symbol arg)
+        :else (badtype 'as-var-name-symbol)))
+  
 
