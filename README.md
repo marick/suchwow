@@ -18,7 +18,8 @@ who think the semicolon is the prince of punctuation.
 
 Available via [clojars](http://clojars.org/search?q=suchwow)   
 For lein: [marick/suchwow "0.2.0"]     
-Much API docs: https://github.com/marick/suchwow/blob/master/doc/index.html
+
+[Much API doc](https://github.com/marick/suchwow/blob/master/doc/index.html)
 
 The functions are packaged so that you can do the usual `(:require
 [such.types :as wow])` thing. Alternately, you can compose them into
