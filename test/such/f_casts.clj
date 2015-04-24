@@ -13,6 +13,6 @@
   (cast/as-var-name-symbol 'foo) => 'foo
   (cast/as-var-name-symbol 'clojure.core/foo) => 'foo
   (cast/as-var-name-symbol #'clojure.core/even?) => 'even?
-  (cast/as-var-name-symbol #'local) => 'localnxxg
+  (cast/as-var-name-symbol #'local) => 'local
   (cast/as-var-name-symbol "local") => 'local)
   
