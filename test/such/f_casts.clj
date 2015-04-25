@@ -16,3 +16,10 @@
   (cast/as-var-name-symbol #'local) => 'local
   (cast/as-var-name-symbol "local") => 'local)
   
+
+(fact "as-name-string"
+  (cast/as-name-string 'clojure/foo) => "foo"   ; namespace omitted
+  (cast/as-name-string #'even?) => "even?"
+  (cast/as-name-string :bar) => "bar"           ; colon omitted.
+  (cast/as-name-string :util.x/quux) => "quux"  ; \"namespace\" omitted
+  (cast/as-name-string "derp") => "derp")

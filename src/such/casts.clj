@@ -4,7 +4,8 @@
    function work with the namespace itself. You can use these functions to 
    convert from what you've got to what Clojure wants. Or you can use them to
    build more accepting variants of those Clojure functions."
-  (:use such.types))
+  (:use such.types)
+  (:require [such.vars :as var]))
 
 (defn- badtype [name]
   (throw (new Exception (str "Bad argument type for " name))))
@@ -41,9 +42,24 @@
 
    Use with namespace functions that require a symbol ([[ns-resolve]], etc.)"
   [arg]
-  (cond (var? arg) (var-name arg)
+  (cond (var? arg) (var/name-as-symbol arg)
         (symbol? arg) (no-namespace arg)
         (string? arg) (symbol arg)
         :else (badtype 'as-var-name-symbol)))
   
+(defn as-name-string
+  "The argument *must* be a symbol, string, keyword, or var. The result is a 
+   string, usually used as part of a symbol's name.
 
+        `(as-name-string 'clojure/foo) => \"foo\"   ; namespace omitted`
+        `(as-name-string #'even?) => \"even?\"`
+        `(as-name-string :bar) => \"bar\"           ; colon omitted.`
+        `(as-name-string :util.x/quux) => \"quux\"  ; \"namespace\" omitted`
+"
+  [arg]
+  (cond (var? arg) (var/name-as-string arg)
+        (symbol? arg) (name arg)
+        (string? arg) arg
+        (keyword? arg) (name arg)
+        :else (badtype 'as-name-string)))
+        
