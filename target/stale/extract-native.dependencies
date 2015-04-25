@@ -1,0 +1,1 @@
+([:dependencies ([codox/codox.core "0.8.11"] [org.clojure/clojure "1.6.0"] [org.clojure/tools.nrepl "0.2.6" :exclusions ([org.clojure/clojure]) :scope "test"] [clojure-complete/clojure-complete "0.2.3" :exclusions ([org.clojure/clojure]) :scope "test"] [midje/midje "2.0.0-SNAPSHOT" :exclusions ([org.clojure/clojure]) :scope "test"])])
