@@ -14,14 +14,15 @@ def working_directory_clean?
 end
 
 desc "Codox into gh-pages branch"
-task :codox do
+task :doc do
   if working_directory_clean?
     doit("lein doc")
     doit("git checkout gh-pages")
-    doit("cp -r /var/tmp/suchwow-doc * .")
+    doit("cp -r /var/tmp/suchwow-doc/* .")
     doit("git add *")
     doit("git commit -am 'doc update'")
     doit("git push origin gh-pages")
+    doit("git checkout master")
   else
     puts "The working directory is not clean"
     doit("git status")
