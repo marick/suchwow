@@ -21,7 +21,7 @@
 
   :codox {:src-dir-uri "https://github.com/marick/suchwow/blob/master/"
           :src-linenum-anchor-prefix "L"
-          :output-dir "tmp/suchwow-doc"}
+          :output-dir "/var/tmp/suchwow-doc"}
           :defaults {:doc/format :markdown}
 
   :aliases {"compatibility" ["with-profile" "+1.4:+1.5.0:+1.5.1:+1.6:+1.7" "midje" ":config" ".compatibility-test-config"]
