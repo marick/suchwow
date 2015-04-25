@@ -11,3 +11,9 @@
   Rootable
   (has-root-value? [var] (.hasRoot var))
   (root-value [var] (alter-var-root var identity)))
+
+(defn name-as-symbol [var]
+  (:name (meta var)))
+
+(defn name-as-string [var]
+  (str (name-as-symbol var)))
