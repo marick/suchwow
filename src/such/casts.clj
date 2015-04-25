@@ -1,4 +1,9 @@
 (ns such.casts
+  "Some Clojure functions require specific types of arguments, such as a symbol
+   representing a namespace. But, for many purposes, you'd just as soon that
+   function work with the namespace itself. You can use these functions to 
+   convert from what you've got to what Clojure wants. Or you can use them to
+   build more accepting variants of those Clojure functions."
   (:use such.types))
 
 (defn- badtype [name]
