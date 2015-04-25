@@ -8,6 +8,8 @@ endure scorn for using `not-empty` instead of `seq`.
 Also for people
 who think the semicolon is the prince of punctuation.
 
+The [API documentation index](http://marick.github.io/suchwow) gives an overview of what this library offers.
+
 
 ![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)     
 [via Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)
