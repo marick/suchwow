@@ -1,4 +1,5 @@
 (ns such.types
+  "Type predicates not included in clojure.core."
   (:use such.versions))
 
 (defn regex?
@@ -18,9 +19,9 @@
 
 (when<=1-5
   (defn record?
-    "Is x neither a hashmap nor a sorted map?"
+    "Is x a record?"
     [x]
-    (and (map? x) (not (classic-map? x)))))
+    (instance? clojure.lang.IRecord x)))
 
 (defn big-decimal?
   "Is x a Java BigDecimal?"
@@ -34,7 +35,7 @@
       (instance? clojure.lang.MultiFn x)))
   
 (defn named?
-  "Will `name` work on x? Two cases: It implements the Named protocol OR it's a string"
+  "Will `name` work on x? Two cases: It implements the Named protocol OR it's a string."
   [x]
   (or (string? x)
       (instance? clojure.lang.Named x)))
@@ -45,5 +46,7 @@
   (or (list? x)
       (seq? x)))
 
-(defn namespace? [x]
+(defn namespace?
+  "Is x a namespace?"
+  [x]
   (instance? clojure.lang.Namespace x))

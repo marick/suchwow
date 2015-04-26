@@ -1,4 +1,4 @@
-(defproject marick/suchwow "0.2.1"
+(defproject marick/suchwow "0.3.0"
   :description "Such functions"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -21,8 +21,8 @@
 
   :codox {:src-dir-uri "https://github.com/marick/suchwow/blob/master/"
           :src-linenum-anchor-prefix "L"
-          :output-dir "/var/tmp/suchwow-doc"}
-          :defaults {:doc/format :markdown}
+          :output-dir "/var/tmp/suchwow-doc"
+          :defaults {:doc/format :markdown}}
 
   :aliases {"compatibility" ["with-profile" "+1.4:+1.5.0:+1.5.1:+1.6:+1.7" "midje" ":config" ".compatibility-test-config"]
             "travis" ["with-profile" "+1.4:+1.5.0:+1.5.1:+1.6:+1.7" "midje"]}

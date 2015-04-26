@@ -17,12 +17,12 @@
 (defn namespaces
   "Create a public var in the current namespace for each public var in the `ns-names`.
   The created vars have the same name, root value, and metadata as the original
-  (except for the :ns metadata value, which is this namespace).
+  (except for the :ns metadata value, which is the current namespace).
 
   The names are typically symbols like `such.immigration`, but they may also be strings
   or namespaces themselves. (See [[as-ns-symbol]].)
 
-      `(immigrate/namespaces 'such.types 'such.casts)`
+      (immigrate/namespaces 'such.types 'such.casts)
 "
 
   [& ns-names]
@@ -40,7 +40,7 @@
    `var-names` must be accepted by [[as-var-name-symbol]] (symbol, var, or string).
    It is an Exception for there to be no var in `ns` corresponding to a `var-name`.
 
-        `(immigrate/selection 'such.casts '[as-ns-symbol as-var-name-symbol])`
+        (immigrate/selection 'such.casts '[as-ns-symbol as-var-name-symbol])
 "
   [ns var-names]
   (let [true-ns (cast/as-ns-symbol ns)]
@@ -54,7 +54,8 @@
    `ns` must be accepted by [[as-ns-symbol]] (namespace, symbol, or string).
    `prefix` may be a symbol, string, or keyword.
 
-        `(immigrate/prefixed 'clojure.string \"str-\")`
+        (immigrate/prefixed 'clojure.string \"str-\")
+        (str-join \"-\" [\"a\" \"b\"]) => \"a-b`\"
 "
   [ns prefix]
   (let [true-ns (cast/as-ns-symbol ns)]

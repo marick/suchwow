@@ -1,5 +1,5 @@
 (ns such.ns
-  "Making working with namespaces easier"
+  "Makes working with namespaces easier."
   (:use such.types)
   (:require [such.casts :as cast]))
 

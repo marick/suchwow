@@ -1,7 +1,7 @@
-(ns ^{:doc "Which version am I running in?"}
+(ns ^{:doc "Which version of Clojure am I running in?"}
   such.versions)
 
-(def minor (:minor *clojure-version*))
+(def ^:private minor (:minor *clojure-version*))
 
 (defmacro when=1-4 [& body] 
   (when (=  minor 4)
