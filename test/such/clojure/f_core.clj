@@ -14,7 +14,7 @@
     (find-var 'such.clojure.f-core/this-var-has-no-value-and-is-used-in-testing) => nil))
 
 (fact "metadata is stored appropriately"
-  (meta #'third) => (contains {:doc #"Return the third element"
+  (meta #'third) => (contains {:doc #"the third element"
                                :ns (find-ns 'such.clojure.core)}))
 
 (fact "selected vars can be immigrated"
