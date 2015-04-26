@@ -8,7 +8,7 @@ Intended audience:
 * those who don't want to use `(if (seq ...))` and don't care *who* knows it.
 * those who think `:use` has its virtues.
 * those disinclined to remember which functions take namespaces, which take symbols, and which take both 
-* those willing to devote precious lines on their [VT100](http://en.wikipedia.org/wiki/VT100) to examples in docstrings.
+* those willing to devote some of the 24 lines on their [VT100](http://en.wikipedia.org/wiki/VT100) to examples in docstrings.
 
 ![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)     
 [via Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)

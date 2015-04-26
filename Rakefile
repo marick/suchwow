@@ -16,10 +16,11 @@ end
 desc "Codox into gh-pages branch"
 task :doc do
   if working_directory_clean?
+    doit("rm -rf /var/tmp/suchwow-doc")
     doit("lein doc")
     doit("git checkout gh-pages")
     doit("cp -r /var/tmp/suchwow-doc/* .")
-    doit("git add *")
+    doit("git add *html")
     doit("git commit -am 'doc update'")
     doit("git push origin gh-pages")
     doit("git checkout master")
