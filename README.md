@@ -18,7 +18,7 @@ Intended audience:
 ## Such Usage
 
 Available via [clojars](http://clojars.org/search?q=suchwow) for Clojure 1.4+  
-For lein: [marick/suchwow "0.2.0"]     
+For lein: [marick/suchwow "0.3.0"]     
 
 [Much API doc](http://marick.github.io/suchwow/)
 
