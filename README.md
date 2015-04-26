@@ -5,8 +5,10 @@ The [API documentation index](http://marick.github.io/suchwow) gives an overview
 Snippets from serious work, wrapped in a whimsical container. A bit of a tribute to the spirit of [_why](http://en.wikipedia.org/wiki/Why_the_lucky_stiff), but with a [Shiba Inu](http://en.wikipedia.org/wiki/Shiba_Inu) instead of [foxes](http://mislav.uniqpath.com/poignant-guide/images/the.foxes-3.png).
 
 Intended audience:
+* those who don't want to use `(if (seq ...))` and don't care *who* knows it.
+* those who think `:use` has its virtues.
 * those disinclined to remember which functions take namespaces, which take symbols, and which take both 
-* those willing to endure scorn for using `not-empty` instead of `seq`.
+* those willing to devote precious lines on their [VT100](http://en.wikipedia.org/wiki/VT100) to examples in docstrings.
 
 ![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)     
 [via Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)
