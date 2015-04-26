@@ -23,3 +23,34 @@
     (contains? {:a 1, :b 2} :a) => true
     (subject/any? :a {:a 1, :b 2}) => true
     (subject/any? :a {:b 1}) => false))
+
+
+(fact "not-empty?"
+  (subject/not-empty? [1]) => true
+  (subject/not-empty? []) => false
+  (subject/not-empty? (cons 1 '())) => true
+  (subject/not-empty? '()) => false
+  (subject/not-empty? nil) => false
+  (subject/not-empty? (range 0)) => false
+  (subject/not-empty? (range 1)) => true
+  (subject/not-empty? (next (next (range 2)))) => false
+  (subject/not-empty? (rest (rest (range 2)))) => false
+  (subject/not-empty? (next (next (range 3)))) => true
+  (subject/not-empty? (rest (rest (range 3)))) => true
+
+  (subject/not-empty? "") => false
+  (subject/not-empty? "1") => true
+  
+  (subject/not-empty? (byte-array 0)) => false
+  (subject/not-empty? (byte-array 1)) => true
+
+  (subject/not-empty? 1) => (throws))
+
+
+(fact "third"
+  (subject/third [1 2 3]) => 3
+  (subject/third [1 2]) => nil)
+
+(fact "fourth"
+  (subject/fourth [1 2 3 4]) => 4
+  (subject/fourth [1 2 3]) => nil)

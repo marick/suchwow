@@ -38,17 +38,17 @@
                  (some predlike coll))))
 
 (defn not-empty? 
-  "Return true if `value` has no values, false otherwise. `value` may be a collection,
-     a String, a native Java array, or anything that implements the Iterable interface."
+  "Return `true` if `value` has any values, `true` otherwise. `value` *must* be a collection,
+     a String, a native Java array, or something that implements the Iterable interface."
   [value]
   (boolean (seq value)))
 
 (defn third 
-  "Return the third element of `coll`. Returns nil if there aren't three elements."
+  "Return the third element of `coll`. Returns `nil` if there are fewer than three elements."
   [coll]
-  (nth coll 2))
+  (second (rest coll)))
 
 (defn fourth
-  "Return the fourth element of `coll`. Returns nil if there aren't four elements."
+  "Return the fourth element of `coll`. Returns nil if there are fewer than four elements."
   [coll]
-  (nth coll 3))
+  (third (rest coll)))
