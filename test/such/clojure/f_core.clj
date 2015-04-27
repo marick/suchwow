@@ -1,4 +1,7 @@
 (ns such.clojure.f-core
+  ;; Note: for some reason I haven't figured out, the next line gives me
+  ;;   third already refers to: #'such.clojure.core/third in namespace: such.clojure.f-core
+  ;; Only happens in this file.
   (:use such.clojure.core)
   (:use midje.sweet))
 
@@ -34,9 +37,4 @@
 
 
 
-
-(fact "a referred value (has-root-value?was silently overwritten"
-  (has-root-value? #'even?) => true
-  (fact "... as was a value "
-    (root-value #'even?) => (exactly even?)))
 

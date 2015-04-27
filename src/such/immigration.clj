@@ -9,7 +9,6 @@
 
 (defn- move-var! [var sym]
   (when (var/has-root-value? var)
-    (ns-unmap *ns* sym)
     (intern *ns*
             (with-meta sym (meta var))
             (var/root-value var))))
