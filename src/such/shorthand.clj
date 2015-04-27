@@ -56,3 +56,14 @@
   "Returns the fourth element of `coll`. Returns `nil` if there are fewer than four elements."
   [coll]
   (third (rest coll)))
+
+(defn find-first
+  "Returns the first item of `coll` where `(pred item)` returns a truthy value, `nil` otherwise.
+   `coll` is evaluated lazily. Note that an \"item\" in a map is a key-value pair:
+
+        (find-first :key {:key \"value\"}) => nil
+        (find-first #(= :key (first %)) {:key \"value\"}) => [:key \"value\"]
+   "
+  [pred coll]
+  (first (filter pred coll)))
+

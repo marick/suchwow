@@ -54,3 +54,13 @@
 (fact "fourth"
   (subject/fourth [1 2 3 4]) => 4
   (subject/fourth [1 2 3]) => nil)
+
+(fact "find-first"
+  (subject/find-first even? [1 3 4 6]) => 4
+  (subject/find-first even? [3 5]) => nil
+  (subject/find-first even? nil) => nil
+  (subject/find-first :key {:key "value"}) => nil
+  (subject/find-first #(= :key (first %)) {:key "value"}) => [:key "value"]
+  (subject/find-first #{1 2} [3 2 1]) => 2
+  (subject/find-first even? (range)) => 0)
+
