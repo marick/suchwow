@@ -21,7 +21,7 @@
 
    Note that the symbol does not have a namespace."
   [var]
-  (:name (meta var)))
+  (.sym var))
 
 (defn name-as-string
   "Unlike symbols and keywords, the \"name\" of a var is a symbol. This function
