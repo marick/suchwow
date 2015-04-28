@@ -11,3 +11,40 @@
   (subject/symbol "no.such.namespace" "th5") => 'no.such.namespace/th5
   (subject/symbol *ns* 'th6) => 'such.f-wide-domains/th6
   (subject/symbol *ns* :th7) => 'such.f-wide-domains/th7)
+
+
+(def here-var)
+(fact find-var
+  (fact "old behavior still works"
+    (subject/find-var 'clojure.core/even?) => #'clojure.core/even?
+    (subject/find-var 'no-such-ns/even?) => (throws #"No such namespace")
+    (subject/find-var 'clojure.core/nonex) => nil)
+
+  (future-fact "and there's new behavior in the one-argument case"
+    (fact "lookup can be by symbol, string, or keyword"
+      (subject/find-var 'such.f-wide-domains/here-var) => #'here-var ; as before
+      (subject/find-var :such.f-wide-domains/here-var) => #'here-var
+      (subject/find-var "such.f-wide-domains/here-var") => #'here-var
+      (subject/find-var "no.such.namespace/here-var") => (throws #"No such namespace")
+      (subject/find-var "such.f-wide-domains/no-here") => nil
+      )
+    (fact "a symbol, string, or keyword without a namespace is looked up in `*ns*`"
+      (subject/find-var 'here-var) => #'such.f-wide-domains/here-var
+      (subject/find-var :here-var) => #'such.f-wide-domains/here-var
+      (subject/find-var "here-var") => #'such.f-wide-domains/here-var
+      (subject/find-var 'not-here) => nil))
+
+  (future-fact "the two argument case is used for easier lookup"
+    (fact "typical cases"
+      (subject/find-var 'clojure.core 'even?) => #'clojure.core/even?
+      (subject/find-var *ns* 'even?) => nil
+      (subject/find-var *ns* 'here-var) => #'here-var)
+
+    (fact "other types of arguments"
+      (subject/find-var "clojure.core" "even?") => #'clojure.core/even?
+      (subject/find-var "clojure.core" #'even?) => #'clojure.core/even?
+      (subject/find-var *ns* #'even?) => nil)
+
+    (fact "probably annoying cases"
+      (subject/find-var 'clojure.core/even? 'odd?) => (throws)
+      (subject/find-var :clojure.core/even? 'odd?) => (throws))))

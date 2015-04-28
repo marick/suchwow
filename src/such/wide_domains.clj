@@ -23,3 +23,7 @@
  (clojure.core/symbol (cast/as-name-string name)))
 ([ns name]
   (clojure.core/symbol (str (cast/as-ns-symbol ns)) (cast/as-name-string name))))
+
+
+(def find-var clojure.core/find-var)
+  
