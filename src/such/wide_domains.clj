@@ -28,6 +28,12 @@
 
 (defn find-var 
   ([namelike]
-     (cond (symbol? namelike) (clojure.core/find-var namelike)
-           (var? namelike) namelike
+     (cond (var? namelike)
+           namelike
+
+           (symbol? namelike)
+           (if (namespace namelike)
+             (clojure.core/find-var namelike)
+             (find-var (symbol *ns* namelike)))
+           
            :else (find-var (apply symbol (cast/as-namespace-and-name namelike))))))

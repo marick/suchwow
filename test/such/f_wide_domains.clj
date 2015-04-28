@@ -26,8 +26,8 @@
       (subject/find-var :such.f-wide-domains/here-var) => #'here-var
       (subject/find-var "such.f-wide-domains/here-var") => #'here-var
       (subject/find-var "no.such.namespace/here-var") => (throws #"No such namespace")
-      (subject/find-var "such.f-wide-domains/no-here") => nil
-      )
+      (subject/find-var "such.f-wide-domains/no-here") => nil)
+      
     (future-fact "a symbol, string, or keyword without a namespace is looked up in `*ns*`"
       (subject/find-var 'here-var) => #'such.f-wide-domains/here-var
       (subject/find-var :here-var) => #'such.f-wide-domains/here-var
