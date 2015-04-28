@@ -1,5 +1,8 @@
 (ns such.casts
-  "Some Clojure functions require specific types of arguments, such as
+  "\"Be conservative in what you send, be liberal in what you accept.\"
+         -- Postel's Robustness Principle
+  
+   Some Clojure functions require specific types of arguments, such as
    a symbol representing a namespace. You can use these functions to
    convert from what you've got to what Clojure requires. Or you can
    use them to build more accepting variants of those Clojure
