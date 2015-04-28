@@ -8,12 +8,10 @@
    use them to build more accepting variants of those Clojure
    functions."
   (:use such.types)
-  (:require [such.vars :as var]))
+  (:require [such.vars :as var]
+            [such.util.fail :as fail]))
 
-(defn- badtype [name]
-  (throw (new Exception (str "Bad argument type for " name))))
 
-(defn- var-name [var] (:name (meta var)))
 (defn- no-namespace [sym] (symbol (name sym)))
 
 ;; Util
@@ -33,7 +31,7 @@
   (cond (namespace? arg) (ns-name arg)
         (symbol? arg) (no-namespace arg)
         (string? arg) (symbol arg)
-        :else (badtype 'as-ns-symbol)))
+        :else (fail/bad-arg-type 'as-ns-symbol arg)))
 
 (defn as-var-name-symbol
   "The argument *must* be a symbol, string, or var. In all cases, the 
@@ -48,7 +46,7 @@
   (cond (var? arg) (var/name-as-symbol arg)
         (symbol? arg) (no-namespace arg)
         (string? arg) (symbol arg)
-        :else (badtype 'as-var-name-symbol)))
+        :else (fail/bad-arg-type 'as-var-name-symbol arg)))
   
 (defn as-name-string
   "The argument *must* be a symbol, string, keyword, or var. The result is a 
@@ -64,5 +62,5 @@
         (symbol? arg) (name arg)
         (string? arg) arg
         (keyword? arg) (name arg)
-        :else (badtype 'as-name-string)))
+        :else (fail/bad-arg-type 'as-name-string arg)))
         
