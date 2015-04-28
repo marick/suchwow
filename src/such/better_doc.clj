@@ -90,3 +90,14 @@
 
    [Other examples](https://clojuredocs.org/clojure.core/ns-resolve)
 ")
+
+
+(local-copy #'clojure.core/symbol
+  "Creates a symbol. Both the `ns` and `name` arguments *must* be strings.
+  In the one-argument version, the resulting symbol has a `nil` namespace.
+  In the two-argument version, the `namespace` of the resulting symbol is
+  the result of `(symbol ns)`. Note that the namespace the string mentions
+  need not exist.
+
+      (symbol \"no.such.namespace\" \"the\") => 'no.such.namespace/the
+")

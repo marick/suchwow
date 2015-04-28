@@ -78,3 +78,9 @@
 
 
 
+(fact symbol
+  (symbol "th") => 'th
+  (symbol *ns* "th") => (throws)
+  (symbol 'such.f-better-doc "th") => (throws)
+  (symbol "such.f-better-doc" "th") => 'such.f-better-doc/th
+  (symbol "no.such.namespace" "th") => 'no.such.namespace/th)
