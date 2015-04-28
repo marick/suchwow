@@ -20,7 +20,7 @@
     (subject/find-var 'no-such-ns/even?) => (throws #"No such namespace")
     (subject/find-var 'clojure.core/nonex) => nil)
 
-  (future-fact "and there's new behavior in the one-argument case"
+  (fact "and there's new behavior in the one-argument case"
     (fact "lookup can be by symbol, string, or keyword"
       (subject/find-var 'such.f-wide-domains/here-var) => #'here-var ; as before
       (subject/find-var :such.f-wide-domains/here-var) => #'here-var
@@ -28,7 +28,7 @@
       (subject/find-var "no.such.namespace/here-var") => (throws #"No such namespace")
       (subject/find-var "such.f-wide-domains/no-here") => nil
       )
-    (fact "a symbol, string, or keyword without a namespace is looked up in `*ns*`"
+    (future-fact "a symbol, string, or keyword without a namespace is looked up in `*ns*`"
       (subject/find-var 'here-var) => #'such.f-wide-domains/here-var
       (subject/find-var :here-var) => #'such.f-wide-domains/here-var
       (subject/find-var "here-var") => #'such.f-wide-domains/here-var

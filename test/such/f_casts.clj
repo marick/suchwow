@@ -23,3 +23,18 @@
   (cast/as-name-string :bar) => "bar"           ; colon omitted.
   (cast/as-name-string :util.x/quux) => "quux"  ; \"namespace\" omitted
   (cast/as-name-string "derp") => "derp")
+
+(def here)
+(fact as-namespace-and-name
+  (cast/as-namespace-and-name 'clojure.core/even?) => ['clojure.core 'even?]
+  (cast/as-namespace-and-name 'even?) => [nil 'even?]
+  
+  (cast/as-namespace-and-name :clojure.core/even?) => ['clojure.core 'even?]
+  (cast/as-namespace-and-name :foo) => [nil 'foo]
+  
+  (cast/as-namespace-and-name "even?") => [nil 'even?]
+  (cast/as-namespace-and-name "clojure.core/even?") => ['clojure.core 'even?]
+  (cast/as-namespace-and-name "clojure/core/even?") => (throws)
+  
+  (cast/as-namespace-and-name #'even?) => ['clojure.core 'even?]
+  (cast/as-namespace-and-name #'here) => ['such.f-casts 'here])

@@ -1,7 +1,9 @@
 (ns such.wide-domains
   "Variants of clojure.core functions that accept more types of inputs."
   (:refer-clojure :exclude [find-var symbol])
-  (:require [such.casts :as cast]))
+  (:require [such.casts :as cast]
+            [clojure.string :as str]
+            [such.util.fail :as fail]))
 
 
 (defn symbol
@@ -24,6 +26,8 @@
 ([ns name]
   (clojure.core/symbol (str (cast/as-ns-symbol ns)) (cast/as-name-string name))))
 
-
-(def find-var clojure.core/find-var)
-  
+(defn find-var 
+  ([namelike]
+     (cond (symbol? namelike) (clojure.core/find-var namelike)
+           (var? namelike) namelike
+           :else (find-var (apply symbol (cast/as-namespace-and-name namelike))))))

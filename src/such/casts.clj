@@ -9,7 +9,8 @@
    functions."
   (:use such.types)
   (:require [such.vars :as var]
-            [such.util.fail :as fail]))
+            [such.util.fail :as fail]
+            [clojure.string :as str]))
 
 
 (defn- no-namespace [sym] (symbol (name sym)))
@@ -64,3 +65,36 @@
         (keyword? arg) (name arg)
         :else (fail/bad-arg-type 'as-name-string arg)))
         
+(defn as-namespace-and-name
+  "`val` is something that can be thought of as having namespace and name parts.
+   This function splits `val` and returns those two parts as symbols, except that
+   the namespace may be nil. Accepts symbols, keywords, vars, and strings containing
+   at most one slash.
+
+       (as-two-part-name 'clojure.core/even?) => ['clojure.core 'even?]
+       (as-two-part-name :foo) => [nil 'foo]
+
+       (as-two-part-name #'even) => ['clojure.core 'even?]
+
+       (as-two-part-name \"even?\") => [nil 'even?]
+       (as-two-part-name \"clojure.core/even?\") => ['clojure.core 'even?]
+       (as-two-part-name \"foo/bar/baz\") => (throws)
+"
+  [val]
+  (letfn [(pairify [substrings]
+                   (case (count substrings)
+                     1 (vector nil (symbol (first substrings)))
+                     2 (into [] (map symbol substrings))
+                     (fail/not-namespace-and-name)))]
+    (cond (string? val)
+          (pairify (str/split val #"/"))
+
+          (instance? clojure.lang.Named val)
+          (pairify (remove nil? ((juxt namespace name) val)))
+
+          (var? val)
+          (vector (ns-name (.ns val)) (.sym val))
+
+          :else
+          (fail/not-namespace-and-name))))
+
