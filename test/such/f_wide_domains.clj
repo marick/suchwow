@@ -50,15 +50,15 @@
       (subject/find-var "clojure.core" "even?") => #'clojure.core/even?
       (subject/find-var "clojure.core" #'even?) => #'clojure.core/even?
       (subject/find-var *ns* #'intersection) => #'such.f-wide-domains/intersection
-      (subject/find-var *ns* :intersection) =future=> #'such.f-wide-domains/intersection
+      (subject/find-var *ns* :intersection) => #'such.f-wide-domains/intersection
       (subject/find-var *ns* #'even?) => nil)
 
     (fact "namespace symbols can have namespaces. Ick."
       (subject/find-var 'derp/clojure.core 'odd?) => #'clojure.core/odd?
-      (subject/find-var "derp/clojure.core" :odd?) =future=> #'clojure.core/odd?)
+      (subject/find-var "derp/clojure.core" :odd?) => #'clojure.core/odd?)
 
     (fact "namespace parts of second argument are ignored - a bit less icky"
       (subject/find-var 'clojure.core 'derp/odd?) => #'clojure.core/odd?
       (subject/find-var 'clojure.core "derp/odd?") => #'clojure.core/odd?
-      (subject/find-var "clojure.core" ::odd?) =future=> #'clojure.core/odd?
+      (subject/find-var "clojure.core" ::odd?) => #'clojure.core/odd?
       (subject/find-var *ns* 'clojure.set/intersection) => #'intersection)))

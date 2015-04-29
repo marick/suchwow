@@ -12,9 +12,6 @@
             [such.util.fail :as fail]
             [clojure.string :as str]))
 
-
-(defn- no-namespace [sym] (symbol (name sym)))
-
 ;; Util
 (defn as-ns-symbol
   "The argument *must* be a symbol, namespace, or string. In all cases, 
@@ -30,22 +27,24 @@
    to a namespace. (For example,`(namespace 'a/a)` returns a string.)"
   [arg]
   (cond (namespace? arg) (ns-name arg)
-        (symbol? arg) (no-namespace arg)
+        (symbol? arg) (symbol (name arg))
         (string? arg) (symbol arg)
         :else (fail/bad-arg-type 'as-ns-symbol arg)))
 
 (defn as-var-name-symbol
-  "The argument *must* be a symbol, string, or var. In all cases, the 
+  "The argument *must* be a symbol, string, keyword, or var. In all cases, the 
    result is a symbol without a namespace:
 
        (as-var-name-symbol 'clojure.core/even?) => 'even?
        (as-var-name-symbol #'clojure.core/even?) => 'even?
+       (as-var-name-symbol :clojure.core/even?) => 'even?
+       (as-var-name-symbol :even?) => 'even?
        (as-var-name-symbol \"even?\") => 'even?
 
    Use with namespace functions that require a symbol ([[ns-resolve]], etc.)"
   [arg]
   (cond (var? arg) (var/name-as-symbol arg)
-        (symbol? arg) (no-namespace arg)
+        (or (symbol? arg) (keyword? arg)) (symbol (name arg))
         (string? arg) (symbol arg)
         :else (fail/bad-arg-type 'as-var-name-symbol arg)))
   
