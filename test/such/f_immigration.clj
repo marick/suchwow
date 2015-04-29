@@ -7,7 +7,7 @@
 
 (immigrate/namespaces "such.casts")
 
-(fact as-var-name-symbol => fn?)
+(fact as-symbol-without-namespace => fn?)
 (immigrate/namespaces (find-ns 'such.immigration))
 (fact namespaces => fn?)
 

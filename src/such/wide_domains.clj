@@ -22,9 +22,9 @@
       (symbol *ns* 'clojure.core/even?) => 'this.namespace/even? ; \"localize\" a symbol.
 "
 ([name]
- (clojure.core/symbol (cast/as-name-string name)))
+ (clojure.core/symbol (cast/as-string-without-namespace name)))
 ([ns name]
-  (clojure.core/symbol (str (cast/as-ns-symbol ns)) (cast/as-name-string name))))
+  (clojure.core/symbol (str (cast/as-ns-symbol ns)) (cast/as-string-without-namespace name))))
 
 (defn find-var 
   "Return a variable identified by the arguments, or `nil`.
@@ -72,9 +72,9 @@
   ([name]
      (if (var? name)
        name
-       (let [[ns name] (cast/as-namespace-and-name name)]
+       (let [[ns name] (cast/as-namespace-and-name-symbols name)]
          (clojure.core/find-var (symbol (or ns *ns*) name)))))
   ([ns name]
      (let [ns-sym (cast/as-ns-symbol ns)
-           name-sym (cast/as-var-name-symbol name)]
+           name-sym (cast/as-symbol-without-namespace name)]
        (clojure.core/find-var (symbol ns-sym name-sym)))))

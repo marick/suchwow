@@ -16,7 +16,8 @@
         (symbol/from-concatenation [:namespace/un #'clojure.core/even?]) => 'uneven?
 "
   ([nameables join-nameable]
-     (symbol (str/join (cast/as-name-string join-nameable) (map cast/as-name-string nameables))))
+     (symbol (str/join (cast/as-string-without-namespace join-nameable)
+                       (map cast/as-string-without-namespace nameables))))
   ([nameables]
      (from-concatenation nameables "")))
 

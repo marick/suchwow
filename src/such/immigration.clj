@@ -36,14 +36,15 @@
    and metadata.
 
    `ns` must be accepted by [[as-ns-symbol]] (namespace, symbol, or string).
-   `var-names` must be accepted by [[as-var-name-symbol]] (symbol, var, or string).
+   `var-names` must be accepted by [[as-symbol-without-namespace]]
+   (symbol, var, keyword, or string).
    It is an Exception for there to be no var in `ns` corresponding to a `var-name`.
 
-        (immigrate/selection 'such.casts '[as-ns-symbol as-var-name-symbol])
+        (immigrate/selection 'such.casts '[as-ns-symbol as-symbol-without-namespace])
 "
   [ns var-names]
   (let [true-ns (cast/as-ns-symbol ns)]
-    (doseq [var-symbol (map cast/as-var-name-symbol var-names)]
+    (doseq [var-symbol (map cast/as-symbol-without-namespace var-names)]
       (move-var! (ns-resolve true-ns var-symbol) var-symbol))))
 
 (defn prefixed
