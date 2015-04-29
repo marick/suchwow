@@ -1,5 +1,6 @@
 (ns such.f-wide-domains
-  (:require [such.wide-domains :as subject])
+  (:require [such.wide-domains :as subject]
+            [clojure.set])
   (:use midje.sweet))
 
 (fact symbol
@@ -14,6 +15,8 @@
 
 
 (def here-var)
+(def intersection)
+
 (fact find-var
   (fact "old behavior still works"
     (subject/find-var 'clojure.core/even?) => #'clojure.core/even?
@@ -28,13 +31,16 @@
       (subject/find-var "no.such.namespace/here-var") => (throws #"No such namespace")
       (subject/find-var "such.f-wide-domains/no-here") => nil)
       
-    (future-fact "a symbol, string, or keyword without a namespace is looked up in `*ns*`"
+    (fact "a symbol, string, or keyword without a namespace is looked up in `*ns*`"
       (subject/find-var 'here-var) => #'such.f-wide-domains/here-var
       (subject/find-var :here-var) => #'such.f-wide-domains/here-var
       (subject/find-var "here-var") => #'such.f-wide-domains/here-var
-      (subject/find-var 'not-here) => nil))
+      (subject/find-var 'not-here) => nil)
 
-  (future-fact "the two argument case is used for easier lookup"
+    (fact "a var is just returned"
+      (subject/find-var #'even?) => #'clojure.core/even?))
+
+  (fact "the two argument case is used for easier lookup"
     (fact "typical cases"
       (subject/find-var 'clojure.core 'even?) => #'clojure.core/even?
       (subject/find-var *ns* 'even?) => nil
@@ -43,8 +49,16 @@
     (fact "other types of arguments"
       (subject/find-var "clojure.core" "even?") => #'clojure.core/even?
       (subject/find-var "clojure.core" #'even?) => #'clojure.core/even?
+      (subject/find-var *ns* #'intersection) => #'such.f-wide-domains/intersection
+      (subject/find-var *ns* :intersection) =future=> #'such.f-wide-domains/intersection
       (subject/find-var *ns* #'even?) => nil)
 
-    (fact "probably annoying cases"
-      (subject/find-var 'clojure.core/even? 'odd?) => (throws)
-      (subject/find-var :clojure.core/even? 'odd?) => (throws))))
+    (fact "namespace symbols can have namespaces. Ick."
+      (subject/find-var 'derp/clojure.core 'odd?) => #'clojure.core/odd?
+      (subject/find-var "derp/clojure.core" :odd?) =future=> #'clojure.core/odd?)
+
+    (fact "namespace parts of second argument are ignored - a bit less icky"
+      (subject/find-var 'clojure.core 'derp/odd?) => #'clojure.core/odd?
+      (subject/find-var 'clojure.core "derp/odd?") => #'clojure.core/odd?
+      (subject/find-var "clojure.core" ::odd?) =future=> #'clojure.core/odd?
+      (subject/find-var *ns* 'clojure.set/intersection) => #'intersection)))
