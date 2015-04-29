@@ -53,11 +53,11 @@
       (subject/find-var *ns* :intersection) => #'such.f-wide-domains/intersection
       (subject/find-var *ns* #'even?) => nil)
 
-    (fact "namespace symbols can have namespaces. Ick."
-      (subject/find-var 'derp/clojure.core 'odd?) => #'clojure.core/odd?
-      (subject/find-var "derp/clojure.core" :odd?) => #'clojure.core/odd?)
+    (fact "namespace symbols can't have namespaces"
+      (subject/find-var 'derp/clojure.core 'odd?) => (throws)
+      (subject/find-var "derp/clojure.core" :odd?) => (throws))
 
-    (fact "namespace parts of second argument are ignored - a bit less icky"
+    (fact "namespace parts of second argument are ignored - a bit icky"
       (subject/find-var 'clojure.core 'derp/odd?) => #'clojure.core/odd?
       (subject/find-var 'clojure.core "derp/odd?") => #'clojure.core/odd?
       (subject/find-var "clojure.core" ::odd?) => #'clojure.core/odd?

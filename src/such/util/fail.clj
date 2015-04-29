@@ -8,3 +8,9 @@
 
 (def bad-arg-type
   (partial fail "Bad argument type for `%s`: %s."))
+
+(def should-not-have-namespace
+  (partial fail "`%s` should not be given a val with a namespace. %s has one."))
+
+(def should-have-namespace
+  (partial fail "`%s` should be given a val with a namespace. %s has none."))
