@@ -1,4 +1,4 @@
-(ns such.util.fail)
+(ns ^:no-doc such.util.fail)
 
 (defn fail [fmt & args]
   (throw (new Exception (apply format fmt args))))

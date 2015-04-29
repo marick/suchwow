@@ -1,6 +1,6 @@
 (ns such.immigration
   "Functions useful for constructing a \"favorite functions\" namespace that you can
-   use as a supplement to `clojure.core` (with `:use` or `:require :all`). 
+   use as a supplement to `clojure.core`.
    See [`such.clojure.core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj) for an example."
   (:use such.versions)
   (:require [such.vars :as var]

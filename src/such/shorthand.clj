@@ -1,6 +1,7 @@
 (ns such.shorthand
-  "Explicit functions for what could be done easily - but less clearly - with clojure.core functions.
-   Anti-shibboleths such as using `not-empty?` instead of `seq`.")
+  "Explicit functions for what could be done easily - but less clearly -
+   by composing clojure.core functions. Anti-shibboleths such as using
+   `not-empty?` instead of `seq`.")
 
 
 (def ^:no-doc this-var-has-no-value-and-is-used-in-testing)
@@ -59,11 +60,16 @@
 
 (defn find-first
   "Returns the first item of `coll` where `(pred item)` returns a truthy value, `nil` otherwise.
-   `coll` is evaluated lazily. Note that an \"item\" in a map is a key-value pair:
+   `coll` is evaluated lazily.
+   
+        (find-first even? [1 2 3]) => 2
+   
+   You can apply `find-first` to a map, even though which
+   element matches \"first\" is undefined. Note that the item passed to `pred` will
+   be a key-value pair:
 
-        (find-first :key {:key \"value\"}) => nil
-        (find-first #(= :key (first %)) {:key \"value\"}) => [:key \"value\"]
-   "
+        (find-first #(even? (second %)) {:a 2, :b 22, :c 222}) => [:c 222]
+"
   [pred coll]
   (first (filter pred coll)))
 

@@ -1,5 +1,5 @@
 (ns such.types
-  "Type predicates not included in clojure.core."
+  "Type (and \"type-like\") predicates not included in clojure.core."
   (:use such.versions))
 
 (defn regex?

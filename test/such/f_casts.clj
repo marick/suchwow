@@ -22,15 +22,15 @@
   (cast/as-ns-symbol "foo") => 'foo
   (cast/as-ns-symbol "clojure.core/foo") => (throws))
 
-(fact with-namespace-as-symbol
-  (cast/with-namespace-as-symbol *ns*) => 'such.f-casts
-  (cast/with-namespace-as-symbol 'some.namespace) => (throws)
-  (cast/with-namespace-as-symbol 'some.namespace/x) => 'some.namespace
-  (cast/with-namespace-as-symbol :food) => (throws)
-  (cast/with-namespace-as-symbol :clojure.core) => (throws)
-  (cast/with-namespace-as-symbol :clojure.core/food) => 'clojure.core
-  (cast/with-namespace-as-symbol "foo") => (throws)
-  (cast/with-namespace-as-symbol "clojure.core/foo") => 'clojure.core)
+(fact extract-namespace-into-symbol
+  (cast/extract-namespace-into-symbol *ns*) => 'such.f-casts
+  (cast/extract-namespace-into-symbol 'some.namespace) => (throws)
+  (cast/extract-namespace-into-symbol 'some.namespace/x) => 'some.namespace
+  (cast/extract-namespace-into-symbol :food) => (throws)
+  (cast/extract-namespace-into-symbol :clojure.core) => (throws)
+  (cast/extract-namespace-into-symbol :clojure.core/food) => 'clojure.core
+  (cast/extract-namespace-into-symbol "foo") => (throws)
+  (cast/extract-namespace-into-symbol "clojure.core/foo") => 'clojure.core)
 
 
 

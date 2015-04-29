@@ -76,16 +76,19 @@
            (import 'java.util.AbstractCollection)
            (ns-resolve *ns* 'AbstractCollection) => java.util.AbstractCollection
        
-       If the class hasn't been imported, `nil` is returned. Note that this is 
-       a difference from the case where the class's name is fully qualified:
+       If the class hasn't been imported, the function returns `nil` (rather than 
+       throwing an exception, as in the fully-qualified case).
        
            (ns-resolve 'clojure.core 'AbstractMethodHandlerFactoryFactory) => nil
            (ns-resolve 'clojure.core 'java.lang.AbstractMethodHandlerFactoryFactory) => (throws)
 
    In the three-argument case, the second `env` argument is a map whose keys 
-   *must* be symbols. If any of the keys are `=` to the final argument, `nil` is returned.
+   *must* be symbols. If any of the keys are `=` to the final argument, `nil` is
+   returned (instead of a match, if any).
 
+       (ns-resolve *ns* 'even?) => #'clojure.core/even?
        (ns-resolve *ns* '{even? \"irrelevant\"} 'even?) => nil
+       (ns-resolve *ns* 'Object) => java.lang.Object
        (ns-resolve *ns* '{Object \"irrelevant\"} 'Object) => nil
 
    [Other examples](https://clojuredocs.org/clojure.core/ns-resolve)
@@ -93,11 +96,10 @@
 
 
 (local-copy #'clojure.core/symbol
-  "Creates a symbol. Both the `ns` and `name` arguments *must* be strings.
-  In the one-argument version, the resulting symbol has a `nil` namespace.
-  In the two-argument version, the `namespace` of the resulting symbol is
-  the result of `(symbol ns)`. Note that the namespace the string mentions
-  need not exist.
-
-      (symbol \"no.such.namespace\" \"the\") => 'no.such.namespace/the
+  "Creates a symbol from its arguments, which *must* be strings.
+   The name of that result is `name`. In the one-argument version,
+   the result's namespace is `nil`. In the two-argument version, it's
+   `ns`. Note that `ns` need not refer to an existing namespace:
+   
+         (symbol \"no.such.namespace\" \"the\") => 'no.such.namespace/the
 ")
