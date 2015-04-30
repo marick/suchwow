@@ -73,3 +73,6 @@
   [pred coll]
   (first (filter pred coll)))
 
+(defn without-nils [coll]
+  "A lazy sequence of non-nil values of `coll`."
+  (keep identity coll))

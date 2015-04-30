@@ -64,3 +64,8 @@
   (subject/find-first #{1 2} [3 2 1]) => 2
   (subject/find-first even? (range)) => 0)
 
+(fact "without-nils"
+  (subject/without-nils nil) => empty?
+  (subject/without-nils []) => empty?
+  (subject/without-nils [1 nil 2 false]) => [1 2 false]
+  (take 2 (subject/without-nils (range))) => [0 1])
