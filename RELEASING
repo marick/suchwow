@@ -1,0 +1,4 @@
+* Bump version in project and readme
+* lein compatibility 
+* rake doc 
+* lein deploy
