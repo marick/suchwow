@@ -43,7 +43,7 @@
                  (some predlike coll))))
 
 (defn not-empty? 
-  "Returns `true` if `value` has any values, `true` otherwise. `value` *must* be a collection,
+  "Returns `true` if `value` has any values, `false` otherwise. `value` *must* be a collection,
      a String, a native Java array, or something that implements the `Iterable` interface."
   [value]
   (boolean (seq value)))

@@ -2,11 +2,12 @@
   "Common operations on vars.")
 
 (defprotocol Rootable
-  "A protocol to look at original values of Vars."
+  "A protocol to look at \"root\" values of Vars. The root value is
+   the value before any `binding` - it's the value altered by `alter-var-root`."
   (has-root-value? [this]
-    "Was this var given an original value when it was created?" )
+    "Does this var have a root value?" )
   (root-value [this]
-    "What value was originally assigned to this var? (Ignores any bindings in effect.)"))
+    "What is the value of the var, ignoring any bindings in effect?"))
 
 (extend-type clojure.lang.Var
   Rootable

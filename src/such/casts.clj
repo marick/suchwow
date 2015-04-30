@@ -40,6 +40,7 @@
   before the slash is considered the namespace.
    
       (has-namespace? :foo) => false
+      (has-namespace? ::foo) => true
       (has-namespace? 'clojure.core/even?) => true
       (has-namespace? \"clojure.core/even?\") => true
 "
@@ -60,15 +61,16 @@
    See [[as-namespace-and-name-symbols]].)
 
    The result is a symbol with no namespace. There are two cases:
+   
    1. If `arg` is a namespace, its symbol name is returned:
       
           (as-ns-symbol *ns*) => 'such.casts    
-
-   2. Otherwise, the \"name\" of the `arg` is converted to a symbol:
       
-          (as-ns-symbol \"clojure.core\") => 'clojure.core
-          (as-ns-symbol 'clojure.core) => 'clojure.core
-          (as-ns-symbol :clojure.core) => 'clojure.core
+   2. Otherwise, the `arg` is converted to a symbol:
+      
+           (as-ns-symbol \"clojure.core\") => 'clojure.core
+           (as-ns-symbol 'clojure.core) => 'clojure.core
+           (as-ns-symbol :clojure.core) => 'clojure.core
    "
 
   [arg]
@@ -86,19 +88,20 @@
 
    The argument *must* be a namespace, symbol, keyword, or string.
    In the latter three cases, `arg` *must* have a namespace. 
-   (Note: strings have \"namespaces\" if they contain exactly one slash.
-
+   (Note: strings have \"namespaces\" if they contain exactly one slash.)
+   
    The result is a symbol with no namespace. There are two cases:
+   
    1. If `arg` is a namespace, its symbol name is returned:
       
           (extract-namespace-into-symbol *ns*) => 'such.casts
-
+   
    2. Otherwise, the \"namespace\" of the `arg` is converted to a symbol:
-           
-          (extract-namespace-into-symbol \"clojure.core/even?\") => 'clojure.core
-          (extract-namespace-into-symbol 'clojure.core/even?) => 'clojure.core
-          (extract-namespace-into-symbol :clojure.core/even?) => 'clojure.core
-   "
+      
+           (extract-namespace-into-symbol \"clojure.core/even?\") => 'clojure.core
+           (extract-namespace-into-symbol 'clojure.core/even?) => 'clojure.core
+           (extract-namespace-into-symbol :clojure.core/even?) => 'clojure.core
+"
    [arg]
    (cond (namespace? arg)
          (ns-name arg)
@@ -158,7 +161,7 @@
   [arg]
   (second (as-namespace-and-name-symbols arg)))
   
-(defn as-string-without-namespace [arg]
+(defn as-string-without-namespace
   "The argument *must* be a symbol, string, keyword, or var. The result is a 
    string name that omits the namespace:
 

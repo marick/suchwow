@@ -18,10 +18,11 @@
   The created vars have the same name, root value, and metadata as the original
   (except for the :ns metadata value, which is the current namespace).
 
-  The names are typically symbols like `such.immigration`, but they may also be strings
-  or namespaces themselves. (See [[as-ns-symbol]].)
+  The `ns-names` are typically symbols like `'such.immigration`, but they may also be
+  strings, keywords, or even namespaces themselves. (See [[as-ns-symbol]].)
 
       (immigrate/namespaces 'such.types 'such.casts)
+      (immigrate/namespaces :such.types (find-ns 'such.casts))
 "
 
   [& ns-names]

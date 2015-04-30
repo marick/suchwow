@@ -8,8 +8,8 @@
 
 (defn symbol
   "Creates a symbol.    
-  The `ns` argument may be a namespace, symbol, or string ([[as-ns-string]]).    
-  The `name` argument may be a symbol, string, keyword, or var.
+  The `ns` argument may be a namespace, symbol, keyword, or string ([[as-ns-string]]).    
+  The `name` argument may be a symbol, string, keyword, or var ([[as-string-without-namespace]]).
 
   In the one-argument version, the resulting symbol has a `nil` namespace.
   In the two-argument version, it has the symbol version of `ns` as the namespace.
@@ -44,19 +44,19 @@
 
    Namespace-qualified keywords can also be used.
 
-   *Case 3*:
+   *Case 2*:
    If the single argument is not namespace-qualified, it is treated as if it 
    were qualified with `*ns*`:
 
        (find-var 'find-var) => #'this.namespace/find-var
        (find-var \"symbol\") => #'this.namespace/symbol
 
-   *Case 4*:
+   *Case 3*:
    If the single argument is a var, it is returned.
 
-   *Case 5*:
+   *Case 4*:
    In the two-argument case, the `ns` argument supplies the namespace and 
-   the `name` argument the var's name. `ns` may be a namespace, symbol,
+   the `name` argument the var's name. `ns` may be a namespace, symbol, keyword,
    or string ([[as-ns-symbol]]). `name` may be a string, symbol, keyword,
    or var. In the first three cases, the namespace part of `name` (if any)
    is ignored:
@@ -66,8 +66,8 @@
 
    If the `name` argument is a var, `find-var` looks for a var with the same name
    in `ns`:
-
-      (find-var 'such.wide-domains #'clojure.core/find-var) => #'such.wide-domains/find-var
+   
+       (find-var 'such.wide-domains #'clojure.core/find-var) => #'such.wide-domains/find-var
 "
   ([name]
      (if (var? name)

@@ -25,7 +25,7 @@
   (meta #'move-var!) => (contains {:private true}))
 
 ;; It is safe to immigrate twice.
-(selection 'clojure.set '[union]) ; Note that the immigrated `selection` needn't be namespace-quolified
+(selection 'clojure.set '[union]) ; Because `selection` is immigrated, it needn't be namespace-quolified
 (selection 'clojure.set '[union intersection])
 
 
