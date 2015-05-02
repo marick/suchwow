@@ -1,6 +1,5 @@
 (ns such.f-immigration (:require [such.immigration :as immigrate])
-  (:use midje.sweet)
-  (:require such.casts such.types clojure.string))
+  (:use midje.sweet))
 
 ;; Most tests of behavior are in `such.clojure.core`. This is about
 ;; checking that the input domain is as wide as advertised. 

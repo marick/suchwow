@@ -1,7 +1,7 @@
 (ns such.clojure.overwrites
+  "Examples of importing symbols that are already referenced. (Silent overwriting.)
+   See also such.clojure.overwrites-client."
   (:require [such.immigration :as immigrate]
-            such.shorthand
-            such.types
             [such.clojure.other-namespace :refer [namespace?]])
   (:use midje.sweet))
 
@@ -13,12 +13,20 @@
 (fact "change was made"
   (third [1 2 3]) => 3)
 
-;; However, vars that "belong" to another namespace will produce an error upon immigration.
-;; This is consistent with the behavior when you try to `def` or `intern` "over" such a var.
+;; Variables that "belong" to another namespace are also overwritten. 
+;; This allows the creation of a supplementary "x.clojure.core" namespace
+;; without a lot of annoying warnings.
+(immigrate/selection 'such.types '[namespace?])
 
 (fact
-  (immigrate/selection 'such.types '[namespace?]) => (throws)
-  (namespace?) => "I will survive! I'll stay alive!")
+  ;; will get a "wrong arity" failure if version from other-namespace not overwritten
+  (namespace? *ns*) => true)
+
+;; Rather than interning the variables, you can `refer` it
+(immigrate/namespaces-by-reference 'such.better-doc)
+(fact
+  ((ns-refers *ns*) 'ns-resolve) => #'such.better-doc/ns-resolve)
+
 
 
 (fact "private variables are also not immigrated"

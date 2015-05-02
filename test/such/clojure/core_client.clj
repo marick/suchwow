@@ -1,7 +1,5 @@
-(ns such.clojure.f-core
-  ;; Note: for some reason I haven't figured out, the next line gives me
-  ;;   third already refers to: #'such.clojure.core/third in namespace: such.clojure.f-core
-  ;; Only happens in this file.
+(ns such.clojure.core-client
+  "A demonstration of what's true of a client that `uses` such.clojure.core."
   (:use such.clojure.core)
   (:use midje.sweet))
 
@@ -14,7 +12,7 @@
   (fact "note that a var with no value is not immigrated"
     (find-var 'such.shorthand/this-var-has-no-value-and-is-used-in-testing) => truthy
     (find-var 'such.clojure.core/this-var-has-no-value-and-is-used-in-testing) => nil
-    (find-var 'such.clojure.f-core/this-var-has-no-value-and-is-used-in-testing) => nil))
+    (find-var 'such.clojure.core-client/this-var-has-no-value-and-is-used-in-testing) => nil))
 
 (fact "metadata is stored appropriately"
   (meta #'third) => (contains {:doc #"the third element"
