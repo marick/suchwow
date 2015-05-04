@@ -80,6 +80,7 @@
 "
   [ns var-names]
   (let [true-ns (cast/as-ns-symbol ns)]
+    (require true-ns)
     (doseq [var-symbol (map cast/as-symbol-without-namespace var-names)]
       (move-var! (ns-resolve true-ns var-symbol) var-symbol))))
 
@@ -95,6 +96,7 @@
 "
   [ns prefix]
   (let [true-ns (cast/as-ns-symbol ns)]
+    (require true-ns)
     (doseq [[sym var] (ns-publics true-ns)]
       (move-var! (ns-resolve true-ns sym)
                  (symbol/from-concatenation (vector prefix sym))))))
