@@ -3,6 +3,11 @@
             [clojure.set])
   (:use midje.sweet))
 
+
+;; These tests are just copies of the ones in the originating namespace.
+;; They give assurance that the particular functions actually *have* been
+;; immigrated. There's no need to keep them in sync.
+
 (fact symbol
   (subject/symbol "th") => 'th
   (subject/symbol #'clojure.core/even?) => 'even?

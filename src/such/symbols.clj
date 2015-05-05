@@ -1,7 +1,30 @@
 (ns such.symbols
   "Symbol utilities, such as different ways to create symbols."
+  (:refer-clojure :exclude [symbol])
   (:require [such.casts :as cast]
             [clojure.string :as str]))
+
+(defn symbol
+  "Creates a symbol. A variant of the `clojure.core` version with a wider domain.     
+  The `ns` argument may be a namespace, symbol, keyword, or string ([[as-ns-string]]).    
+  The `name` argument may be a symbol, string, keyword, or var ([[as-string-without-namespace]]).
+
+  In the one-argument version, the resulting symbol has a `nil` namespace.
+  In the two-argument version, it has the symbol version of `ns` as the namespace.
+  Note that `ns` need not refer to an existing namespace.
+
+      (symbol \"th\") => 'th
+      (symbol 'clojure.core \"th\") => 'clojure.core/th
+
+      (symbol *ns* 'th) => 'this.namespace/th ; \"add\" a namespace
+      (symbol *ns* 'clojure.core/even?) => 'this.namespace/even? ; \"localize\" a symbol.
+"
+([name]
+ (clojure.core/symbol (cast/as-string-without-namespace name)))
+([ns name]
+  (clojure.core/symbol (str (cast/as-ns-symbol ns)) (cast/as-string-without-namespace name))))
+
+
 
 (defn from-concatenation 
   "Construct a symbol from the concatenation of the string versions of the
