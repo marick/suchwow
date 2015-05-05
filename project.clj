@@ -1,5 +1,5 @@
-(defproject marick/suchwow "1.1.0"
-  :description "Such functions"
+(defproject marick/suchwow "2.0.0"
+  :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
   :license {:name "The Unlicense"

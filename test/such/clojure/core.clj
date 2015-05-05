@@ -9,22 +9,13 @@
 
 ;; Here are the three ways to immigrate:
 ;; 1. Every public var in a set of namespaces
-(immigrate/namespaces 'such.shorthand 'such.types)
+(immigrate/namespaces 'such.shorthand 'such.types 'such.wide-domains)
 ;; 2. Selected vars in a single namespace
 (immigrate/selection 'such.immigration '[move-var! selection])
 ;; 3. Every public var in a namespace, with the resulting vars in this namespace prefixed.
 (immigrate/prefixed 'clojure.string "str-")
 
-;; Go to the f_core.clj file in this directory to see use of this namespace.
-
-;;; Note: this example does not include such.wide-domains. When that's
-;;; are immigrated into here, `:use` or `:refer :all` of this
-;;; namespace from another one will produce these warnings:
-;;; 
-;;; WARNING: find-ns already refers to: #'clojure.core/find-ns in namespace: user, being replaced by: #'commons.clojure.core/find-ns
-;;; 
-;;; I recommend you `(:require such.wide-domains :as w)`. However, `such.clojure.more-core-client`
-;;; shows how to work around the problem.
+;; Go to the core-client.clj file in this directory to see use of this namespace.
 
 
 

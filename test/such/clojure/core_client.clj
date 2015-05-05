@@ -14,6 +14,10 @@
     (find-var 'such.clojure.core/this-var-has-no-value-and-is-used-in-testing) => nil
     (find-var 'such.clojure.core-client/this-var-has-no-value-and-is-used-in-testing) => nil))
 
+(fact "wider domain functions are present"
+  (+symbol *ns* :from-keyword) => 'such.clojure.core-client/from-keyword)
+
+
 (fact "metadata is stored appropriately"
   (meta #'third) => (contains {:doc #"the third element"
                                :ns (find-ns 'such.clojure.core)}))

@@ -4,9 +4,8 @@
    various other utility namespaces that you don't want to require individually.
    You can `:require :as` the supplementary namespaces, or - more daringly - you can 
    `:use` or `:require :refer :all` it. 
-   See [`such.clojure.core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj) 
-   and [`such.clojure.more-core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/more-core.clj)
-   for examples."
+   See [`such.clojure.core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj).
+"
   (:use such.versions)
   (:require [such.vars :as var]
             [such.casts :as cast]
@@ -46,10 +45,6 @@
    1. The `ns-names` can be strings, keywords, symbols or namespaces (see [[as-ns-symbol]]).
    
    2. Existing references will be overwritten without a warning.
-
-   This function is useful for \"using\" a namespace that contains overrides of 
-   `clojure.core` functions. (Such as `such.wide-domains`.)
-   See [`such.clojure.more-core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/more-core.clj) for an example.
 "
 
   [& ns-names]
