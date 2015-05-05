@@ -14,12 +14,6 @@
   ((ns-refers *ns*) 'fourth) => #'such.clojure.more-core/fourth
   (namespace? *ns*) => true)
 
-
-(fact "documentation version is present"
-  ((ns-refers *ns*) 'ns-resolve) => #'such.clojure.more-core/ns-resolve
-  (> (-> #'ns-resolve meta :doc count)
-     (-> #'clojure.core/ns-resolve meta :doc count)))
-
 (fact "wider domains are present"
   ((ns-refers *ns*) 'find-var) => #'such.clojure.more-core/find-var
   (symbol *ns* :from-keyword) => 'such.clojure.more-core-client/from-keyword)

@@ -23,9 +23,9 @@
   (namespace? *ns*) => true)
 
 ;; Rather than interning the variables, you can `refer` it
-(immigrate/namespaces-by-reference 'such.better-doc)
+(immigrate/namespaces-by-reference 'such.wide-domains)
 (fact
-  ((ns-refers *ns*) 'ns-resolve) => #'such.better-doc/ns-resolve)
+  ((ns-refers *ns*) 'find-var) => #'such.wide-domains/find-var)
 
 
 

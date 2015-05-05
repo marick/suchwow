@@ -1,13 +1,21 @@
-(ns such.f-better-doc (:require [such.better-doc :as subject])
+(ns such.f-better-doc (:require such.better-doc)
   (:use midje.sweet such.types))
+
+
+(fact "doc strings have been updated"
+  (resolve 'find-ns) => #'clojure.core/find-ns
+  (-> #'find-ns meta :doc) => #"Other examples")
+
+;;; The following are just tests derived from the documentation, demonstrating 
+;;; that it was true at one time.
 
 (def a-var)
 
 ;; ns-name
 (fact "`ns-name` converts either a namespace or its symbol representation into a symbol"
-  (subject/ns-name 'such.f-better-doc) => 'such.f-better-doc
-  (subject/ns-name (find-ns 'such.f-better-doc)) => 'such.f-better-doc
-  (subject/ns-name 'no.such.namespace) => (throws #"No namespace.*found")
+  (ns-name 'such.f-better-doc) => 'such.f-better-doc
+  (ns-name (find-ns 'such.f-better-doc)) => 'such.f-better-doc
+  (ns-name 'no.such.namespace) => (throws #"No namespace.*found")
 
   (fact "Note that `name` doesn't work with namespaces"
     (name *ns*) => (throws)))

@@ -1,14 +1,15 @@
 (ns such.better-doc
-  "`clojure.core` functions, except with more complete documentation."
+  "Requiring this file will replace some `clojure.core` docstrings with
+   better versions."
   (:require [such.vars :as vars]))
 
 ;;; I'd be ecstatic if documentation like this, or derived from this, were
 ;;; included in clojure.core. Note that the Unlicense allows anyone to do that.
 
-
-
+;; Interning copies in this namespace allows codox to find them.
 (defmacro ^:private local-copy [var doc-string]
   `(let [var-name# (:name (meta ~var))]
+     (alter-meta! ~var assoc :doc ~doc-string)
      (ns-unmap *ns* var-name#)
      (intern *ns* (with-meta var-name#
                     (assoc (meta ~var) :doc ~doc-string)) (vars/root-value ~var))))

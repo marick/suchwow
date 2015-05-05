@@ -18,6 +18,10 @@
   (meta #'third) => (contains {:doc #"the third element"
                                :ns (find-ns 'such.clojure.core)}))
 
+(fact "documentation has been improved"
+  ((ns-refers *ns*) 'ns-resolve) => #'clojure.core/ns-resolve
+  (-> #'ns-resolve meta :doc) => #"`sym` is not namespace qualified")
+
 (fact "selected vars can be immigrated"
   ;; Note that union was immigrated twice in a row.
   ((ns-refers *ns*) 'selection) => #'such.clojure.core/selection
@@ -32,7 +36,3 @@
   ((ns-refers *ns*) 'blank?) => nil
   ((ns-refers *ns*) 'str-blank?) => var?
   (str-blank? " ") => true)
-
-
-
-

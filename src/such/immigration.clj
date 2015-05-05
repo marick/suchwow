@@ -30,13 +30,6 @@
       (immigrate/namespaces 'such.types 'such.casts)
       (immigrate/namespaces :such.types (find-ns 'such.casts))
 
-  Namespaces are loaded in left-to-right order, so a var defined in
-  two namespaces ends up with values from the final one. This is
-  useful when loading namespaces that improve on clojure.core:
-
-      (immigrate/namespaces 'such.better-doc   ; just bettter documentation for core fns
-                            'such.wide-domains) ; wider domains *and* better documentation.
-
   Existing vars, whether actually present (`intern`) or included by reference (`refer`)
   are silently overwritten.
 "
@@ -55,7 +48,7 @@
    2. Existing references will be overwritten without a warning.
 
    This function is useful for \"using\" a namespace that contains overrides of 
-   `clojure.core` functions. (Such as `such.better-doc` and `such.wide-domains`.)
+   `clojure.core` functions. (Such as `such.wide-domains`.)
    See [`such.clojure.more-core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/more-core.clj) for an example.
 "
 

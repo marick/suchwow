@@ -2,7 +2,9 @@
   "This namespace demonstrates the creation of a 'catch-all' namespace that contains
    the vars from several other namespaces *and* can make those vars available to
    other namespaces that `:require` this one."
-  (:require [such.immigration :as immigrate])
+  (:require [such.immigration :as immigrate]
+            ;; the following updates docstrings for clojure.core
+            such.better-doc)
   (:use midje.sweet))
 
 ;; Here are the three ways to immigrate:
@@ -15,19 +17,20 @@
 
 ;; Go to the f_core.clj file in this directory to see use of this namespace.
 
-;;; Note: this example does not include such.better-doc or such.wide-domains. When
-;;; those are immigrated into here, `:use` or `:refer :all` of this namespace from
-;;; another one will produce these warnings:
+;;; Note: this example does not include such.wide-domains. When that's
+;;; are immigrated into here, `:use` or `:refer :all` of this
+;;; namespace from another one will produce these warnings:
 ;;; 
 ;;; WARNING: find-ns already refers to: #'clojure.core/find-ns in namespace: user, being replaced by: #'commons.clojure.core/find-ns
 ;;; 
-;;; See such.clojure.more-core for a way to handle that.
+;;; I recommend you `(:require such.wide-domains :as w)`. However, `such.clojure.more-core-client`
+;;; shows how to work around the problem.
 
 
 
 ;; Other possibly interesting facts
 
-(fact "you can immigrate a private var, but it remains private (see f-core for confirmation)"
+(fact "you can immigrate a private var, but it remains private"
   (meta #'move-var!) => (contains {:private true}))
 
 ;; It is safe to immigrate twice.
