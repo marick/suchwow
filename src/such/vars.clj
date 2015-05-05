@@ -3,7 +3,8 @@
 
 (defprotocol Rootable
   "A protocol to look at \"root\" values of Vars. The root value is
-   the value before any `binding` - it's the value altered by `alter-var-root`."
+   the value before any `binding` - it's the value altered by `alter-var-root`.
+   Defines `has-root-value?` and `root-value`."
   (has-root-value? [this]
     "Does this var have a root value?" )
   (root-value [this]
