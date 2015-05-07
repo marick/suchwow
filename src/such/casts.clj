@@ -9,7 +9,7 @@
    functions."
   (:use such.types)
   (:require [such.vars :as var]
-            [such.util.fail :as fail]
+            [such.wrongness :as !]
             [clojure.string :as str]))
 
 (defn- namespacishly-split [s]
@@ -21,7 +21,7 @@
     (case (count substrings)
       1 (vector nil (symbol (first substrings)))
       2 (into [] (map symbol substrings))
-      (fail/not-namespace-and-name))))
+      (!/not-namespace-and-name))))
 
 (defn- named-namespace [named]
   (if (string? named)
@@ -45,7 +45,7 @@
       (has-namespace? \"clojure.core/even?\") => true
 "
   [arg]
-  (when-not (named? arg) (fail/not-namespace-and-name arg))
+  (when-not (named? arg) (!/not-namespace-and-name arg))
   (boolean (named-namespace arg)))
 
 (defn as-ns-symbol
@@ -78,7 +78,7 @@
         (ns-name arg)
 
         (has-namespace? arg)
-        (fail/should-not-have-namespace 'as-ns-symbol arg)
+        (!/should-not-have-namespace 'as-ns-symbol arg)
 
         :else
         (symbol (named-name arg))))
@@ -107,7 +107,7 @@
          (ns-name arg)
          
          (not (has-namespace? arg))
-         (fail/should-have-namespace 'extract-namespace-into-symbol arg)
+         (!/should-have-namespace 'extract-namespace-into-symbol arg)
          
          :else
          (symbol (named-namespace arg))))
@@ -133,7 +133,7 @@
                    (case (count substrings)
                      1 (vector nil (symbol (first substrings)))
                      2 (into [] (map symbol substrings))
-                     (fail/not-namespace-and-name)))]
+                     (!/not-namespace-and-name)))]
     (cond (string? val)
           (pairify (str/split val #"/"))
 
@@ -144,7 +144,7 @@
           (vector (ns-name (.ns val)) (.sym val))
 
           :else
-          (fail/not-namespace-and-name))))
+          (!/not-namespace-and-name))))
 
 (defn as-symbol-without-namespace
   "The argument *must* be a symbol, string, keyword, or var. In all cases, the 
