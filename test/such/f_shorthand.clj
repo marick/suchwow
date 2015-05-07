@@ -69,3 +69,10 @@
   (subject/without-nils []) => empty?
   (subject/without-nils [1 nil 2 false]) => [1 2 false]
   (take 2 (subject/without-nils (range))) => [0 1])
+
+
+(def a (atom 100))
+(fact "prog1"
+  (subject/prog1 (+ 1 1)
+    (swap! a inc)) => 2
+  @a => 101)

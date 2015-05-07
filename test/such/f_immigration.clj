@@ -25,6 +25,3 @@
 (immigrate/prefixed "clojure.string" ::str-3-)
 (fact str-3-join => fn?)
 
-
-
-

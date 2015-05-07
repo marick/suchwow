@@ -77,3 +77,20 @@
   "A lazy sequence of non-nil values of `coll`."
   [coll]
   (keep identity coll))
+
+
+(defmacro prog1
+  "The `retform` is evaluated, followed by the `body`. The value of the
+   form is returned, so the point of `body` should be to have side-effects.
+   
+       (defn pop! [k]
+          (prog1 (top k)
+            (alter! k clojure.core/pop)))
+   
+   The name is a homage to older Lisps.
+"
+  [retform & body]
+  `(let [retval# ~retform]
+     ~@body
+     retval#))
+
