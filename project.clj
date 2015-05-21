@@ -13,7 +13,7 @@
              :1.5.0 {:dependencies [[org.clojure/clojure "1.5.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
-             :1.7 {:dependencies [[org.clojure/clojure "1.7.0-beta3"]]}
+             :1.7 {:dependencies [[org.clojure/clojure "1.7.0-RC1"]]}
              }
 
   :plugins [[lein-midje "3.1.3"]
