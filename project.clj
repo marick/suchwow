@@ -1,4 +1,4 @@
-(defproject marick/suchwow "2.2.0"
+(defproject marick/suchwow "2.3.0-SNAPSHOT"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -6,14 +6,14 @@
             :url "http://unlicense.org/"
             :distribution :repo}
 
-  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :dependencies [[org.clojure/clojure "1.7.0"]]
 
-  :profiles {:dev {:dependencies [[midje "2.0.0-SNAPSHOT" :exclusions [org.clojure/clojure]]]}
+  :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]]}
              :1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.5.0 {:dependencies [[org.clojure/clojure "1.5.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
-             :1.7 {:dependencies [[org.clojure/clojure "1.7.0-RC1"]]}
+             :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              }
 
   :plugins [[lein-midje "3.1.3"]
