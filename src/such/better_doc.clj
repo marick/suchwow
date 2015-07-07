@@ -104,3 +104,9 @@
    
          (symbol \"no.such.namespace\" \"the\") => 'no.such.namespace/the
 ")
+
+(local-copy #'clojure.core/butlast
+  "Return a seq of all but the last item in coll, in linear time.
+   If you are working on a vector and want the result to be a vector, use `pop`.")
+
+    
