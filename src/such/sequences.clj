@@ -30,3 +30,18 @@
    change of domain than a widening."
 
   (reduce into coll colls))
+
+(defn bifurcate
+  "Apply `pred` to all elements of `coll` and return two sequences. 
+   Those elements for which `pred` returns a truthy value go in the
+   first sequence. `pred` is only evaluated once per element. 
+   Sequences are created lazily.
+    
+        (bifurcate even? [1 2 3 4]) => [ [2 4] [1 3] ]
+        (take 5 (first (bifurcate even? (range)))) => [0 2 4 6 8]
+"
+  [pred coll]
+  (let [tagged (map #(vector (pred %) %) coll)
+        choice (fn [in-or-out] (map second (in-or-out first tagged)))]
+    (vector (choice filter) (choice remove))))
+        

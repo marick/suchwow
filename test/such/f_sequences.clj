@@ -16,3 +16,7 @@
   (subject/+into [1]) => [1]
   (subject/+into [1] [2 3]) => [1 2 3]
   (subject/+into [1] [2 3] [4 5] [] [6]) => [1 2 3 4 5 6])
+
+(fact bifurcate
+  (subject/bifurcate even? [1 2 3 4]) => [ [2 4] [1 3] ]
+  (take 5 (first (subject/bifurcate even? (range)))) => [0 2 4 6 8])
