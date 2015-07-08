@@ -4,11 +4,10 @@ The [API documentation index](http://marick.github.io/suchwow) gives an overview
 
 Snippets from serious work, wrapped in a whimsical container. A bit of a tribute to the spirit of [_why](http://en.wikipedia.org/wiki/Why_the_lucky_stiff), but with a [Shiba Inu](http://en.wikipedia.org/wiki/Shiba_Inu) instead of [foxes](http://mislav.uniqpath.com/poignant-guide/images/the.foxes-3.png).
 
-Intended audience:
-* those who refuse to use `(if (seq ...))` and don't care *who* knows it.
-* those who think `:use` has its virtues.
-* those disinclined to remember which functions take namespaces, which take symbols, and which take both 
-* those willing to devote some of the 24 lines on their [VT100](http://en.wikipedia.org/wiki/VT100) to examples in docstrings.
+This package offers three types of functions:
+* `clojure.core` functions, but with better documentation (including examples).
+* Variants of `clojure.core` functions that accept more kinds of inputs.
+* A grab-bag of useful functions that, importantly, you can copy into your own code without worrying about licenses or giving credit or any of that.
 
 ![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)     
 [via Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)
@@ -17,19 +16,16 @@ Intended audience:
 
 ## Such Usage
 
-Available via [clojars](https://clojars.org/marick/suchwow) for Clojure 1.4+  
+Available via [clojars](https://clojars.org/marick/suchwow) for Clojure 1.5+  
 For lein: [marick/suchwow "2.2.0"]     
 
 [Much API doc](http://marick.github.io/suchwow/)
 
-The functions are packaged so that you can do the usual `(:require
-[such.types :as wow])` thing. Alternately, you can compose them into
-your own private addition to `clojure.core`, whereupon you can adorn
-any namespace declaration with:
+Copy the source if you want, do the normal `(:require
+[such.types :as wow])` thing, or create your own `commons.clojure.core`
+namespace with all the things you think should be packaged with Clojure. 
 
-    (:use marick.clojure.core) ; yes: `use`. Glorious, terse `use`.
-
-The file [`test/such/clojure/core.clj`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj) shows how to arrange for that to work.
+The file [`test/such/clojure/core.clj`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj) shows how to arrange for that last.
 
 
 ## Such License
