@@ -7,6 +7,7 @@
             :distribution :repo}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
+                 [potemkin "0.3.13" :exclusions [org.clojure/clojure]]
                  [environ "1.0.0"]]
 
   :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]]}
@@ -25,7 +26,7 @@
           :defaults {:doc/format :markdown}}
 
   :aliases {"compatibility" ["with-profile" "+1.5.0:+1.5.1:+1.6:+1.7" "midje" ":config" ".compatibility-test-config"]
-            "travis" ["with-profile" ":+1.5.0:+1.5.1:+1.6:+1.7" "midje"]}
+            "travis" ["with-profile" "+1.5.0:+1.5.1:+1.6:+1.7" "midje"]}
 
   ;; For Clojure snapshots
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
