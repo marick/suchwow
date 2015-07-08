@@ -10,7 +10,8 @@
 "
   (:require [such.immigration :as immigrate]))
 
-(immigrate/selection 'such.ns '[+find-var])
-(immigrate/selection 'such.symbols '[+symbol])
-(immigrate/selection 'such.sequences '[+into])
+(immigrate/import-vars [such.ns +find-var]
+                       [such.symbols +symbol]
+                       [such.sequences +into])
+
 

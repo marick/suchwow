@@ -1,90 +1,31 @@
 (ns such.immigration
-  "Functions useful for constructing a \"favorite functions\" namespace that you can
-   use as a supplement to `clojure.core`. That namespace is typically constructed from 
-   various other utility namespaces that you don't want to require individually.
-   You can `:require :as` the supplementary namespaces, or - more daringly - you can 
-   `:use` or `:require :refer :all` it. 
-   See [`such.clojure.core`](https://github.com/marick/suchwow/blob/master/test/such/clojure/core.clj).
-"
-  (:use such.versions)
-  (:require [such.vars :as var]
-            [such.casts :as cast]
-            [such.symbols :as symbol]))
+  "Use [Potemkin](https://github.com/ztellman/potemkin) `import-vars` to 
+   make a \"favorite functions\" namespace that  supplements `clojure.core`. 
+   This namespace contains useful macros that build on it. It also imports
+   the Potemkin functions for convenience."
+  (:require [potemkin.namespaces :as ns]))
 
-(defn- move-var! [var sym]
-  (ns-unmap *ns* sym)
-  (when (var/has-root-value? var)
-    (intern *ns*
-            (with-meta sym (meta var))
-            (var/root-value var))))
+(ns/import-vars [potemkin.namespaces
+                 import-fn
+                 import-macro
+                 import-def
+                 import-vars])
 
-(defn namespaces
-  "Create (`intern`) a public var in the current namespace for each public var in the `ns-names`.
-  The created vars have the same name, root value, and metadata as the original
-  (except for the :ns metadata value, which is the current namespace).
 
-  The `ns-names` are typically symbols like `'such.immigration`, but they may also be
-  strings, keywords, or even namespaces themselves. (See [[as-ns-symbol]].)
 
-      (immigrate/namespaces 'such.types 'such.casts)
-      (immigrate/namespaces :such.types (find-ns 'such.casts))
 
-  Existing vars, whether actually present (`intern`) or included by reference (`refer`)
-  are silently overwritten.
-"
-
+(defn ^:no-doc namespaces
   [& ns-names]
-  (doseq [ns (map cast/as-ns-symbol ns-names)]
-    (require ns)
-    (doseq [[sym ^clojure.lang.Var var] (ns-publics ns)]
-      (move-var! var sym))))
+  (println "`namespaces` has been removed in favor of potemkin/import-vars"))
 
-(defn namespaces-by-reference
-  "This is `(require ns :refer :all)` for each of the namespaces, except:
-   
-   1. The `ns-names` can be strings, keywords, symbols or namespaces (see [[as-ns-symbol]]).
-   
-   2. Existing references will be overwritten without a warning.
-"
-
+(defn ^:no-doc namespaces-by-reference
   [& ns-names]
-  (doseq [ns (map cast/as-ns-symbol ns-names)]
-    (require ns)
-    (doseq [[sym ^clojure.lang.Var var] (ns-publics ns)]
-      (ns-unmap *ns* sym))
-    (refer ns)))
+  (println "`namespaces-by-reference` has been removed in favor of potemkin/import-vars"))
 
-(defn selection
-  "For each `var-name` that corresponds to a var in `ns`,
-   create a var in this namespace with the same name, root binding,
-   and metadata.
-
-   `ns` must be accepted by [[as-ns-symbol]] (namespace, symbol, or string).
-   `var-names` must be accepted by [[as-symbol-without-namespace]]
-   (symbol, var, keyword, or string).
-   It is an Exception for there to be no var in `ns` corresponding to a `var-name`.
-
-        (immigrate/selection 'such.casts '[as-ns-symbol as-symbol-without-namespace])
-"
+(defn ^:no-doc selection
   [ns var-names]
-  (let [true-ns (cast/as-ns-symbol ns)]
-    (require true-ns)
-    (doseq [var-symbol (map cast/as-symbol-without-namespace var-names)]
-      (move-var! (ns-resolve true-ns var-symbol) var-symbol))))
+  (println "`selection` has been removed in favor of potemkin/import-vars"))
 
-(defn prefixed
-  "Immigrate each public var in `ns`, but prefix their names in this namespace
-   with the given `prefix`.
-
-   `ns` must be accepted by [[as-ns-symbol]] (namespace, symbol, or string).
-   `prefix` may be a symbol, string, or keyword.
-
-        (immigrate/prefixed 'clojure.string \"str-\")
-        (str-join \"-\" [\"a\" \"b\"]) => \"a-b`\"
-"
+(defn ^:no-doc prefixed
   [ns prefix]
-  (let [true-ns (cast/as-ns-symbol ns)]
-    (require true-ns)
-    (doseq [[sym var] (ns-publics true-ns)]
-      (move-var! (ns-resolve true-ns sym)
-                 (symbol/from-concatenation (vector prefix sym))))))
+  (println "`selection` has been removed in favor of potemkin/import-vars"))
