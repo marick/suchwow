@@ -33,3 +33,20 @@
 "
   [var]
   (name (name-as-symbol var)))
+
+(defn has-macro?
+  "Does the var point to a macro?"
+  [v]
+  (boolean (:macro (meta v))))
+
+(defn has-function?
+  "Does the var point to a function?"
+  [v]
+  (or (and (boolean (:arglists (meta v)))
+           (not (has-macro? v)))
+      (= (type (root-value v)) clojure.lang.MultiFn)))
+
+(defn has-plain-value?
+  "Does the var point to something not a macro nor a function?"
+  [v]
+  ( (complement (some-fn has-macro? has-function?)) v))

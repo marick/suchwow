@@ -38,3 +38,47 @@
 
 (fact "name-as-string"
   (var/name-as-string #'clojure.core/even?) => "even?")
+
+
+;;; What vars point to
+
+(defn a-fun [n] (inc n))
+(defmulti a-multi identity)
+(defmacro a-macro [n] `(+ ~n ~n))
+(def a-thing 5)
+
+(defprotocol P
+  (a-proto-fn [this]))
+
+(defrecord R [a]
+  P
+  (a-proto-fn [this] a))
+
+(fact 
+  (var/has-macro? #'cons) => false
+  (var/has-macro? #'cond) => true
+  (var/has-macro? #'a-fun) => false
+  (var/has-macro? #'a-multi) => false
+  (var/has-macro? #'a-macro) => true
+  (var/has-macro? #'a-thing) => false
+  (var/has-macro? #'a-proto-fn) => false
+
+  (var/has-function? #'cons) => true
+  (var/has-function? #'cond) => false
+  (var/has-function? #'a-fun) => true
+  (var/has-function? #'a-multi) => true
+  (var/has-function? #'a-macro) => false
+  (var/has-function? #'a-thing) => false
+  (var/has-function? #'a-proto-fn) => true
+
+  (var/has-plain-value? #'cons) => false
+  (var/has-plain-value? #'cond) => false
+  (var/has-plain-value? #'a-fun) => false
+  (var/has-plain-value? #'a-multi) => false
+  (var/has-plain-value? #'a-macro) => false
+  (var/has-plain-value? #'a-thing) => true
+  (var/has-plain-value? #'a-proto-fn) => false)
+
+
+
+  
