@@ -6,7 +6,8 @@
             :url "http://unlicense.org/"
             :distribution :repo}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]]
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [environ "1.0.0"]]
 
   :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]]}
              :1.5.0 {:dependencies [[org.clojure/clojure "1.5.0"]]}
