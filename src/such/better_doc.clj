@@ -8,14 +8,14 @@
 
 
 ;; Interning copies in this namespace allows codox to find them.
-(defmacro ^:private local-copy [var doc-string]
+(defmacro ^:private update-and-make-local-copy! [var doc-string]
   `(let [var-name# (:name (meta ~var))]
      (alter-meta! ~var assoc :doc ~doc-string)
      (ns-unmap *ns* var-name#)
      (intern *ns* (with-meta var-name#
                     (assoc (meta ~var) :doc ~doc-string)) (vars/root-value ~var))))
 
-(local-copy #'clojure.core/ns-name
+(update-and-make-local-copy! #'clojure.core/ns-name
   "`ns` *must* be either a namespace or a symbol naming a namespace.
    If the namespace exists, its symbol-name is returned. If not, an exception is thrown.
    Note: the more common `name` function cannot be applied to namespaces.
@@ -24,14 +24,14 @@
        (ns-name *ns*) => 'such.better-doc
 ")
 
-(local-copy #'clojure.core/find-ns
+(update-and-make-local-copy! #'clojure.core/find-ns
   "`sym` *must* be a symbol. If it names an existing namespace, that namespace is returned.
    Otherwise, `nil` is returned. [Other examples](https://clojuredocs.org/clojure.core/find-ns)
 
        (find-ns 'clojure.core) => #<Namespace clojure.core>
 ")
 
-(local-copy #'clojure.core/ns-resolve
+(update-and-make-local-copy! #'clojure.core/ns-resolve
   "`ns-resolve` goes from a symbol to the var or class it represents. [Other examples](https://clojuredocs.org/clojure.core/ns-resolve)
 
 
@@ -97,7 +97,7 @@
 ")
 
 
-(local-copy #'clojure.core/symbol
+(update-and-make-local-copy! #'clojure.core/symbol
   "Creates a symbol from its arguments, which *must* be strings.
    The name of that result is `name`. In the one-argument version,
    the result's namespace is `nil`. In the two-argument version, it's
@@ -106,45 +106,32 @@
          (symbol \"no.such.namespace\" \"the\") => 'no.such.namespace/the
 ")
 
-(local-copy #'clojure.core/butlast
+(update-and-make-local-copy! #'clojure.core/butlast
   "Return a seq of all but the last item in coll, in linear time.
    If you are working on a vector and want the result to be a vector, use `pop`.")
 
     
-(local-copy #'clojure.core/every-pred
-   "Take N predicates and produce a single predicate - call it `result`. `result`
-    will return `true` iff each of the original predicates returns a truthy 
-    value. The predicates are evaluated in order, and the first one that produces
-    a falsey value stops any further checking.
-    
-    See also `some-fn`.
-    
-         ( (every-pred integer? even? pos?) \"hi\") => false
-         ( (every-pred integer? even? pos?) 4) => true
-")
-
-    
-(local-copy #'clojure.core/every-pred
+(update-and-make-local-copy! #'clojure.core/every-pred
    "Take N functions and produce a single predicate - call it `result`. `result`
     will return `true` iff each of the original functions returns a truthy 
     value. `result` evaluates the functions in order, and the first one that produces
     a falsey value stops any further checking. In that case, `false` is returned.
     
-    See also `some-fn`.
+    See also [[some-fn]].
     
          ( (every-pred integer? even? pos?) \"hi\") => false
          ( (every-pred integer? even? pos?) 4) => true
 ")
 
     
-(local-copy #'clojure.core/some-fn
+(update-and-make-local-copy! #'clojure.core/some-fn
    "Take N functions and produce a single function - call it `result`. `result`
     evaluates the N functions in order. When one returns a truthy result, `result`
     skips the remaining functions and returns that result. If none of the functions
     returns a truthy value, `result` returns a falsey value.
     
     This function is called `some-fn` because it does not produce a pure (true/false)
-    result. See also `every-pred`.
+    result. See also [[every-pred]].
     
          ( (some-fn even? pos?) 3) => true
          ( (some-fn even? pos?) -3) => false
@@ -155,3 +142,37 @@
 ")
 
     
+(update-and-make-local-copy! #'clojure.core/some
+   "Apply `pred` to each element in `coll` until it returns a truthy value,
+    then return that value (*not* the element). This can be used to ask 
+    the question \"is there an even value in the collection?\":
+
+        (some even? [1 2 3 4]) => true
+
+    However, as signaled by the lack of a '?' in `some`, its value is not
+    necessarily a boolean. Here is how you would ask \"is there a value 
+    greater than zero and, if so, what is the first of them?\":
+
+        (some #(and (pos? %) %) [-1 -3 2 4]) => 2
+
+    `some` is often used to ask the question \"is X in the collection?\".
+    That takes advantage of how sets can be treated as a \"contains value?\"
+    function:
+    
+        (#{1 2 3} 2) => 2
+        (#{1 2 3} -88) => nil
+
+    So:
+    
+        (some #{2} [1 2 3]) => 2
+        (some #{2} [-1 -2 -3]) => nil
+
+    You may find [[any?]] (in `such.shorthand`) easier to remember.
+    
+    It's easy to forget that `some` returns the *value of the predicate*,
+    not the element itself. To be sure you get the element, do this:
+    
+        (first (filter pred coll))
+    
+    That's [[find-first]] in shorthand.
+")
