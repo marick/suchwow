@@ -1,10 +1,11 @@
 (ns such.better-doc
   "Requiring this file will replace some `clojure.core` docstrings with
-   better versions."
+   better versions.
+   
+   I'd be ecstatic if documentation like this, or derived from this, were
+   included in clojure.core. Note that the Unlicense allows anyone to do that."
   (:require [such.vars :as vars]))
 
-;;; I'd be ecstatic if documentation like this, or derived from this, were
-;;; included in clojure.core. Note that the Unlicense allows anyone to do that.
 
 ;; Interning copies in this namespace allows codox to find them.
 (defmacro ^:private local-copy [var doc-string]
@@ -108,5 +109,49 @@
 (local-copy #'clojure.core/butlast
   "Return a seq of all but the last item in coll, in linear time.
    If you are working on a vector and want the result to be a vector, use `pop`.")
+
+    
+(local-copy #'clojure.core/every-pred
+   "Take N predicates and produce a single predicate - call it `result`. `result`
+    will return `true` iff each of the original predicates returns a truthy 
+    value. The predicates are evaluated in order, and the first one that produces
+    a falsey value stops any further checking.
+    
+    See also `some-fn`.
+    
+         ( (every-pred integer? even? pos?) \"hi\") => false
+         ( (every-pred integer? even? pos?) 4) => true
+")
+
+    
+(local-copy #'clojure.core/every-pred
+   "Take N functions and produce a single predicate - call it `result`. `result`
+    will return `true` iff each of the original functions returns a truthy 
+    value. `result` evaluates the functions in order, and the first one that produces
+    a falsey value stops any further checking. In that case, `false` is returned.
+    
+    See also `some-fn`.
+    
+         ( (every-pred integer? even? pos?) \"hi\") => false
+         ( (every-pred integer? even? pos?) 4) => true
+")
+
+    
+(local-copy #'clojure.core/some-fn
+   "Take N functions and produce a single function - call it `result`. `result`
+    evaluates the N functions in order. When one returns a truthy result, `result`
+    skips the remaining functions and returns that result. If none of the functions
+    returns a truthy value, `result` returns a falsey value.
+    
+    This function is called `some-fn` because it does not produce a pure (true/false)
+    result. See also `every-pred`.
+    
+         ( (some-fn even? pos?) 3) => true
+         ( (some-fn even? pos?) -3) => false
+         
+         ( (some-fn second first) [1 2 3]) => 2
+         ( (some-fn second first) [1]) => 1
+         ( (some-fn second first) []) => nil
+")
 
     
