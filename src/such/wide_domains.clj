@@ -12,4 +12,5 @@
 
 (immigrate/selection 'such.ns '[+find-var])
 (immigrate/selection 'such.symbols '[+symbol])
+(immigrate/selection 'such.sequences '[+into])
 

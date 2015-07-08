@@ -12,3 +12,7 @@
   (subject/only []) => (throws #"`\[\]` should have only one"))
 
 
+(fact +into
+  (subject/+into [1]) => [1]
+  (subject/+into [1] [2 3]) => [1 2 3]
+  (subject/+into [1] [2 3] [4 5] [] [6]) => [1 2 3 4 5 6])
