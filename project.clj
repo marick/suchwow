@@ -1,4 +1,4 @@
-(defproject marick/suchwow "2.3.0-SNAPSHOT"
+(defproject marick/suchwow "3.0.0-SNAPSHOT"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -9,7 +9,6 @@
   :dependencies [[org.clojure/clojure "1.7.0"]]
 
   :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]]}
-             :1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.5.0 {:dependencies [[org.clojure/clojure "1.5.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
@@ -24,8 +23,8 @@
           :output-dir "/var/tmp/suchwow-doc"
           :defaults {:doc/format :markdown}}
 
-  :aliases {"compatibility" ["with-profile" "+1.4:+1.5.0:+1.5.1:+1.6:+1.7" "midje" ":config" ".compatibility-test-config"]
-            "travis" ["with-profile" "+1.4:+1.5.0:+1.5.1:+1.6:+1.7" "midje"]}
+  :aliases {"compatibility" ["with-profile" "+1.5.0:+1.5.1:+1.6:+1.7" "midje" ":config" ".compatibility-test-config"]
+            "travis" ["with-profile" ":+1.5.0:+1.5.1:+1.6:+1.7" "midje"]}
 
   ;; For Clojure snapshots
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
