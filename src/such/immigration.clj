@@ -58,7 +58,7 @@
   [ns-sym prefix]
   (letfn [(one-call [[unqualified var]]
             (let [qualified (symbol/+symbol ns-sym unqualified)
-                  to (symbol (str prefix unqualified))
+                  to (symbol/from-concatenation [prefix unqualified])
                   importer (flow/branch-on var
                               var/has-macro?     `ns/import-macro
                               var/has-function?  `ns/import-fn
