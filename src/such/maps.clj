@@ -55,3 +55,26 @@
   [original unwanted]
   (apply dissoc original (keys unwanted)))
 
+(defn update-each-value
+  "Call `f` on each value in map `kvs`, passing it the value and
+   any `args`.
+    
+        (update-each-value {:a 1, :b 0} + 2) => {:a 3, :b 2}
+"
+  [kvs f & args]
+  (reduce (fn [so-far k] 
+            (assoc so-far k (apply f (get kvs k) args)))
+          kvs
+          (keys kvs)))
+
+(defn mkmap:all-keys-with-value
+  "Create a map with keys `keys`. Each key will have `v` as
+   its value.
+       
+          (mkmap:all-keys-with-value [:a, :b] 3) => {:a 3, :b 3}
+"
+  [keys v]
+  (reduce (fn [so-far k]
+            (assoc so-far k v))
+          {}
+          keys))

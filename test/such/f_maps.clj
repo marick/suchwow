@@ -45,3 +45,13 @@
     (subject/dissoc-keypath {:by-name {:name1 1}} [:NOTFOUND :name1])
     =not=>          {:NOTFOUND {:name1 1}}))
 
+(fact update-each-value
+  (subject/update-each-value {} inc) => {}
+  (subject/update-each-value {:a 1, :b 2} inc) => {:a 2 :b 3}
+  (subject/update-each-value {:a [], :b [:b]} conj 1) => {:a [1] :b [:b 1]})
+
+(fact "making a map with uniform keys"
+  (subject/mkmap:all-keys-with-value [] 3) => {}
+  (subject/mkmap:all-keys-with-value [:a] 3) => {:a 3}
+  (subject/mkmap:all-keys-with-value [:a [:b]] 3) => {:a 3, [:b] 3})
+
