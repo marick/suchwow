@@ -25,7 +25,11 @@
         (has-favs? [1 6]) => true
    
    Stops checking after the first success. A predicate created from
-   no arguments always returns `true`."
+   no arguments always returns `true`.
+
+   Note: this predates [[some-fn]]. It differs in that it always returns
+   `true` or `false`, and that it allows zero arguments (which produces a
+   function that always returns `true`).
   [& preds]
   (if (empty? preds)
     (constantly true)
