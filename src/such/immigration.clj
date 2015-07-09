@@ -1,23 +1,47 @@
 (ns such.immigration
-  "Use [Potemkin](https://github.com/ztellman/potemkin) `import-vars` to 
-   make a \"favorite functions\" namespace that  supplements `clojure.core`. 
-   This namespace contains useful macros that build on it. It also re-exports
-   the Potemkin functions for convenience."
+  "[Potemkin](https://github.com/ztellman/potemkin)'s `import-vars` 
+   is the most reliable way I know to make a namespace that gathers vars from several
+   namespaces and presents them as a unified API. This namespace builds
+   on it. 
+   See [the tests](https://github.com/marick/suchwow/blob/master/test/such/f_immigration.clj)
+   and [commons.clojure.core](https://github.com/marick/clojure-commons/blob/master/src/commons/clojure/core.clj)
+   for two examples of creating a \"favorite functions\" namespace that
+   can be included everywhere with (for example) `(ns my.ns (:use my.clojure.core))`.
+"
   (:require [potemkin.namespaces :as ns]
             [such.symbols :as symbol]
             [such.vars :as var]
             [such.control-flow :as flow]))
 
 (ns/import-vars [potemkin.namespaces
-                 import-fn
-                 import-macro
-                 import-def
                  import-vars])
 
-(defmacro import-all-vars
-  "Import all public vars from the namespace, using Potemkin's `import-vars`.
+(defmacro import-vars
+  "Import named vars from the named namespaces and make them (1) public in this
+   namespace and (2) available for `refer` by namespaces that require this one.
+   See [Potemkin](https://github.com/ztellman/potemkin) for more.
    
-         (import-all-vars clojure.set) ; note namespace is unquoted.
+        (import-vars [clojure.math.combinatorics
+                         count-permutations permutations]
+                     [clojure.data.json
+                         write-str])
+    
+   This version differs from Potemkin's in that you needn't have already required
+   the namespaces you're importing."
+  [& namespace-and-var-descriptions]
+  (let [namespaces (map first namespace-and-var-descriptions)
+        requires (map (fn [ns] `(require '~ns)) namespaces)]
+    `(do 
+       ~@requires
+       (ns/import-vars ~@namespace-and-var-descriptions))))
+
+
+(defmacro import-all-vars
+  "Import all public vars from the namespace, using Potemkin's
+   `import-vars`.
+    
+          (import-all-vars clojure.set) ; note namespace is unquoted.
+
 "
   [ns-sym]
   (let [expanded (into (vector ns-sym) (keys (ns-publics ns-sym)))]
@@ -41,6 +65,7 @@
                               :else              `ns/import-def)]
               `(~importer ~qualified ~to)))]
     `(do
+       (require '~ns-sym)
        ~@(map one-call (ns-publics ns-sym)))))
 
 (defn ^:no-doc namespaces
