@@ -13,9 +13,6 @@
             [such.vars :as var]
             [such.control-flow :as flow]))
 
-(ns/import-vars [potemkin.namespaces
-                 import-vars])
-
 (defmacro import-vars
   "Import named vars from the named namespaces and make them (1) public in this
    namespace and (2) available for `refer` by namespaces that require this one.
@@ -45,9 +42,9 @@
 "
   [& ns-syms]
   (let [expand (fn [ns-sym]
+                 (require ns-sym)
                  (into (vector ns-sym) (keys (ns-publics ns-sym))))
         expanded (map #(list `import-vars (expand %)) ns-syms)]
-    
     `(do ~@expanded)))
 
 (defmacro import-prefixed-vars
