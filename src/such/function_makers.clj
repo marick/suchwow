@@ -30,6 +30,7 @@
    Note: this predates [[some-fn]]. It differs in that it always returns
    `true` or `false`, and that it allows zero arguments (which produces a
    function that always returns `true`).
+"
   [& preds]
   (if (empty? preds)
     (constantly true)
