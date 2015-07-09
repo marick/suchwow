@@ -7,7 +7,7 @@ Snippets from serious work, wrapped in a whimsical container. A bit of a tribute
 This package offers three types of functions:
 * `clojure.core` functions, but with better documentation (including examples).
 * Variants of `clojure.core` functions that accept more kinds of inputs.
-* A grab-bag of useful functions that, importantly, you can copy into your own code without worrying about licenses or giving credit or any of that.
+* A grab-bag of useful functions that, importantly, you can copy into your own code without worrying about licenses or giving credit or any of that. I put such things into a ["favorite functions" namespace](https://github.com/marick/clojure-commons/blob/master/src/commons/clojure/core.clj).
 
 ![By Euterpia (Own work, CC0), via Wikimedia Commons](http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Doge_homemade_meme.jpg/256px-Doge_homemade_meme.jpg)     
 [via Euterpia](http://commons.wikimedia.org/wiki/File:Doge_homemade_meme.jpg)
