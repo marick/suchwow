@@ -67,3 +67,8 @@
       (subject/+find-var 'clojure.core "derp/odd?") => #'clojure.core/odd?
       (subject/+find-var "clojure.core" ::odd?) => #'clojure.core/odd?
       (subject/+find-var *ns* 'clojure.set/intersection) => #'intersection)))
+
+(fact +into
+  (let [result (subject/+into [] [1] (list 3 4))]
+    result => [1 3 4]
+    result => vector?))
