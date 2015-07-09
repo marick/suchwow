@@ -8,7 +8,9 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [potemkin "0.3.13" :exclusions [org.clojure/clojure]]
-                 [environ "1.0.0"]]
+                 [environ "1.0.0"]
+                 [commons-codec/commons-codec "1.10"]]
+
 
   :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.1"]
