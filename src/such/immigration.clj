@@ -37,15 +37,18 @@
 
 
 (defmacro import-all-vars
-  "Import all public vars from the namespace, using Potemkin's
+  "Import all public vars from the namespaces, using Potemkin's
    `import-vars`.
     
           (import-all-vars clojure.set) ; note namespace is unquoted.
 
 "
-  [ns-sym]
-  (let [expanded (into (vector ns-sym) (keys (ns-publics ns-sym)))]
-    `(import-vars ~expanded)))
+  [& ns-syms]
+  (let [expand (fn [ns-sym]
+                 (into (vector ns-sym) (keys (ns-publics ns-sym))))
+        expanded (map #(list `import-vars (expand %)) ns-syms)]
+    
+    `(do ~@expanded)))
 
 (defmacro import-prefixed-vars
   "Import all public vars from the namespace, using Potemkin's `import-vars`.
