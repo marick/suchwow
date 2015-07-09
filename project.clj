@@ -10,7 +10,9 @@
                  [potemkin "0.3.13" :exclusions [org.clojure/clojure]]
                  [environ "1.0.0"]]
 
-  :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]]}
+  :profiles {:dev {:dependencies [[midje "1.7.0" :exclusions [org.clojure/clojure]]
+                                  [org.clojure/math.combinatorics "0.1.1"]
+                                  [org.clojure/data.json "0.2.6"]]}
              :1.5.0 {:dependencies [[org.clojure/clojure "1.5.0"]]}
              :1.5.1 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
