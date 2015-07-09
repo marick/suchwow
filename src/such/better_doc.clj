@@ -174,5 +174,5 @@
     
         (first (filter pred coll))
     
-    That's [[find-first]] in shorthand.
+    That's [[find-first]] in `such.shorthand`.
 ")
