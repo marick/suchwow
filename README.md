@@ -25,7 +25,7 @@ Copy the source if you want, do the normal `(:require
 [such.types :as wow])` thing, or create your own `commons.clojure.core`
 namespace with all the things you think should be packaged with Clojure. 
 
-The files [`test/such/clojure/f_immigration.clj`](https://github.com/marick/suchwow/blob/master/test/such/f_immigration.clj) and [commons.clojure.core](https://github.com/marick/clojure-commons/blob/master/src/commons/clojure/core.clj) show how to arrange for that last.
+The files [test/such/clojure/f_immigration.clj](https://github.com/marick/suchwow/blob/master/test/such/f_immigration.clj) and [commons.clojure.core](https://github.com/marick/clojure-commons/blob/master/src/commons/clojure/core.clj) show how to arrange for that last.
 
 
 ## Such License
