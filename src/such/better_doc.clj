@@ -176,3 +176,68 @@
     
     That's [[find-first]] in `such.shorthand`.
 ")
+
+
+(update-and-make-local-copy! #'clojure.core/sequential?
+  "True of lazy sequences, vectors, and lists. False for other
+   Clojure built-in types. Note: perhaps surprisingly, *not* true
+   of strings and java arrays.
+   Any new type can be `sequential?` if it implements the Java 
+   interface `Sequential`, a marker interface that has no methods.")
+
+(update-and-make-local-copy! #'clojure.core/cond->
+  "The `clauses` have two parts: a *test expression* and a *form*.
+   An entire `cond->` expression looks like this:
+   
+        (cond-> <expr>
+                <independent-test-1> <exec-1>
+                <independent-test-2> <exec-2>
+                ...)
+   
+   The independent tests do *not* have the value of `expr` threaded
+   into them. If, however, `independent-test-1` is truthy, the 
+   value of `expr` will be threaded into `exec-1`, using the rules of `->`.
+   The resulting value will be threaded into the value of `exec2` 
+   when `independent-test-2` is false.
+   
+   Examples will clarify. Here is a `cond->` form that threads through
+   each of the `exec` forms:
+   
+       (cond-> 1
+               true inc
+               true inc
+               true inc)
+       => 4
+   
+   Here's an example that illustrates that the original `expr` has *nothing to do*
+   with the tests:
+   
+       (cond-> 1
+               string? inc
+               string? inc
+               string? inc)
+       => 4
+
+    The result is 4 because `string?`, a function, is a truthy value.
+    
+    Here's an example of a function that takes arguments describing which 
+    branches to take:
+    
+       (defn brancher [& branches]
+         (letfn [(take? [n] (contains? (set branches) n))]
+           (cond-> []
+                   (take? 1) (conj 1)
+                   (take? 2) (conj 2)
+                   (take? 3) (conj 3))))
+       
+       (brancher 1 3) => [1 3]
+")
+   
+(update-and-make-local-copy! #'clojure.core/cond->>
+  "This is like [[cond->]], except that values are threaded into the
+   last position, as with `->>`.
+   
+        (cond->> [1 2 3]
+                false (map inc) ; not taken
+                true  (map -))
+        => [-1 -2 -3]")
