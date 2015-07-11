@@ -1,4 +1,7 @@
 (ns such.readable
+  "Stringify nested structures such that all functions - and particular values of your
+   choice - are displayed in a more readable way. [[value-string]] and [[fn-symbol]] are
+   the key functions."
   (:use [such.versions :only [when>=1-7]])
   (:refer-clojure :exclude [print])
   (:require [such.symbols :as symbol]
@@ -7,19 +10,24 @@
             [clojure.repl :as repl]))
 
 
-(defn with-name
+(defn rename
   "Produce a new function from `f`. It has the same behavior and metadata,
-   except that [[fn-symbol]] will use the given `name`."
+   except that [[fn-symbol]] and friends will use the given `name`.
+   
+   Note: `f` may actually be any object that allows metadata. That's irrelevant
+   to `fn-symbol`, which accepts only functions, but it can be used to affect
+   the output of [[value-string]]."
+
   [f name]
   (with-meta f (merge (meta f) {::name name})))
 
-(defn- generate-name [f base-name previously-seen]
-  (if (contains? @previously-seen f)
-    (@previously-seen f)
-    (let [name (if (empty? @previously-seen)
+(defn- generate-name [f base-name anonymous-names]
+  (if (contains? @anonymous-names f)
+    (@anonymous-names f)
+    (let [name (if (empty? @anonymous-names)
                  base-name
-                 (str base-name "-" (+ 1 (count @previously-seen))))]
-      (swap! previously-seen assoc f name)
+                 (str base-name "-" (+ 1 (count @anonymous-names))))]
+      (swap! anonymous-names assoc f name)
       name)))
 
 (defn- super-demunge [f]
@@ -37,26 +45,65 @@
 (def ^:private anonymous? #{"fn" "clojure.lang.MultiFn"})
 
 (defn elaborate-fn-symbol
-  [f base-name surroundings previously-seen]
+  "A more customizable version of [[fn-symbol]]. Takes `f`, which *must* be a function 
+   or multimethod. In all cases, the return value is a symbol where `f`'s name is embedded
+   in the `surroundings`, a string. For example, if the surroundings are \"<!!>\", a
+   result would look like `<!cons!>`. 
+   
+   `f`'s name is found by these rules, checked in
+   order:
+   
+   * `f` has had a name assigned with `rename`.
+   
+   * `f` is a key in `(deref anonymous-names)`. The value is its name. 
+   
+   * The function had a name assigned by `defn`, `let`, 
+     or the seldom used \"named lambda\": `(fn name [...] ...)`.
+     Note that multimethods do not have accessible names in current versions
+     of Clojure. They are treated as anonymous functions.
+   
+   * The function is anonymous and there are no other anonymous names. The name is 
+     `anonymous-name`, which is also stored in the `anonymous-names` atom.
+   
+   * After the first anonymous name, the names are `<anonymous-name>-2` `<anonymous-name>-3`
+     and so on.
+"
+  [f anonymous-name surroundings anonymous-names]
   (let [candidate (if (contains? (meta f) ::name)
                     (get (meta f) ::name)
                     (super-demunge f))]
     (symbol/from-concatenation [(.substring surroundings 0 (/ (count surroundings) 2))
                                 (if (anonymous? candidate)
-                                  (generate-name f base-name previously-seen)
+                                  (generate-name f anonymous-name anonymous-names)
                                   candidate)
                                 (.substring surroundings (/ (count surroundings) 2))])))
 
 
-(def default-function-string "fn")
-(def default-surroundings "<>")
+(def default-anonymous-name 
+  "Anonymous functions are given this name, possibly suffixed by a numeral."
+  "fn")
+(def default-surroundings
+  "These characters surround a function name to make it visually distinct from 
+  other symbols or strings."
+  "<>")
 
 
 (defn fn-symbol
+  "Transform `f` into a symbol with a more pleasing string representation.
+   `f` *must* be a function or multimethod.
+    
+       (fn-symbol even?) => '<even?>
+       (fn-symbol (fn [])) => '<fn>
+       (fn-symbol (fn name [])) => '<name>
+       (let [foo (fn [])] (fn-symbol foo)) => '<foo>
+    
+    See [[elaborate-fn-symbol]] for the gory details.
+"
   [f]
-  (elaborate-fn-symbol f default-function-string default-surroundings (atom {})))
+  (elaborate-fn-symbol f default-anonymous-name default-surroundings (atom {})))
 
 (defn fn-string
+  "`str` applied to the result of [[fn-symbol]]."
   [f]
   (str (fn-symbol f)))
   
@@ -66,46 +113,100 @@
 (require '[com.rpl.specter :as specter])
 
 
-(def ^:private translations (atom {}))
+(def ^:private ^:dynamic *translations* (atom {}))
 
-(defn forget-translations! []
-  (reset! translations {}))
+(defn forget-translations! 
+  "There is a global store of translations from values to names. Empty it."
+  []
+  (reset! *translations* {}))
 
-(defn instead-of [value show]
-  (swap! translations assoc value show))
+(defn instead-of 
+  "Arrange for [[value-string]] to show `value` as `show`. `show` is typically
+   a symbol, but can be anything."
+  [value show]
+  (swap! *translations* assoc value show))
+
+(defn- translatable? [x]
+  (contains? (deref *translations*) x))
+
+(defn- translate [x]
+  (get (deref *translations*) x))
+
+(defmacro with-translations 
+  "Describe a set of value->name translations, then execute the body
+   (which presumably contains a call to [[value-string]]).
+   
+         (with-translations [5 'five
+                             {1 2} 'amap]
+           (value-string {5 {1 2}
+                          :key [:value1 :value2 5]}))
+         => \"{five amap, :key [:value1 :value2 five]}\"
+"
+  [let-style & body]
+  `(binding [*translations* (atom {})]
+    (doseq [pair# (partition 2 ~let-style)]
+      (apply instead-of pair#))
+    ~@body))
+    
+  
 
 
 (defn- better-aliases [x aliases]
-  (specter/transform (specter/walker #(contains? @aliases %))
-                     @aliases
+  (specter/transform (specter/walker translatable?)
+                     translate
                      x))
 
 
-(defn- better-function-names [x previously-seen]
+(defn- better-function-names [x anonymous-names]
   (specter/transform (specter/walker type/extended-fn?)
-                     #(elaborate-fn-symbol % default-function-string
+                     #(elaborate-fn-symbol % default-anonymous-name
                                            default-surroundings
-                                           previously-seen)
+                                           anonymous-names)
                      x))
 
-(defn value [x]
+(defn value-string 
+  "Currently available only for Clojure 1.7.
+   
+   Except for special values, converts `x` into a string as with `pr-str`.
+   Exceptions (which apply anywhere within collections):
+   
+   * If a value was given an alternate name in [[with-translations]] or [[instead-of]],
+     that alternate is used.
+   
+   * Functions and multimethods are given better names as per [[fn-symbol]].
+     
+   Examples:
+          
+          (value-string even?) => \"<even?>\"
+          (value-string {1 {2 [even? odd?]}}) => \"{1 {2 [<even?> <odd?>]}}\"
+          
+          (instead-of even? 'not-odd)
+          (value-string {1 {2 [even? odd?]}}) => \"{1 {2 [not-odd <odd?>]}}\"
+          
+          (def generator (fn [x] (fn [y] (+ x y))))
+          (def add2 (generator 2))
+          (def add3 (generator 3))
+          (value-string [add2 add3 add3 add2]) => \"[<fn> <fn-2> <fn-2> <fn>]\"
+          
+          (def add4 (rename (generator 4) 'add4))
+          (def add5 (rename (generator 4) 'add5))
+          (value-string [add4 add5 add5 add4]) => \"[<add4> <add5> <add5> <add4>]\"
+"
+  [x]
   (pr-str
-   (cond (type/extended-fn? x)
+   (cond (translatable? x)
+         (translate x)
+
+         (type/extended-fn? x)
          (fn-symbol x)
          
          (coll? x)
-         (let [previously-seen (atom {})]
+         (let [anonymous-names (atom {})]
            (-> x 
-               (better-function-names previously-seen)
-               (better-aliases translations)
-               ))
+               (better-aliases (deref *translations*))
+               (better-function-names anonymous-names)))
          
          :else 
          x)))
-
-          
-
-
-
 )
 
