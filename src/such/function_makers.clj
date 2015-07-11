@@ -11,16 +11,16 @@
 ")
 
 
-(defn any-pred
+(defn pred:any?
   "Constructs a strict predicate that takes a single argument.
    That predicate returns `true` iff any of the `preds` is 
    truthy of that argument.
    
-        (def stringlike? (mkfn:any-pred string? regex?))
+        (def stringlike? (mkfn/pred:any? string? regex?))
         (stringlike? []) => false
         (stringlike? \"\") => true
    
-        (def has-favs? (mkfn/any-pred (partial some #{0 4}) odd?)
+        (def has-favs? (mkfn/pred:any? (partial some #{0 4}) odd?)
         (has-favs? [2 4]) => true
         (has-favs? [1 6]) => true
    
@@ -40,20 +40,30 @@
               (candidate arg) true
               :else           (recur remainder))))))
 
+(defn ^:no-doc any-pred [& args]
+  (println "any-pred has been deprecated in favor of pred:any?")
+  (apply pred:any? args))
 
-(defn wrap-pred-with-catcher
+
+(defn pred:exception->false
   "Produces a new function. It returns whatever value `pred` does, except
    that it traps exceptions and returns `false`.
 
-        ( (wrap-pred-with-catcher even?) 4) => true
+        ( (pred:exception->false even?) 4) => true
         
         (even? :hi) => (throws)
-        ( (wrap-pred-with-catcher even?) :hi) => false
+        ( (pred:exception->false even?) :hi) => false
 "
   [pred]
   (fn [& xs]
     (try (apply pred xs)
     (catch Exception ex false))))
+
+(defn wrap-pred-with-catcher [& args]
+  (println "any pred has been deprecated in favor of pred:exception->false")
+  (apply pred:exception->false args))
+           
+
 
 (defn mkfn:lazyseq
   "This is used to generate the `lazyseq:x->...` functions. See the source."

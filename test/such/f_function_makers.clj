@@ -3,19 +3,19 @@
   (:use midje.sweet))
 
 
-(fact "any-pred"
-  ((mkfn/any-pred odd? even?) 1) => true
-  ((mkfn/any-pred pos? neg?) 0) => false
-  ((mkfn/any-pred :key :word) {:key false}) => false
-  ((mkfn/any-pred :key :word) {:key false :word 3}) => true
-  ((mkfn/any-pred #{1 2} #{3 4}) 3) => true
+(fact "pred:any?"
+  ((mkfn/pred:any? odd? even?) 1) => true
+  ((mkfn/pred:any? pos? neg?) 0) => false
+  ((mkfn/pred:any? :key :word) {:key false}) => false
+  ((mkfn/pred:any? :key :word) {:key false :word 3}) => true
+  ((mkfn/pred:any? #{1 2} #{3 4}) 3) => true
   ;; stops at first match
-  ((mkfn/any-pred (partial = 3) (fn[_](throw (new Error "boom!")))) 3) => true
+  ((mkfn/pred:any? (partial = 3) (fn[_](throw (new Error "boom!")))) 3) => true
   ;; Any empty list means that everything matches
-  ((mkfn/any-pred) 3) => true)
+  ((mkfn/pred:any?) 3) => true)
 
-(fact wrap-pred-with-catcher
-  (let [wrapped (mkfn/wrap-pred-with-catcher even?)]
+(fact pred:exception->false
+  (let [wrapped (mkfn/pred:exception->false even?)]
     (wrapped 2) => true
     (wrapped 3) => false
     (even? nil) => (throws)
