@@ -30,6 +30,8 @@
    Note: this predates [[some-fn]]. It differs in that it always returns
    `true` or `false`, and that it allows zero arguments (which produces a
    function that always returns `true`).
+
+   [[none-of?]] is the complement.
 "
   [& preds]
   (if (empty? preds)
@@ -40,10 +42,35 @@
               (candidate arg) true
               :else           (recur remainder))))))
 
-(defn ^:no-doc any-pred [& args]
-  (println "any-pred has been deprecated in favor of pred:any?")
-  (apply pred:any? args))
 
+(defn pred:none-of?
+  "Constructs a strict predicate that takes a single argument.
+   That predicate returns `false` iff any of the `preds` is 
+   truthy of that argument.
+   
+        (def not-function?
+             (mkfn/pred:none-of? fn?
+                                 (partial instance? clojure.lang.MultiFn)))
+        (not-function? even?) => false
+        (not-function? \"\") => true
+   
+   Stops checking after the first success. A predicate created from
+   no arguments always returns `false`.
+
+   [[pred:any?]] is the complement.
+"
+  [& preds]
+  (if (empty? preds)
+    (constantly false)
+    (fn [arg]
+      (loop [[candidate & remainder :as preds] preds]
+        (cond (empty? preds)  true
+              (candidate arg) false
+              :else           (recur remainder))))))
+
+(def pred:not-any?
+  "Synonym for [[pred:none-of?]]."
+  pred:none-of?)
 
 (defn pred:exception->false
   "Produces a new function. It returns whatever value `pred` does, except
@@ -58,11 +85,6 @@
   (fn [& xs]
     (try (apply pred xs)
     (catch Exception ex false))))
-
-(defn wrap-pred-with-catcher [& args]
-  (println "any pred has been deprecated in favor of pred:exception->false")
-  (apply pred:exception->false args))
-           
 
 
 (defn mkfn:lazyseq
@@ -152,3 +174,18 @@
     (doseq [x coll]
       (when (deviancy-detector x) (reporter coll x)))
     coll))
+
+
+
+;;; Deprecated
+
+(defn ^:no-doc any-pred [& args]
+  (println "any-pred has been deprecated in favor of pred:any?")
+  (apply pred:any? args))
+
+(defn wrap-pred-with-catcher [& args]
+  (println "any pred has been deprecated in favor of pred:exception->false")
+  (apply pred:exception->false args))
+           
+
+

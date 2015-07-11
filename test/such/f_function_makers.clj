@@ -14,6 +14,17 @@
   ;; Any empty list means that everything matches
   ((mkfn/pred:any?) 3) => true)
 
+(fact "pred:not-any? and pred:none-of?"
+  ((mkfn/pred:not-any? odd? even?) 1) => false
+  ((mkfn/pred:not-any? pos? neg?) 0) => true
+  ((mkfn/pred:none-of? :key :word) {:key false}) => true
+  ((mkfn/pred:none-of? :key :word) {:key false :word 3}) => false
+  ((mkfn/pred:not-any? #{1 2} #{3 4}) 3) => false
+  ;; stops at first match
+  ((mkfn/pred:not-any? (partial = 3) (fn[_](throw (new Error "boom!")))) 3) => false
+  ;; Any empty list means that everything matches
+  ((mkfn/pred:not-any?) 3) => false)
+
 (fact pred:exception->false
   (let [wrapped (mkfn/pred:exception->false even?)]
     (wrapped 2) => true
