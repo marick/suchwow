@@ -28,11 +28,15 @@
   [x]
   (instance? java.math.BigDecimal x))
 
+(defn multi? 
+  "Was `x` created with `defmulti`?"
+  [x]
+  (instance? clojure.lang.MultiFn x))
+
 (defn extended-fn?
   "`fn?` does not consider multimethods to be functions. This does."
   [x]
-  (or (fn? x)
-      (instance? clojure.lang.MultiFn x)))
+  (or (fn? x) (multi? x)))
   
 (defn named?
   "Will `name` work on x? Two cases: It implements the Named protocol OR it's a string."
