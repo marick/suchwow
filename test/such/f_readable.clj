@@ -29,7 +29,11 @@
 
   (fact "function-generating functions"
     (let [gen (fn [x] (fn [y] (+ x y)))]
-      (subject/fn-symbol (gen 3)) => '<fn>)))
+      (subject/fn-symbol (gen 3)) => '<fn>))
+
+  (fact "readable name given"
+    (let [f (subject/with-name (fn []) 'fred)]
+      (subject/fn-symbol f) => '<fred>)))
 
 (fact fn-string
   (fact "plain functions"
@@ -69,12 +73,14 @@
        =>             "[<fn> <fn-2> <foo> <bar> <foo> <even?>]"))
 
    (fact "nested functions"
-     (let [foo (fn [a] 1)]
+     (let [foo (fn [a] 1)
+           named (subject/with-name (fn [b] 2) "named")]
        (subject/value [(fn [])
                        foo
+                       named
                        [(fn []) foo]
                        [[[foo]]]])
-       => "[<fn> <foo> [<fn-2> <foo>] [[[<foo>]]]]"))
+       => "[<fn> <foo> <named> [<fn-2> <foo>] [[[<foo>]]]]"))
 
    (fact "generated functions have indexes repeated"
      (let [generator (fn [x] (fn [y] (+ x y)))

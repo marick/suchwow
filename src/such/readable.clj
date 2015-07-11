@@ -6,6 +6,13 @@
             [clojure.string :as str]
             [clojure.repl :as repl]))
 
+
+(defn with-name
+  "Produce a new function from `f`. It has the same behavior and metadata,
+   except that [[fn-symbol]] will use the given `name`."
+  [f name]
+  (with-meta f (merge (meta f) {::name name})))
+
 (defn- generate-name [f base-name previously-seen]
   (if (contains? @previously-seen f)
     (@previously-seen f)
@@ -15,7 +22,7 @@
       (swap! previously-seen assoc f name)
       name)))
 
-(defn- readable-name [f]
+(defn- super-demunge [f]
   (-> (str f)
       repl/demunge
       (str/split #"/")
@@ -31,7 +38,9 @@
 
 (defn elaborate-fn-symbol
   [f base-name surroundings previously-seen]
-  (let [candidate (readable-name f)]
+  (let [candidate (if (contains? (meta f) ::name)
+                    (get (meta f) ::name)
+                    (super-demunge f))]
     (symbol/from-concatenation [(.substring surroundings 0 (/ (count surroundings) 2))
                                 (if (anonymous? candidate)
                                   (generate-name f base-name previously-seen)
