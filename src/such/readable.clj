@@ -20,7 +20,7 @@
 
 (defn set-function-elaborations!
   "Control the way functions are prettified. Note: this does not override
-   any value set in `with-function-elaborations`.
+   any value changed with `with-function-elaborations`.
     
          (set-function-elaborations! {:anonymous-name 'anon :surroundings \"\"})
 "
@@ -28,7 +28,8 @@
   (alter-var-root #'*function-elaborations* (constantly all)))
 
 (defmacro with-function-elaborations
-  "Change the function elaborations, execute the body, and revert the elaborations.
+  "Change the function elaborations, execute the body, and revert the
+   elaborations.
     
         (with-function-elaborations {:anonymous-name 'fun :surroundings \"{{}}\"}
           (fn-symbol (fn []))) => {{fun}}
