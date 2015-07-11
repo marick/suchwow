@@ -9,6 +9,77 @@
             [clojure.string :as str]
             [clojure.repl :as repl]))
 
+;;; What is stringified is controlled by two dynamically-bound variables.
+
+(def default-function-elaborations
+  "Anonymous functions are named `fn` and functions are surrounded by `<>`"
+  {:anonymous-name "fn" :surroundings "<>"})
+
+(def ^:private ^:dynamic *function-elaborations*
+  {:anonymous-name "fn" :surroundings "<>"})
+
+(defn set-function-elaborations!
+  "Control the way functions are prettified. Note: this does not override
+   any value set in `with-function-elaborations`.
+    
+         (set-function-elaborations! {:anonymous-name 'anon :surroundings \"\"})
+"
+  [{:keys [anonymous-name surroundings] :as all}]
+  (alter-var-root #'*function-elaborations* (constantly all)))
+
+(defmacro with-function-elaborations
+  "Change the function elaborations, execute the body, and revert the elaborations.
+    
+        (with-function-elaborations {:anonymous-name 'fun :surroundings \"{{}}\"}
+          (fn-symbol (fn []))) => {{fun}}
+"
+  [{:keys [anonymous-name surroundings] :as all} & body]
+  `(binding [*function-elaborations* ~all]
+     ~@body))
+
+(when>=1-7
+
+(def ^:private ^:dynamic *translations*
+  "This atom contains the map from values->names that [[with-translations]] and
+   [[value-strings]] use."
+  (atom {}))
+
+(defn- translatable? [x]
+  (contains? (deref *translations*) x))
+
+(defn- translate [x]
+  (get (deref *translations*) x))
+
+(defn forget-translations!
+  "There is a global store of translations from values to names, used by 
+   [[with-translations]] and [[value-strings]]. Empty it."
+  []
+  (reset! *translations* {}))
+
+(defn instead-of 
+  "Arrange for [[value-string]] to show `value` as `show`. `show` is typically
+   a symbol, but can be anything."
+  [value show]
+  (swap! *translations* assoc value show))
+
+(defmacro with-translations 
+  "Describe a set of value->name translations, then execute the body
+   (which presumably contains a call to [[value-string]]).
+   
+         (with-translations [5 'five
+                             {1 2} 'amap]
+           (value-string {5 {1 2}
+                          :key [:value1 :value2 5]}))
+         => \"{five amap, :key [:value1 :value2 five]}\"
+"
+  [let-style & body]
+  `(binding [*translations* (atom {})]
+    (doseq [pair# (partition 2 ~let-style)]
+      (apply instead-of pair#))
+    ~@body))
+
+) ; 1.7
+
 
 (defn rename
   "Produce a new function from `f`. It has the same behavior and metadata,
@@ -42,7 +113,7 @@
       ;; last clause required by 1.5.X
       (str/replace "-COLON-" ":")))
 
-(def ^:private anonymous? #{"fn" "clojure.lang.MultiFn"})
+(def ^:private show-as-anonymous? #{"fn" "clojure.lang.MultiFn"})
 
 (defn elaborate-fn-symbol
   "A more customizable version of [[fn-symbol]]. Takes `f`, which *must* be a function 
@@ -67,26 +138,22 @@
    
    * After the first anonymous name, the names are `<anonymous-name>-2` `<anonymous-name>-3`
      and so on.
+
+   In the single-argument version, the global or default elaborations are used,
+   and `anonymous-names` is empty. See [[set-function-elaborations!]].
 "
-  [f anonymous-name surroundings anonymous-names]
-  (let [candidate (if (contains? (meta f) ::name)
-                    (get (meta f) ::name)
-                    (super-demunge f))]
-    (symbol/from-concatenation [(.substring surroundings 0 (/ (count surroundings) 2))
-                                (if (anonymous? candidate)
-                                  (generate-name f anonymous-name anonymous-names)
-                                  candidate)
-                                (.substring surroundings (/ (count surroundings) 2))])))
-
-
-(def default-anonymous-name 
-  "Anonymous functions are given this name, possibly suffixed by a numeral."
-  "fn")
-(def default-surroundings
-  "These characters surround a function name to make it visually distinct from 
-  other symbols or strings."
-  "<>")
-
+  ([f {:keys [anonymous-name surroundings]} anonymous-names]
+     (let [candidate (if (contains? (meta f) ::name)
+                       (get (meta f) ::name)
+                       (super-demunge f))]
+       (symbol/from-concatenation [(.substring surroundings 0 (/ (count surroundings) 2))
+                                   (if (show-as-anonymous? candidate)
+                                     (generate-name f anonymous-name anonymous-names)
+                                     candidate)
+                                   (.substring surroundings (/ (count surroundings) 2))])))
+  ([f]
+     (elaborate-fn-symbol f *function-elaborations* (atom {}))))
+     
 
 (defn fn-symbol
   "Transform `f` into a symbol with a more pleasing string representation.
@@ -100,7 +167,7 @@
     See [[elaborate-fn-symbol]] for the gory details.
 "
   [f]
-  (elaborate-fn-symbol f default-anonymous-name default-surroundings (atom {})))
+  (elaborate-fn-symbol f))
 
 (defn fn-string
   "`str` applied to the result of [[fn-symbol]]."
@@ -112,57 +179,35 @@
 
 (require '[com.rpl.specter :as specter])
 
-
-(def ^:private ^:dynamic *translations* (atom {}))
-
-(defn forget-translations! 
-  "There is a global store of translations from values to names. Empty it."
-  []
-  (reset! *translations* {}))
-
-(defn instead-of 
-  "Arrange for [[value-string]] to show `value` as `show`. `show` is typically
-   a symbol, but can be anything."
-  [value show]
-  (swap! *translations* assoc value show))
-
-(defn- translatable? [x]
-  (contains? (deref *translations*) x))
-
-(defn- translate [x]
-  (get (deref *translations*) x))
-
-(defmacro with-translations 
-  "Describe a set of value->name translations, then execute the body
-   (which presumably contains a call to [[value-string]]).
-   
-         (with-translations [5 'five
-                             {1 2} 'amap]
-           (value-string {5 {1 2}
-                          :key [:value1 :value2 5]}))
-         => \"{five amap, :key [:value1 :value2 five]}\"
-"
-  [let-style & body]
-  `(binding [*translations* (atom {})]
-    (doseq [pair# (partition 2 ~let-style)]
-      (apply instead-of pair#))
-    ~@body))
-    
-  
-
-
 (defn- better-aliases [x aliases]
   (specter/transform (specter/walker translatable?)
                      translate
                      x))
 
-
 (defn- better-function-names [x anonymous-names]
   (specter/transform (specter/walker type/extended-fn?)
-                     #(elaborate-fn-symbol % default-anonymous-name
-                                           default-surroundings
-                                           anonymous-names)
+                     #(elaborate-fn-symbol % *function-elaborations* anonymous-names)
                      x))
+
+(defn value
+  "Like [[value-string]], but the final step of converting the value into
+   a string is omitted. Note that this means functions are replaced by
+   symbols."
+  [x]
+  (cond (translatable? x)
+        (translate x)
+        
+        (type/extended-fn? x)
+        (fn-symbol x)
+         
+        (coll? x)
+        (let [anonymous-names (atom {})]
+          (-> x 
+              (better-aliases (deref *translations*))
+              (better-function-names anonymous-names)))
+        
+        :else 
+        x))
 
 (defn value-string 
   "Currently available only for Clojure 1.7.
@@ -193,20 +238,7 @@
           (value-string [add4 add5 add5 add4]) => \"[<add4> <add5> <add5> <add4>]\"
 "
   [x]
-  (pr-str
-   (cond (translatable? x)
-         (translate x)
+  (pr-str (value x)))
 
-         (type/extended-fn? x)
-         (fn-symbol x)
-         
-         (coll? x)
-         (let [anonymous-names (atom {})]
-           (-> x 
-               (better-aliases (deref *translations*))
-               (better-function-names anonymous-names)))
-         
-         :else 
-         x)))
-)
+) ; 1.7
 
