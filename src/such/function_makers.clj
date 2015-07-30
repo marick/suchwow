@@ -183,7 +183,7 @@
   (println "any-pred has been deprecated in favor of pred:any?")
   (apply pred:any? args))
 
-(defn wrap-pred-with-catcher [& args]
+(defn ^:no-doc wrap-pred-with-catcher [& args]
   (println "any pred has been deprecated in favor of pred:exception->false")
   (apply pred:exception->false args))
            
