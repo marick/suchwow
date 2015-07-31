@@ -1,4 +1,4 @@
-(defproject marick/suchwow "3.3.0"
+(defproject marick/suchwow "3.4.0"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -7,7 +7,7 @@
             :distribution :repo}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [potemkin "0.3.13" :exclusions [org.clojure/clojure]]
+                 [potemkin "0.4.1" :exclusions [org.clojure/clojure]]
                  [com.rpl/specter "0.6.2" :exclusions [org.clojure/clojure]]
                  [environ "1.0.0"]
                  [commons-codec/commons-codec "1.10"]]
