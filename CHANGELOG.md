@@ -1,4 +1,6 @@
 # Change Log
+This project adheres to [Semantic Versioning](http://semver.org/).
+
 ## [unreleased]
 
 ## [3.4.0] - 2015-07-31
