@@ -1,4 +1,4 @@
-(defproject marick/suchwow "3.4.0"
+(defproject marick/suchwow "3.5.0-SNAPSHOT"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -23,7 +23,7 @@
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0-alpha1"]]}
              }
 
-  :plugins [[lein-midje "3.1.3"]
+  :plugins [[lein-midje "3.2-RC4"]
             [codox "0.8.11"]]
 
   :codox {:src-dir-uri "https://github.com/marick/suchwow/blob/master/"
