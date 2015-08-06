@@ -241,3 +241,165 @@
                 false (map inc) ; not taken
                 true  (map -))
         => [-1 -2 -3]")
+
+(update-and-make-local-copy! #'clojure.core/reduce
+  "`reduce` converts a collection into a single value. Except for 
+   one exception (described below), `f` must take two arguments.
+   `+` takes two arguments, so it can be used to reduce a collection
+   of numbers to their sum:
+   
+        (reduce + 0 [1 2 3 4]) => 10
+   
+   `+` is called four times. Here is the sequence of calls.
+   
+        (+ 0 1) => 1   ; sum of first element
+        (+ 1 2) => 3   ; sum of first two elements
+        (+ 3 3) => 6   ; sum of first three elements
+        (+ 6 4) => 10  ; ...
+   
+   At any point, the first argument to `f` is the \"reduction\" of all
+   the previous calls to `f`, and the second argument is the next
+   collection element to add into the reduction. When defining functions to
+   use with `reduce`, the first argument is often called `acc` (for
+   \"accumulator\") or `so-far`.
+   
+   When using `+`, the distinction between the two arguments isn't
+   clear, so here's an example that returns the longest string in a
+   collection:
+   
+        (reduce (fn [max-so-far elt]
+                  (if (> (count elt) max-so-far)
+                    (count elt)
+                    max-so-far))
+                0
+                [\"abc\" \"ab\" \"abcd\" \"a\"]) => 4
+   
+   When you're surprised by the results of a call to `reduce`, you 
+   can use [[reductions]] as an easy way to see what's going on:
+   
+        (reductions + 0 [1 2 3 4]) 
+                  =>    (0 1 3 6 10)
+   
+   `reductions` returns a collection of all the first arguments to `f` 
+   plus the final result.
+
+   Reduce is lazy, so the reduction isn't done until the result is used.
+   
+   The **two-argument form** can be used when `(f val (first coll))`
+   is the same as `(first coll)`. That's the case with `+`, where
+   `(+ 0 1)` is `1`. So, in the two argument form, the first call to `f`
+   uses the first argument of the collection as the starting reduction
+   and begins working with the second element:
+   
+        (reduce + [1 2 3 4]) => 10
+        (reductions + [1 2 3 4]) => (1 3 6 10) ; slightly different result
+   
+   **Small arrays:** `f` takes two values. What if there aren't two values
+   to give it? There's one special case
+   for the three-argument form:
+   
+        (reduce + 0 []) => 0
+        (reductions + 0 []) => (0)
+   
+   In this case, `val` is returned and `f` is never called.
+   
+   There are two special two-argument cases. The first is when there's
+   only one element in the collection:
+   
+        (reduce + [10]) => 10
+   
+   The handling is really the same as the above, since the first argument in
+   the collection is treated as the starting `val`. More interesting is the 
+   empty collection:
+   
+        (reduce + []) => 0
+        (reductions + []) => (0)
+   
+   Here, `f` *is* called, but with zero arguments. It happens that `(+)` is `0`.
+   In the longest-string example, though, the result is not so pretty:
+   
+        (reduce (fn [max-so-far elt]...) [])
+        ArityException Wrong number of args (0) ...
+   
+   **See also:** [[reductions]], [[reduce-kv]]
+")
+
+(update-and-make-local-copy! #'clojure.core/reductions
+   "Perform a [[reduce]] but don't return only the final reduction. 
+   Return a sequence of the intermediate reductions, ending with the 
+   final reduction.
+   
+   Consider this reduction that produces nested vectors:
+   
+        (reduce (fn [so-far elt] (vector (conj so-far elt)))
+                []
+                [1 2 3 4 5])
+        => [[[[[[1] 2] 3] 4] 5]]
+   
+   Using `reductions` instead:
+   
+        (reductions (fn [so-far elt] (vector (conj so-far elt)))
+                    []
+                    [1 2 3 4 5])
+        => ([]
+            [[1]]
+            [[[1] 2]]
+            [[[[1] 2] 3]]   [[[[[1] 2] 3] 4]]   [[[[[[1] 2] 3] 4] 5]])
+   
+   To be more precise, the result is a sequence of the first arguments to
+   `f`, followed by the final value. Those are slightly different in the two-argument
+   and three-argument cases:
+   
+        (reductions + 0 [1 2 3]) => (0 1 3 6)
+        (reductions +   [1 2 3]) => (  1 3 6)
+   
+   The sequence is lazy:
+   
+        (take 3 (reductions (fn [so-far elt] (vector (conj so-far elt)))
+                            []
+                            (range)))  ; infinite list here
+        => ([]  [[0]]  [[[0] 1]])
+")
+
+(update-and-make-local-copy! #'clojure.core/reduce-kv
+  "For maps, `reduce-kv` is a trivial variant on [[reduce]]. The following
+   two functions are the same:
+   
+       (reduce     (fn [so-far [key val]] ...) ... {...}
+       (reduce-kvs (fn [so-far  key val ] ...) ... {...}
+
+   For vectors, `reduce-kv` is to `reduce` as [[map-indexed]] is to `map`: 
+   it provides indexes as well as collection elements. The argument list
+   is `[reduction-so-far index element]`.
+   
+   This example sums up the indices and values of a vector:
+   
+       (reduce-kv + 0 [-1 -2 -3 -4]) => -4
+
+   It works because `+` allows three arguments. Here's an example that converts
+   a vector to a map whose keys are the vector indexes:
+
+       (reduce-kv (fn [acc i elt] (assoc acc i elt))
+                  {}
+                  [\"0\" \"2\" \"3\" \"4\"])
+       => {0 \"0\", 1 \"2\", 2 \"3\", 3 \"4\"}
+   
+   If `coll` is empty, `init` is returned and `f` is not called.
+")
+
+
+(update-and-make-local-copy! #'clojure.core/map-indexed
+  "In the two-argument form, the following two are equivalent:
+   
+        (map-indexed f coll)
+        (map f (range) coll)
+
+   Thus, `f` should accept two arguments: the index of an element in `coll`
+   and the element itself.
+   
+        (map-indexed vector [:a :b :c]) => ([0 :a] [1 :b] [2 :c])
+
+   Like `map`, `map-indexed` is lazy.
+   
+   The single argument form produces a transducer.
+")
