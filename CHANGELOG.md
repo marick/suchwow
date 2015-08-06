@@ -3,7 +3,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 
-## [3.4.0] - 2015-07-31
+### Added
+- docs for `reduce`, `reductions`, `reduce-kv`, and `map-indexed`.
+
+## [3.4.0] - 2015-07-31es
 
 ### Added
 - `such.metadata` namespace
