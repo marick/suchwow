@@ -47,7 +47,10 @@
                                sort))
 
     (let [var (intern *ns* 'api (fn [] (browse/browse-url url)))]
-      (alter-meta! var assoc :doc (format api-doc-template (ns-name *ns*))))))
+      (alter-meta! var assoc
+                   :doc (format api-doc-template (ns-name *ns*))
+                   :arglists '([])))
+    nil))
 
 
 (api-url! "http://marick.github.io/suchwow/")
