@@ -1,12 +1,16 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
+See [here](http://keepachangelog.com/) for the change log format. 
 
 ## [unreleased]
 
+## [3.5.0] - 2015-08-14
+
 ### Added
 - docs for `reduce`, `reductions`, `reduce-kv`, and `map-indexed`.
+- `such.api`
 
-## [3.4.0] - 2015-07-31es
+## [3.4.0] - 2015-07-31
 
 ### Added
 - `such.metadata` namespace

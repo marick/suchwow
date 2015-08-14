@@ -1,4 +1,4 @@
-(defproject marick/suchwow "3.5.0-SNAPSHOT"
+(defproject marick/suchwow "3.5.0"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -8,10 +8,12 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [potemkin "0.4.1" :exclusions [org.clojure/clojure]]
-                 [com.rpl/specter "0.6.2" :exclusions [org.clojure/clojure]]
+                 [com.rpl/specter "0.6.2" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
                  [environ "1.0.0"]
                  [commons-codec/commons-codec "1.10"]]
 
+  :repl-options {:init (do (require 'such.api)
+                           (such.api/apis))}
 
   :profiles {:dev {:dependencies [[midje "1.8-alpha1" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.1"]
