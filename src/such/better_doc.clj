@@ -198,7 +198,7 @@
    into them. If, however, `independent-test-1` is truthy, the 
    value of `expr` will be threaded into `exec-1`, using the rules of `->`.
    The resulting value will be threaded into the value of `exec2` 
-   when `independent-test-2` is false.
+   when `independent-test-2` is truthy.
    
    Examples will clarify. Here is a `cond->` form that threads through
    each of the `exec` forms:
