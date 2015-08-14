@@ -4,6 +4,12 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.0.1] - 2015-08-14
+
+### Fixed
+
+- The generated `api` function didn't have `:arglist` metadata.
+
 ## [4.0.0] - 2015-08-14
 
 ### Changed

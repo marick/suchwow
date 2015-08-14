@@ -1,4 +1,4 @@
-(defproject marick/suchwow "4.0.0"
+(defproject marick/suchwow "4.0.1"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
