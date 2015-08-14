@@ -4,6 +4,12 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.0.0] - 2015-08-14
+
+### Changed
+
+- Names in previous were bad: such.api -> such.doc, `open` -> `api`.
+
 ## [3.5.0] - 2015-08-14
 
 ### Added
