@@ -4,6 +4,11 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.1.0] - 2015-08-19
+
+### Added
+- `imperfection` namespace for debugging and testing functions.
+
 ## [4.0.1] - 2015-08-14
 
 ### Fixed
