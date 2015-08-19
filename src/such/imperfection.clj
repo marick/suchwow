@@ -1,8 +1,14 @@
 (ns such.imperfection
   "Were we perfect, we wouldn't need to test or debug. Since we're not, a
-   few helpers, especially for code written in flow style."
+   few helpers, especially for code written in flow style.
+   
+   These functions are only available for Clojure 1.7+
+"
   (:require [clojure.pprint :refer [pprint]]
-            [such.readable :as readable]))
+            [such.readable :as readable]
+            [such.versions :refer [when>=1-7]]))
+
+(when>=1-7
 
 (defmacro val-and-output
   "Execute the body. Instead of just returning the resulting value,
@@ -71,3 +77,4 @@
   value)
   
   
+) ; when>=1-7
