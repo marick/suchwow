@@ -43,3 +43,7 @@
       (meta oo) => (meta o)
       (identical? oo o) => false)))
 
+(fact "contains?"
+  (meta/contains? o :meta) => true
+  (meta/contains? o :not-meta) => false
+  (meta/contains? (with-meta [] {:protocol nil}) :protocol) => true)

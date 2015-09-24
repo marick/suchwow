@@ -1,7 +1,7 @@
 (ns such.metadata
   "Convenience functions for working with metadata. Intended to be used with
   `(:require [such.metadata :as meta])`."
-  (:refer-clojure :exclude [merge assoc get]))
+  (:refer-clojure :exclude [merge assoc get contains?]))
 
 (defn get
   "Equivalent to `(get (meta o) k)` or `(get (meta o) k default)`."
@@ -30,3 +30,12 @@
   (let [all (apply hash-map kvs)]
     (merge o all)))
 
+(defn contains?
+  "Answer whether the metadata contains the given key. A key with
+   a `nil` value counts as being contained.
+   
+      (meta/contains? o :author) => true
+"
+  [o key]
+  (clojure.core/contains? (meta o) key))
+      
