@@ -4,6 +4,15 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.2.0]
+
+### Added
+- `such.metadata/contains?`
+
+### Fixed
+- All the `such.immigration` functions now do requires at compile time.
+- Workaround to prevent Codox from crashing on vars imported with `import-prefixed-vars`.
+
 ## [4.1.0] - 2015-08-19
 
 ### Added
