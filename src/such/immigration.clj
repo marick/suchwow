@@ -28,9 +28,8 @@
   [& namespace-and-var-descriptions]
   (let [namespaces (map first namespace-and-var-descriptions)
         requires (map (fn [ns] `(require '~ns)) namespaces)]
-    `(do 
-       ~@requires
-       (ns/import-vars ~@namespace-and-var-descriptions))))
+    (doseq [ns namespaces] (require ns))
+    `(ns/import-vars ~@namespace-and-var-descriptions)))
 
 
 (defmacro import-all-vars
@@ -64,8 +63,8 @@
                               var/has-function?  `ns/import-fn
                               :else              `ns/import-def)]
               `(~importer ~qualified ~to)))]
+    (require ns-sym)
     `(do
-       (require '~ns-sym)
        ~@(map one-call (ns-publics ns-sym)))))
 
 (defn ^:no-doc namespaces
