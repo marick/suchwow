@@ -21,7 +21,7 @@
     (case (count substrings)
       1 (vector nil (symbol (first substrings)))
       2 (into [] (map symbol substrings))
-      (!/not-namespace-and-name))))
+      (!/not-namespace-and-name s))))
 
 (defn- named-namespace [named]
   (if (string? named)
@@ -133,7 +133,7 @@
                    (case (count substrings)
                      1 (vector nil (symbol (first substrings)))
                      2 (into [] (map symbol substrings))
-                     (!/not-namespace-and-name)))]
+                     (!/not-namespace-and-name substrings)))]
     (cond (string? val)
           (pairify (str/split val #"/"))
 
@@ -144,7 +144,7 @@
           (vector (ns-name (.ns val)) (.sym val))
 
           :else
-          (!/not-namespace-and-name))))
+          (!/not-namespace-and-name val))))
 
 (defn as-symbol-without-namespace
   "The argument *must* be a symbol, string, keyword, or var. In all cases, the 
