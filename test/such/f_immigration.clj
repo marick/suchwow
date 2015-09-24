@@ -1,5 +1,8 @@
-(ns such.f-immigration (:require [such.immigration :as immigrate])
+(ns such.f-immigration
+  (:require [such.immigration :as immigrate]
+            [such.metadata :as meta])
   (:use midje.sweet))
+    
 
 ;;; This creates a "favorite functions" namespace. The imported functions
 ;;; are available here. See `f_use_favorites.clj` to see that the
@@ -30,3 +33,8 @@
 
 (fact 
   (str-trim "   f     ") => "f")
+
+(fact "If the old source information is retained, codox blows up"
+  (meta/contains? #'str-trim :file) => false
+  (meta/contains? #'str-trim :line) => false
+  (meta/contains? #'str-trim :column) => false)

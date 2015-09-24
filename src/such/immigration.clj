@@ -8,8 +8,9 @@
    for two examples of creating a \"favorite functions\" namespace that
    can be included everywhere with (for example) `(ns my.ns (:use my.clojure.core))`.
 "
-  (:require [potemkin.namespaces :as ns]
+  (:require [potemkin.namespaces :as potemkin]
             [such.symbols :as symbol]
+            [such.ns :as ns]
             [such.vars :as var]
             [such.control-flow :as flow]))
 
@@ -29,7 +30,7 @@
   (let [namespaces (map first namespace-and-var-descriptions)
         requires (map (fn [ns] `(require '~ns)) namespaces)]
     (doseq [ns namespaces] (require ns))
-    `(ns/import-vars ~@namespace-and-var-descriptions)))
+    `(potemkin/import-vars ~@namespace-and-var-descriptions)))
 
 
 (defmacro import-all-vars
@@ -59,10 +60,12 @@
             (let [qualified (symbol/+symbol ns-sym unqualified)
                   to (symbol/from-concatenation [prefix unqualified])
                   importer (flow/branch-on var
-                              var/has-macro?     `ns/import-macro
-                              var/has-function?  `ns/import-fn
-                              :else              `ns/import-def)]
-              `(~importer ~qualified ~to)))]
+                              var/has-macro?     `potemkin/import-macro
+                              var/has-function?  `potemkin/import-fn
+                              :else              `potemkin/import-def)]
+              `(do
+                 (~importer ~qualified ~to)
+                 (alter-meta! (ns/+find-var '~to) #(dissoc % :file :line :column)))))]
     (require ns-sym)
     `(do
        ~@(map one-call (ns-publics ns-sym)))))
