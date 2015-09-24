@@ -34,7 +34,7 @@
   "Answer whether the metadata contains the given key. A key with
    a `nil` value counts as being contained.
    
-      (meta/contains? o :author) => true
+        (meta/contains? o :author) => true
 "
   [o key]
   (clojure.core/contains? (meta o) key))
