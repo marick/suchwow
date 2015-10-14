@@ -4,6 +4,13 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.4.0]
+
+### Added
+
+- such.maps now supplies Clojure 1.7's `update` under Clojure 1.6.
+- -tag and tag- can now take any value, not just a string.
+
 ## [4.3.0]
 
 ### Added
