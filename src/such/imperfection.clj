@@ -51,8 +51,8 @@
   v)
 
 (defn tag-
-  "Prints (as with `println`) the given `string`.
-   The `value` is returned. Use as follows:
+  "Prints (as with `println`) the given `tag`, which may be any value.
+   The `value` is returned. 
 
         (->> v
              frob
@@ -64,16 +64,23 @@
   value)
   
 (defn -tag
-  "Formats the `string` and `args` and prints the results as with `println`.
-   The `value` is returned. Use as follows:
+  "If `tag` is a string, formats `tag` and `args` and prints the results as with `println`.
+   If `tag` is not a string, it is printed and any `args` are ignored.
+   The `value` is returned. 
+
+   Use as follows:
 
         (-> v
              frob
              (tag \"Frob with %s\" flag) (-pprint-)
+             quux
+             (tag :quux)
              ...)
 "
-  [value string & args]
-  (println (apply format string args))
+  [value tag & args]
+  (println (if (string? tag)
+             (apply format tag args)
+             tag))
   value)
   
   
