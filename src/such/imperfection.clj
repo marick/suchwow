@@ -59,8 +59,8 @@
              (tag \"frobout\") -prn-
              ...)
 "
-  [string value]
-  (println string)
+  [tag value]
+  (println tag)
   value)
   
 (defn -tag
