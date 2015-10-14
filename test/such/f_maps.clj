@@ -58,5 +58,5 @@
 
 (when=1-6 
  (fact "update"
-   (subject/update {:a 1} + 5) => {:a 6})
+   (subject/update {:a 1} :a + 5) => {:a 6})
 )

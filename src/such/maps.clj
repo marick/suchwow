@@ -7,7 +7,7 @@
    "The update function from Clojure 1.7. The same as `update-in` except
     the second argument is a key instead of a path.
     
-         (subject/update {:a 1} + 5)"
+         (subject/update {:a 1} :a + 5)"
    [m k f & args]
    (apply update-in m [k] f args))
  )
