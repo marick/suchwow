@@ -1,5 +1,6 @@
 (ns such.f-maps
-  (:require [such.maps :as subject])
+  (:require [such.maps :as subject]
+            [such.versions :refer [when=1-6]])
   (:use midje.sweet))
 
 
@@ -55,3 +56,7 @@
   (subject/mkmap:all-keys-with-value [:a] 3) => {:a 3}
   (subject/mkmap:all-keys-with-value [:a [:b]] 3) => {:a 3, [:b] 3})
 
+(when=1-6 
+ (fact "update"
+   (subject/update {:a 1} + 5) => {:a 6})
+)

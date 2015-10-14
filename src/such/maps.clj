@@ -1,5 +1,16 @@
 (ns such.maps
-  "Various functions on key-value structures")
+  "Various functions on key-value structures"
+  (:require [such.versions :refer [when=1-6]]))
+
+(when=1-6
+ (defn update
+   "The update function from Clojure 1.7. The same as `update-in` except
+    the second argument is a key instead of a path.
+    
+         (subject/update {:a 1} + 5)"
+   [m k f & args]
+   (apply update-in m [k] f args))
+ )
 
 (defn invert
   "Produce a map with values as keys.
