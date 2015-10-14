@@ -1,7 +1,7 @@
 (ns such.f-readable
   (:require [such.readable :as subject])
   (:use midje.sweet)
-  (:use [such.versions :only [when>=1-7]]))
+  (:use [such.versions :only [when>=1-6]]))
 
 (defmulti multi identity)
 (subject/set-function-elaborations! subject/default-function-elaborations)
@@ -59,7 +59,7 @@
     (letfn [(x [a] a)]
       (subject/fn-string x) => "<x>")))
 
-(when>=1-7
+(when>=1-6
  (require '[com.rpl.specter :as specter])
 
  (fact value-string

@@ -2,7 +2,7 @@
   "Stringify nested structures such that all functions - and particular values of your
    choice - are displayed in a more readable way. [[value-string]] and [[fn-symbol]] are
    the key functions."
-  (:use [such.versions :only [when>=1-7]])
+  (:use [such.versions :only [when>=1-6]])
   (:refer-clojure :exclude [print])
   (:require [such.symbols :as symbol]
             [such.types :as type]
@@ -38,7 +38,7 @@
   `(binding [*function-elaborations* ~all]
      ~@body))
 
-(when>=1-7
+(when>=1-6
 
 (def ^:private ^:dynamic *translations*
   "This atom contains the map from values->names that [[with-translations]] and
@@ -79,7 +79,7 @@
       (apply instead-of pair#))
     ~@body))
 
-) ; 1.7
+) ; 1-6
 
 
 (defn rename
@@ -176,7 +176,7 @@
   (str (fn-symbol f)))
   
 
-(when>=1-7
+(when>=1-6
 
 (require '[com.rpl.specter :as specter])
 
@@ -211,7 +211,7 @@
         x))
 
 (defn value-string 
-  "Currently available only for Clojure 1.7.
+  "Currently available only for Clojure 1.6+.
    
    Except for special values, converts `x` into a string as with `pr-str`.
    Exceptions (which apply anywhere within collections):
@@ -241,5 +241,5 @@
   [x]
   (pr-str (value x)))
 
-) ; 1.7
+) ; 1-6
 

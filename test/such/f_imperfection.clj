@@ -1,9 +1,9 @@
 (ns such.f-imperfection
   (:require [such.imperfection :as subject]
-            [such.versions :refer [when>=1-7]])
+            [such.versions :refer [when>=1-6]])
   (:use midje.sweet))
 
-(when>=1-7
+(when>=1-6
 
 ;; These are kludges because the function names look like metaconstants.
 (def x-pprint- subject/-pprint-)
@@ -28,4 +28,4 @@
     s => #"hi 1"
     s => #"\[1 :a\]"))
 
-) ; when>=1-7
+) ; when>=1-6

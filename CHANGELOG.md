@@ -4,6 +4,12 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.3.0]
+
+### Added
+
+- Functions in such.imperfection and such.readable can now be used with Clojure 1.6.
+
 ## [4.2.0]
 
 ### Added
