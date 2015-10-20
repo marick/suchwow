@@ -25,7 +25,7 @@
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0-beta1"]]}
              }
 
-  :plugins [[lein-midje "3.2-RC4"]
+  :plugins [[lein-midje "3.2"]
             [codox "0.8.11"]]
 
   :codox {:src-dir-uri "https://github.com/marick/suchwow/blob/master/"
