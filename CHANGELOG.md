@@ -4,6 +4,12 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [unreleased]
 
+## [4.4.1]
+
+- Use commons-codec 1.6 instead of 1.10. ring-codec uses 1.6. Since it's more popular,
+  we might as well just track its preference to avoid shoving version conflicts into
+  people's faces.
+
 ## [4.4.0]
 
 ### Added
