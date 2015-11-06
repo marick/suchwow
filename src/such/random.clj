@@ -14,8 +14,7 @@
   "Returns a SHA-1 hash (encoded as a hex string) from the `prn` representation of the input.
    Use for collision avoidance when the highest security is not needed."
   [form]
-  (DigestUtils/sha1Hex (pr-str form)))
-
-
-
-
+  ;; Note: this is deprecated in later versions of commons.codec. However,
+  ;; we're using an old version for compatibility with Compojure.
+  ;; When compojure updates, we can use sha1Hex.
+  (DigestUtils/shaHex (pr-str form)))
