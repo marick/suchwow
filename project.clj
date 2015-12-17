@@ -1,4 +1,4 @@
-(defproject marick/suchwow "4.4.1"
+(defproject marick/suchwow "4.4.2"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -7,13 +7,10 @@
             :distribution :repo}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [potemkin "0.4.1" :exclusions [org.clojure/clojure]]
-                 [com.rpl/specter "0.8.0" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
+                 [potemkin "0.4.2" :exclusions [org.clojure/clojure]]
+                 [com.rpl/specter "0.9.0" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
                  [environ "1.0.1" :exclusions [org.clojure/clojure]]
-                 ;; Note: using same version of commons-codec as ring-codec, which is included
-                 ;; by compojure. Let's not shove version incompatibilities into the faces of
-                 ;; the vastly larger numbers of compojure users.
-                 [commons-codec/commons-codec "1.6"]]
+                 [commons-codec/commons-codec "1.10"]]
 
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
