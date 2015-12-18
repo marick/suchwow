@@ -2,7 +2,8 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format. 
 
-## [unreleased]
+## [4.4.3]
+- DEPRECATION: In upcoming release, immigration functions will not `require` namespaces themselves.
 
 ## [4.4.2]
 
