@@ -15,7 +15,7 @@
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
 
-  :profiles {:dev {:dependencies [[midje "1.8.2" :exclusions [org.clojure/clojure]]
+  :profiles {:dev {:dependencies [[midje "1.8.3" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.1"]
                                   [org.clojure/data.json "0.2.6"]
                                   ;; Including compojure so that `lein ancient` will
