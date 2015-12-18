@@ -14,6 +14,17 @@
             [such.vars :as var]
             [such.control-flow :as flow]))
 
+(defn warning-require [sym]
+  (when-not (find-ns sym)
+    (binding [*out* *err*]
+      (println (format "-------- WARNING for %s" (ns-name *ns*)))
+      (println (format "You should include `%s` in your `ns` form." sym))
+      (println "Currently, you are not required to, but such behavior is ")
+      (println "DEPRECATED and will be removed in a future release.")
+      (println "The problem is that code without the `ns` declaration")
+      (println "does not work with uberjars - and fails in puzzling way.")))
+  (require sym))
+
 (defmacro import-vars
   "Import named vars from the named namespaces and make them (1) public in this
    namespace and (2) available for `refer` by namespaces that require this one.
@@ -23,13 +34,11 @@
                          count-permutations permutations]
                      [clojure.data.json
                          write-str])
-    
-   This version differs from Potemkin's in that you needn't have already required
-   the namespaces you're importing."
+   "
   [& namespace-and-var-descriptions]
   (let [namespaces (map first namespace-and-var-descriptions)
         requires (map (fn [ns] `(require '~ns)) namespaces)]
-    (doseq [ns namespaces] (require ns))
+    (doseq [ns namespaces] (warning-require ns))
     `(potemkin/import-vars ~@namespace-and-var-descriptions)))
 
 
@@ -42,7 +51,7 @@
 "
   [& ns-syms]
   (let [expand (fn [ns-sym]
-                 (require ns-sym)
+                 (warning-require ns-sym)
                  (into (vector ns-sym) (keys (ns-publics ns-sym))))
         expanded (map #(list `import-vars (expand %)) ns-syms)]
     `(do ~@expanded)))
@@ -66,7 +75,7 @@
               `(do
                  (~importer ~qualified ~to)
                  (alter-meta! (ns/+find-var '~to) #(dissoc % :file :line :column)))))]
-    (require ns-sym)
+    (warning-require ns-sym)
     `(do
        ~@(map one-call (ns-publics ns-sym)))))
 

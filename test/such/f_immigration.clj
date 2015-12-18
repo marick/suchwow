@@ -1,6 +1,8 @@
 (ns such.f-immigration
   (:require [such.immigration :as immigrate]
             [such.metadata :as meta])
+  (:require clojure.math.combinatorics
+            clojure.data.json)
   (:use midje.sweet))
     
 
