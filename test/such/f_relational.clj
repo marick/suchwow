@@ -81,7 +81,7 @@
 (def type-repo (-> type/empty-type-repo
                    (type/replace-error-handler type/throwing-error-handler)
                    (type/named :Problem (apply type/requires problem-keys))))
-(def confirm-type #(type/built-like type-repo :Problem %))
+(def this-is-a-problem #(type/built-like type-repo :Problem %))
 
 
 ;;; We work from relational tables (vectors of maps) that have been
@@ -94,9 +94,10 @@
                   {:code "two", :description "code2"}
                   {:code "three", :description "code3"}])
 
-(def icd10-code-problem-assignments [{:id 1, :problem_id 1, :code "one"}
-                                     {:id 2, :problem_id 2, :code "two"}
-                                     {:id 3, :problem_id 2, :code "three"}])
+(def icd10-code-problem-assignments [{:id 1, :code "one",  :problem_id 1}
+                                     {:id 2, :code "two",  :problem_id 2}
+                                     ;; Note next one is broken
+                                     {:id 3, :code "three" :problem_id nil}])
 
 
 ;;; For each table, we can construct "indexes" that provide fast access to
@@ -111,7 +112,7 @@
 
 ;;; `from` functions build up a result in the following stages:
 ;;;   1. Select the initial map from the value of a key in an index.
-;;;   2.   Repeat expanding merging in the results of following foreign keys.
+;;;   2.   Repeat: follow a foreign key and merge selected key/values.
 ;;;   3. Rename any keys that are not to taste.
 ;;;   4. Restrict the resulting map to the keys allowed in a Problem.
 ;;;   5. Blow up unless the Problem is well-formed.
@@ -129,8 +130,9 @@
          [:code index:icd10-by-code [:description]])
       (set/rename-keys {:code :icd10_code})
       (select-keys problem-keys)
-      confirm-type))
+      this-is-a-problem))
 
 (fact
   (from-icd10 "one") => {:problem_id 1 :problem_name "problem1",
-                         :icd10_code "one", :icd10_description "code1"})
+                         :icd10_code "one", :icd10_description "code1"}
+  (from-icd10 "three") => (throws #":problem_id must exist and be non-nil"))

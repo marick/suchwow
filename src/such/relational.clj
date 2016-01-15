@@ -1,4 +1,8 @@
 (ns such.relational
+  "Given vectors of uniform maps, do some simple relational things to them.
+
+   A work in progress. Note: will eventually contain the relational parts of
+   clojure.set, with better documentation."
   (:require [clojure.set :as set]
             [such.metadata :as meta]))
 
