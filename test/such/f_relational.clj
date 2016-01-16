@@ -1,10 +1,12 @@
 (ns such.f-relational
-  (:require [such.relational :as subject]
+  (:require [such.versions :refer [when>=1-7 when>=1-6]]
+            [such.relational :as subject]
             [such.metadata :as meta]
             [clojure.set :as set]
             [clojure.pprint :refer [pprint]]
-            [structural-typing.type :as type]
             [midje.sweet :refer :all]))
+
+(when>=1-6
 
 (facts "about extracting a simple index from maps"
   (subject/simple-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}])
@@ -65,6 +67,12 @@
                                [:problem_id index:problem-by-id [:name]]
                                [:code index:icd10-by-code [:description]])
     => {:problem_id 1, :code "one", :problem_name "problem1", :icd10_description "code1"}))
+
+) ; when>=1-6
+
+(when>=1-7 ; this uses structural-typing, which requires 1-7
+
+(require '[structural-typing.type :as type])
 
 
 ;;; Here is the construction of a (medical) Problem from an ICD-10 code.
@@ -136,3 +144,6 @@
   (from-icd10 "one") => {:problem_id 1 :problem_name "problem1",
                          :icd10_code "one", :icd10_description "code1"}
   (from-icd10 "three") => (throws #":problem_id must exist and be non-nil"))
+
+
+) ; >= 1.7

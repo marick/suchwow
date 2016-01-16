@@ -2,7 +2,9 @@
   "Given vectors of uniform maps, do some simple relational things to them.
 
    A work in progress. Note: will eventually contain the relational parts of
-   clojure.set, with better documentation."
+   clojure.set, with better documentation.
+
+   This is only available for Clojure 1.6 and later."
   (:require [clojure.set :as set]
             [such.metadata :as meta]))
 
