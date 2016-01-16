@@ -8,7 +8,7 @@
 
 (when>=1-6
 
-(facts "about extracting a simple index from maps"
+(facts "about extracting a simple one-to-one index from maps"
   (subject/one-to-one-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}])
   => {1 {:pk 1, :rest 2}
       2 {:pk 2, :rest 3}}
@@ -26,21 +26,31 @@
     (let [result (subject/one-to-one-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}] "pre-")]
       (subject/index-prefix result) => "pre-")))
 
+(facts "about extracting a one-to-many index from maps"
+  ;; Simple test, since it shares code with above.
+  (let [r (subject/one-to-many-index-on :foreign_id
+                                        [{:pk 1, :foreign_id 2}
+                                         {:pk 2, :foreign_id 2}
+                                         {:pk 3, :foreign_id 8}])]
+    (get r 2) => (just [{:pk 1, :foreign_id 2} {:pk 2, :foreign_id 2}] :in-any-order)
+    (get r 8) => (just [{:pk 3, :foreign_id 8}] :in-any-order)))
+
+
 (facts "about merging via a foreign key"
   (let [subtable [{:subpk ..sub1.. :other ..other1..} {:subpk ..sub2.. :other ..other2..}]]
     (fact "a starting - not so useful - version"
       (let [sub-index (subject/one-to-one-index-on :subpk subtable)]
-        (subject/has-one:merge {:pk ..pk.. :foreign ..sub1..} :foreign sub-index)
+        (subject/merge-related-table {:pk ..pk.. :foreign ..sub1..} :foreign sub-index)
         => {:pk ..pk.. :foreign ..sub1.. :subpk ..sub1.. :other ..other1..}))
 
     (fact "it is better if the map contains a prefix"
       (let [sub-index (subject/one-to-one-index-on :subpk subtable :sub_)]
-        (subject/has-one:merge {:pk ..pk.. :foreign ..sub1..} :foreign sub-index)
+        (subject/merge-related-table {:pk ..pk.. :foreign ..sub1..} :foreign sub-index)
         => {:pk ..pk.. :foreign ..sub1.. :sub_subpk ..sub1.. :sub_other ..other1..}))
 
     (fact "you can also select a subset of the foreign map's keys"
       (let [sub-index (subject/one-to-one-index-on :subpk subtable)]
-        (subject/has-one:merge {:pk ..pk.. :foreign ..sub1..} :foreign sub-index [:other])
+        (subject/merge-related-table {:pk ..pk.. :foreign ..sub1..} :foreign sub-index [:other])
         => {:pk ..pk.. :foreign ..sub1.. :other ..other1..}))))
 
 
