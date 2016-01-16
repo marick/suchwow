@@ -9,37 +9,37 @@
 (when>=1-6
 
 (facts "about extracting a simple index from maps"
-  (subject/simple-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}])
+  (subject/one-to-one-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}])
   => {1 {:pk 1, :rest 2}
       2 {:pk 2, :rest 3}}
 
   (fact "works with non-keyword keys"
-    (subject/simple-index-on "i" [{"i" 1, :rest 2} {"i" 2, :rest 3}])
+    (subject/one-to-one-index-on "i" [{"i" 1, :rest 2} {"i" 2, :rest 3}])
     => {1 {"i" 1, :rest 2}
         2 {"i" 2, :rest 3}})
 
   (fact "you can also stash a prefix string for future use"
-    (let [result (subject/simple-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}] :pre-)]
+    (let [result (subject/one-to-one-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}] :pre-)]
       (subject/index-prefix result) => "pre-")) ; note stringification
 
   (fact "a prefix can also be a string"
-    (let [result (subject/simple-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}] "pre-")]
+    (let [result (subject/one-to-one-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}] "pre-")]
       (subject/index-prefix result) => "pre-")))
 
 (facts "about merging via a foreign key"
   (let [subtable [{:subpk ..sub1.. :other ..other1..} {:subpk ..sub2.. :other ..other2..}]]
     (fact "a starting - not so useful - version"
-      (let [sub-index (subject/simple-index-on :subpk subtable)]
+      (let [sub-index (subject/one-to-one-index-on :subpk subtable)]
         (subject/has-one:merge {:pk ..pk.. :foreign ..sub1..} :foreign sub-index)
         => {:pk ..pk.. :foreign ..sub1.. :subpk ..sub1.. :other ..other1..}))
 
     (fact "it is better if the map contains a prefix"
-      (let [sub-index (subject/simple-index-on :subpk subtable :sub_)]
+      (let [sub-index (subject/one-to-one-index-on :subpk subtable :sub_)]
         (subject/has-one:merge {:pk ..pk.. :foreign ..sub1..} :foreign sub-index)
         => {:pk ..pk.. :foreign ..sub1.. :sub_subpk ..sub1.. :sub_other ..other1..}))
 
     (fact "you can also select a subset of the foreign map's keys"
-      (let [sub-index (subject/simple-index-on :subpk subtable)]
+      (let [sub-index (subject/one-to-one-index-on :subpk subtable)]
         (subject/has-one:merge {:pk ..pk.. :foreign ..sub1..} :foreign sub-index [:other])
         => {:pk ..pk.. :foreign ..sub1.. :other ..other1..}))))
 
@@ -47,15 +47,15 @@
 (facts "about flattening lookup"
   (let [problems [{:id 1, :name "problem1"}
                   {:id 2, :name "problem2"}]
-        index:problem-by-id (subject/simple-index-on :id problems "problem_")
+        index:problem-by-id (subject/one-to-one-index-on :id problems "problem_")
         icd10-codes [{:code "one", :description "code1"}
                      {:code "two", :description "code2"}
                      {:code "three", :description "code3"}]
-        index:icd10-by-code (subject/simple-index-on :code icd10-codes "icd10_")
+        index:icd10-by-code (subject/one-to-one-index-on :code icd10-codes "icd10_")
         icd10-code-problem-assignments [{:id 1, :problem_id 1, :code "one"}
                                         {:id 2, :problem_id 2, :code "two"}
                                         {:id 3, :problem_id 2, :code "three"}]
-        index:icd10-code->problem-id (subject/simple-index-on :code icd10-code-problem-assignments)]
+        index:icd10-code->problem-id (subject/one-to-one-index-on :code icd10-code-problem-assignments)]
 
     (subject/flattening-lookup 1 index:problem-by-id [:name]) => {:name "problem1"}
 
@@ -113,10 +113,10 @@
 ;;; index, they can have a prefix prepended to them. (Think of `SELECT table.column AS col`,
 ;;; except enforced for all queries.)
 
-(def index:problem-by-id (subject/simple-index-on :id problems "problem_"))
-(def index:icd10-by-code (subject/simple-index-on :code icd10-codes "icd10_"))
+(def index:problem-by-id (subject/one-to-one-index-on :id problems "problem_"))
+(def index:icd10-by-code (subject/one-to-one-index-on :code icd10-codes "icd10_"))
 (def index:icd10-code->problem-id  ; this contributes nothing to the final problem, so no prefix.
-  (subject/simple-index-on :code icd10-code-problem-assignments))
+  (subject/one-to-one-index-on :code icd10-code-problem-assignments))
 
 ;;; `from` functions build up a result in the following stages:
 ;;;   1. Select the initial map from the value of a key in an index.

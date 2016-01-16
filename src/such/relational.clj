@@ -8,12 +8,12 @@
   (:require [clojure.set :as set]
             [such.metadata :as meta]))
 
-(defn simple-index-on
+(defn one-to-one-index-on
   "Given a list of `maps` with a \"primary\" (unique) key,
    produce a map from the different values of the primary key to
    the original maps they identify.
 
-          (simple-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}])
+          (one-to-one-index-on :pk [{:pk 1, :rest 2} {:pk 2, :rest 3}])
           => {1 {:pk 1, :rest 2}
               2 {:pk 2, :rest 3}}
 "
@@ -24,7 +24,7 @@
              maps))
 
   ([primary-key maps prefix]
-     (meta/assoc (simple-index-on primary-key maps)
+     (meta/assoc (one-to-one-index-on primary-key maps)
                  ::prefix (name prefix))))
 
 (defn index-prefix [index]
