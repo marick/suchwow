@@ -55,7 +55,7 @@
                           :only [:val] :prefix "foreign-")
       => {:id 1 :foreign_id "a" :rest ..rest1.. :foreign-val "fa"}))
 
-  (future-fact "compound-to-one tables"
+  (fact "compound-to-one tables"
     (let [original-map {:id 1 :foreign_id_alpha "a" :foreign_id_num 1 :rest ..rest1..}
           foreign-table [{:alpha "a" :id 1 :val "fa"} {:alpha "b" :id "2" :val "fb"}]
           foreign-index (subject/compound-to-one-index-on foreign-table [:alpha :id])]
@@ -63,7 +63,10 @@
       (subject/extend-map original-map :using foreign-index :via [:foreign_id_alpha :foreign_id_num]
                           :only [:val] :prefix "foreign-")
       => {:id 1 :foreign_id_alpha "a" :foreign_id_num 1 :rest ..rest1..
-          :foreign-val "fa"})))
+          :foreign-val "fa"}))
+
+
+  )
 
 
 

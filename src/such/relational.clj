@@ -13,21 +13,18 @@
 (defn- force-sequential [v]
   (if (sequential? v) v (vector v)))
 
-(defn one-to-one-index-on [table one-key]
-  (-> table
-      (set/index (vector one-key))
-      (meta/assoc ::type :one-to-one
-                  ::value-handler first
-                  ::key-maker #(hash-map one-key %))))
+(defn- mkfn:key-for-index
+  "Given [:x :y], produce a function that takes [1 2] and
+   returns {:x 1 :y 2}"
+  [map-keys]
+  (fn [map-values]
+    (apply hash-map (interleave map-keys map-values))))
 
-(defn compound-to-one-index-on [table keyseq]
-  (-> table
-      (set/index keyseq)
-      (meta/assoc ::type :compound-to-one
-                  ::value-handler first
-                  ::key-maker #(apply hash-map (interleave keyseq %)))))
+(defn- multi-get [kvs keyseq]
+  "(multi-get {:x 1, :y 2, :z 3} [:x :z]) => [1 3]"
+  (vals (select-keys kvs (force-sequential keyseq))))
 
-(defn- add-prefix [kvs prefix]
+(defn- prefix-all-keys [kvs prefix]
   (letfn [(prefixer [k]
             (-> (str (name prefix) (name k))
                 (cond-> (keyword? k) keyword)))]
@@ -36,6 +33,23 @@
                                          (map prefixer (keys kvs))))]
       (set/rename-keys kvs translation))))
 
+
+;;;; Public
+
+
+(defn one-to-one-index-on [table one-key]
+  (-> table
+      (set/index (vector one-key))
+      (meta/assoc ::type :one-to-one
+                  ::value-handler first
+                  ::key-maker (mkfn:key-for-index (vector one-key)))))
+
+(defn compound-to-one-index-on [table keyseq]
+  (-> table
+      (set/index keyseq)
+      (meta/assoc ::type :compound-to-one
+                  ::value-handler first
+                  ::key-maker (mkfn:key-for-index keyseq))))
 
 (defn select-map
   ([key options]
@@ -46,10 +60,10 @@
            desired-keys (get options :only)
            prefix (get options :prefix)]
        (-> index
-           (get (key-maker key))
+           (get (key-maker (force-sequential key)))
            value-handler
            (cond-> desired-keys (select-keys desired-keys))
-           (cond-> prefix (add-prefix (name prefix))))))
+           (cond-> prefix (prefix-all-keys prefix)))))
   ([key k v & rest] ; k and v are to give this different arity than above
      (select-map key (apply hash-map k v rest))))
 
@@ -59,7 +73,7 @@
      (assert (contains? options :using) "You must provide an index with `:using`.")
      (assert (contains? options :via) "You must provide an index with `:using`.")
 
-     (let [foreign-key-value (get kvs (:via options))]
+     (let [foreign-key-value (multi-get kvs (:via options))]
        (merge kvs (select-map foreign-key-value options))))
 
   ([kvs k v & rest] ; k and v are to give this different arity than above
