@@ -37,19 +37,14 @@
 ;;;; Public
 
 
-(defn one-to-one-index-on [table one-key]
-  (-> table
-      (set/index (vector one-key))
-      (meta/assoc ::type :one-to-one
-                  ::value-handler first
-                  ::key-maker (mkfn:key-for-index (vector one-key)))))
-
-(defn compound-to-one-index-on [table keyseq]
-  (-> table
-      (set/index keyseq)
-      (meta/assoc ::type :compound-to-one
-                  ::value-handler first
-                  ::key-maker (mkfn:key-for-index keyseq))))
+(defn one-to-one-index-on [table keyseq]
+  (if (sequential? keyseq)
+    (-> table
+        (set/index keyseq)
+        (meta/assoc ::type :compound-to-one
+                    ::value-handler first
+                    ::key-maker (mkfn:key-for-index keyseq)))
+    (one-to-one-index-on table [keyseq])))
 
 (defn select-map
   ([key options]

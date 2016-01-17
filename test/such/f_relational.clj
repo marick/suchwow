@@ -15,11 +15,11 @@
           index (subject/one-to-one-index-on data :id)]
       (subject/select-map 1 :using index) => {:id 1 :rest ..rest1..}))
 
-  (fact "compound-to-one indices"
+  (fact "one-to-one indices where the keys are compound"
     (let [data [{:id 1 :pk 1 :rest ..rest11..}
                 {:id 1 :pk 2 :rest ..rest12..}
                 {:id 2 :pk 2 :rest ..rest22..}]
-          index (subject/compound-to-one-index-on data [:id :pk])]
+          index (subject/one-to-one-index-on data [:id :pk])]
       (subject/select-map [1 1] :using index) => (first data)
       (subject/select-map [1 2] :using index) => (second data)))
 
@@ -55,10 +55,10 @@
                           :only [:val] :prefix "foreign-")
       => {:id 1 :foreign_id "a" :rest ..rest1.. :foreign-val "fa"}))
 
-  (fact "compound-to-one tables"
+  (fact "one-to-one tables with compound keys"
     (let [original-map {:id 1 :foreign_id_alpha "a" :foreign_id_num 1 :rest ..rest1..}
           foreign-table [{:alpha "a" :id 1 :val "fa"} {:alpha "b" :id "2" :val "fb"}]
-          foreign-index (subject/compound-to-one-index-on foreign-table [:alpha :id])]
+          foreign-index (subject/one-to-one-index-on foreign-table [:alpha :id])]
 
       (subject/extend-map original-map :using foreign-index :via [:foreign_id_alpha :foreign_id_num]
                           :only [:val] :prefix "foreign-")
