@@ -130,7 +130,7 @@
 
 
     (fact "making an index and then selecting"
-      (future-fact "1-N 1-N 1-N"
+      (fact "1-N 1-N 1-N"
         (let [combined-index (subject/combined-index-on one-to-many-top-index
                                                         :foreign one-to-many-middle-index
                                                         :foreign one-to-many-bottom-index)]
