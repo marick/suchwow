@@ -16,6 +16,7 @@
   (:require [clojure.set :as set]
             [such.maps :as map]
             [such.imperfection :refer :all]
+            [such.shorthand :refer :all]
             [such.wrongness :refer [boom!]]
             [such.metadata :as meta]))
 
@@ -43,10 +44,6 @@
       (set/rename-keys kvs translation))))
 
 (defn- option-controlled-merge [old new options]
-  (when (and (sequential? new)
-             (not (contains? options :into)))
-    (boom! "A merge using a one-to-many index must specify `:into`"))
-
   (if-let [destination (:into options)]
     (let [current (or (get old destination) [])
           extended (into current new)]
@@ -54,21 +51,44 @@
     (merge old new)))
 
 
+;; Use of indexes is controlled by metadata
+
 (defn- one-to-one-index? [index]
   (= :one-to-one (meta/get index ::type)))
 (defn- one-to-many-index? [index]
   (= :one-to-many (meta/get index ::type)))
 
+(defn- index-keyseq [index]
+  (meta/get index ::keyseq))
 
-;;;; Public
 
 (defn- with-one-to-one-metadata [index keyseq]
   (meta/assoc index
               ::type :one-to-one
-              ::value-handler first
-              ::key-selector select-keys
-              ::prefix-adder prefix-all-keys
-              ::key-maker (mkfn:key-for-index keyseq)))
+              ::keyseq keyseq             ; the keys this is an index on (a singleton like [:id]
+              ;; convert a singleton sequence (a value like `[5]`) into the format
+              ;; clojure.set/index wants: `{:id 5}`
+              ::key-maker (mkfn:key-for-index keyseq)
+
+              ::value-handler first       ; the result is always a set containing one value
+              ::key-selector select-keys  ; how to pick a smaller (projected map)
+              ::prefix-adder prefix-all-keys))
+
+(defn- with-one-to-many-metadata [index keyseq]
+  (meta/assoc index
+              ::type :one-to-many
+              ::keyseq keyseq
+              ::key-maker (mkfn:key-for-index keyseq)
+
+              ::value-handler identity    ; multiple values are returned
+              ::key-selector (fn [value keyseq]
+                               (mapv #(select-keys % keyseq) value))
+              ::prefix-adder (fn [value prefix]
+                               (mapv #(prefix-all-keys % prefix) value))))
+
+
+
+;;;; Public
 
 (defn one-to-one-index-on
   "`table` should be a sequence of maps. `keyseq` is either a single value
@@ -91,16 +111,6 @@
         (set/index keyseq)
         (with-one-to-one-metadata keyseq))
     (one-to-one-index-on table [keyseq])))
-
-(defn- with-one-to-many-metadata [index keyseq]
-  (meta/assoc index
-              ::type :one-to-many
-              ::value-handler identity
-              ::key-selector (fn [value keyseq]
-                               (mapv #(select-keys % keyseq) value))
-              ::prefix-adder (fn [value prefix]
-                               (mapv #(prefix-all-keys % prefix) value))
-              ::key-maker (mkfn:key-for-index keyseq)))
 
 
 (defn one-to-many-index-on [table keyseq]
@@ -195,7 +205,10 @@
   "
 
   ([kvs options]
-     (assert (contains? options :via) "You must provide an index with `:via`.")
+     (assert (contains? options :via) "You must provide a foreign key with `:via`.")
+     (assert (contains? options :using) "You must provide an index with `:using`.")
+     (when (one-to-many-index? (:using options))
+       (assert (contains? options :into) "When using a one-to-many index, you must provide `:into`"))
 
      (let [foreign-key-value (multi-get kvs (:via options))]
        (option-controlled-merge kvs
@@ -208,7 +221,7 @@
 
 ;;;;
 
-(defn select-along-path
+(defn- select-along-path
   "This is not really intended for public use. Note: doesn't handle compound keys."
   [val starting-index & foreign-index-pairs]
   (loop [many-return-values? false
@@ -217,7 +230,7 @@
            (concat [::sentinel-key starting-index] foreign-index-pairs)]
 
     (cond (empty? all)
-          (if many-return-values? result (first result))
+          result ; note that even 1-1 indexes return a set result.
 
           (one-to-one-index? next-index)
           (recur many-return-values?
@@ -229,8 +242,23 @@
                  (set (mapcat #(index-select (get % foreign-key) :using next-index) result))
                  remainder))))
 
-;; (defn combined-index-on [starting-index & foreign-index-pairs]
-;;   (reduce-kv (fn [so-far v]
-;;                (assoc so-far v (apply select-along-path v starting-index foreign-index-pairs)))
-;;              {}
-;;              (keys starting-index)))
+(defn combined-index-on
+  "Create an index that maps directly from values in the starting index to values
+   in the last of the list of indexes, following keys to move from index to index.
+  "
+  {:arglists '([starting-index foreign-key next-index ...])}
+  [starting-index & path-pairs]
+  (let [raw-index (reduce (fn [so-far key-and-value-map]
+                            (let [starting-val (multi-get key-and-value-map
+                                                          (index-keyseq starting-index))]
+                              (assoc so-far
+                                     key-and-value-map
+                                     (apply select-along-path
+                                            starting-val starting-index path-pairs))))
+                          {}
+                          (keys starting-index))
+        ;; Bit of sliminess here in that we're checking the metadata on non-indexes
+        metadata-adder (if (any? one-to-many-index? (cons starting-index path-pairs))
+                         with-one-to-many-metadata
+                         with-one-to-one-metadata)]
+    (metadata-adder raw-index (index-keyseq starting-index))))
