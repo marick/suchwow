@@ -245,6 +245,15 @@
 (defn combined-index-on
   "Create an index that maps directly from values in the starting index to values
    in the last of the list of indexes, following keys to move from index to index.
+   Example:
+
+      (let [index:countries-by-person-id (subject/combined-index-on index:rulership-by-person-id
+                                                                    :country_code
+                                                                    index:country-by-country-code)]
+        (subject/index-select 1 :using index:countries-by-person-id :keys [:gdp])
+        => [{:gdp 1690}])
+
+   (See ..someplace.. for details..)
   "
   {:arglists '([starting-index foreign-key next-index ...])}
   [starting-index & path-pairs]
