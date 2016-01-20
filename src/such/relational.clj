@@ -53,7 +53,22 @@
       (assoc old destination extended))
     (merge old new)))
 
+
+(defn- one-to-one-index? [index]
+  (= :one-to-one (meta/get index ::type)))
+(defn- one-to-many-index? [index]
+  (= :one-to-many (meta/get index ::type)))
+
+
 ;;;; Public
+
+(defn- with-one-to-one-metadata [index keyseq]
+  (meta/assoc index
+              ::type :one-to-one
+              ::value-handler first
+              ::key-selector select-keys
+              ::prefix-adder prefix-all-keys
+              ::key-maker (mkfn:key-for-index keyseq)))
 
 (defn one-to-one-index-on
   "`table` should be a sequence of maps. `keyseq` is either a single value
@@ -63,10 +78,10 @@
   The resulting index provides fast access to individual maps.
 
       (def index:traditional (one-to-one-index-on table :id))
-      (select 5 :using index:traditional :only [:key-i-want])
+      (index-select 5 :using index:traditional :keys [:key1 :key2])
 
       (def index:compound (one-to-one-index-on table [\"intkey\" \"strkey\")))
-      (select [4 \"dawn\"] :using index:compound)
+      (index-select [4 \"dawn\"] :using index:compound)
 
   Note that keys need not be Clojure keywords.
   "
@@ -74,12 +89,19 @@
   (if (sequential? keyseq)
     (-> table
         (set/index keyseq)
-        (meta/assoc ::type :one-to-one
-                    ::value-handler first
-                    ::key-selector select-keys
-                    ::prefix-adder prefix-all-keys
-                    ::key-maker (mkfn:key-for-index keyseq)))
+        (with-one-to-one-metadata keyseq))
     (one-to-one-index-on table [keyseq])))
+
+(defn- with-one-to-many-metadata [index keyseq]
+  (meta/assoc index
+              ::type :one-to-many
+              ::value-handler identity
+              ::key-selector (fn [value keyseq]
+                               (mapv #(select-keys % keyseq) value))
+              ::prefix-adder (fn [value prefix]
+                               (mapv #(prefix-all-keys % prefix) value))
+              ::key-maker (mkfn:key-for-index keyseq)))
+
 
 (defn one-to-many-index-on [table keyseq]
   "`table` should be a sequence of maps. `keyseq` is either a single value
@@ -89,26 +111,20 @@
   The resulting index provides fast retrieval of vectors of matching maps.
 
       (def index:traditional (one-to-many-index-on table :id))
-      (select 5 :using index:traditional :only [:key-i-want]) ; a vector of maps
+      (index-select 5 :using index:traditional :keys [:key-i-want]) ; a vector of maps
 
       (def index:compound (one-to-many-index-on table [\"intkey\" \"strkey\")))
-      (select [4 \"dawn\"] :using index:compound) ; a vector of maps
+      (index-select [4 \"dawn\"] :using index:compound) ; a vector of maps
 
   Keys may be either Clojure keywords or strings.
   "
   (if (sequential? keyseq)
     (-> table
         (set/index keyseq)
-        (meta/assoc ::type :one-to-many
-                    ::value-handler identity
-                    ::key-selector (fn [value keyseq]
-                                     (mapv #(select-keys % keyseq) value))
-                    ::prefix-adder (fn [value prefix]
-                                     (mapv #(prefix-all-keys % prefix) value))
-                    ::key-maker (mkfn:key-for-index keyseq)))
+        (with-one-to-many-metadata keyseq))
     (one-to-many-index-on table [keyseq])))
 
-(defn select
+(defn index-select
   "Produce a map by looking a key up in an index.
 
   See <<someplace>> for examples.
@@ -119,7 +135,7 @@
 
   :using <index>
     (required) The index to use.
-  :only <[keys...]>
+  :keys <[keys...]>
     (optional) Keys you're interested in (default is all of them)
   :prefix <prefix>
     (optional) Prepend the given prefix to all the keys in the selected map.
@@ -131,13 +147,16 @@
   "
   ([key options]
      (assert (contains? options :using) "You must provide an index with `:using`.")
+     (when-let [keys (options :keys)]
+       (assert (vector? keys) ":keys takes a vector as an argument"))
+
      (let [index (get options :using)
 
            [key-maker value-handler key-selector prefix-adder]
            (mapv #(meta/get index %)
                  [::key-maker ::value-handler ::key-selector ::prefix-adder])
 
-           [desired-keys prefix] (mapv #(get options %) [:only :prefix])]
+           [desired-keys prefix] (mapv #(get options %) [:keys :prefix])]
 
        (-> index
            (get (key-maker (force-sequential key)))
@@ -145,7 +164,7 @@
            (cond-> desired-keys (key-selector desired-keys))
            (cond-> prefix (prefix-adder prefix)))))
   ([key k v & rest] ; k and v are to give this different arity than above
-     (select key (apply hash-map k v rest))))
+     (index-select key (apply hash-map k v rest))))
 
 
 (defn extend-map
@@ -167,7 +186,7 @@
     (optional, relevant only to a one-to-many map). Since a one-to-many map
     can't be [[merge]]d into the `kvs`, it has to be added \"under\" (as the
     value of) a particular `key`.
-  :only <[keys...]>
+  :keys <[keys...]>
     (optional) Keys you're interested in (default is all of them)
   :prefix <prefix>
     (optional) Prepend the given prefix to all the keys in the selected map.
@@ -176,14 +195,42 @@
   "
 
   ([kvs options]
-     (assert (contains? options :using) "You must provide an index with `:using`.")
-     (assert (contains? options :via) "You must provide an index with `:using`.")
+     (assert (contains? options :via) "You must provide an index with `:via`.")
 
      (let [foreign-key-value (multi-get kvs (:via options))]
        (option-controlled-merge kvs
-                                (select foreign-key-value options)
+                                (index-select foreign-key-value options)
                                 options)))
 
   ([kvs k v & rest] ; k and v are to give this different arity than above
      (extend-map kvs (apply hash-map k v rest))))
 
+
+;;;;
+
+(defn select-along-path
+  "This is not really intended for public use. Note: doesn't handle compound keys."
+  [val starting-index & foreign-index-pairs]
+  (loop [many-return-values? false
+         result [{::sentinel-key val}]
+         [foreign-key next-index & remainder :as all]
+           (concat [::sentinel-key starting-index] foreign-index-pairs)]
+
+    (cond (empty? all)
+          (if many-return-values? result (first result))
+
+          (one-to-one-index? next-index)
+          (recur many-return-values?
+                 (set (map #(index-select (get % foreign-key) :using next-index) result))
+                 remainder)
+
+          :else
+          (recur true
+                 (set (mapcat #(index-select (get % foreign-key) :using next-index) result))
+                 remainder))))
+
+;; (defn combined-index-on [starting-index & foreign-index-pairs]
+;;   (reduce-kv (fn [so-far v]
+;;                (assoc so-far v (apply select-along-path v starting-index foreign-index-pairs)))
+;;              {}
+;;              (keys starting-index)))
