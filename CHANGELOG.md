@@ -1,6 +1,9 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
-See [here](http://keepachangelog.com/) for the change log format. 
+See [here](http://keepachangelog.com/) for the change log format.
+
+## [4.5]
+- ADD: such.control-flow/let-maybe
 
 ## [4.4.3]
 - DEPRECATION: In upcoming release, immigration functions will not `require` namespaces themselves.

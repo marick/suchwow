@@ -22,3 +22,19 @@
     
     `(let [~value-sym ~value-form]
        (cond ~@cond-pairs))))
+
+(defmacro let-maybe
+  "Like `let` except that if any symbol would be bound to a `nil`, the
+   entire expression immediately short-circuits and returns `nil`.
+
+       (let-maybe [v []
+                   f (first v)
+                   _ (throw (new Exception))]
+          (throw (new Exception)))
+       => nil
+"
+  [bindings & body]
+  (if (empty? bindings)
+    `(do ~@body)
+    `(when-some [~@(take 2 bindings)]
+       (let-maybe [~@(drop 2 bindings)] ~@body))))
