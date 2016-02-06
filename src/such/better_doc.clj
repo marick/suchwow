@@ -6,9 +6,9 @@
    included in clojure.core. Note that the Unlicense allows anyone to do that."
   (:require [such.vars :as vars]))
 
-
 ;; Interning copies in this namespace allows codox to find them.
-(defmacro ^:private update-and-make-local-copy! [var doc-string]
+(defmacro ^:no-doc update-and-make-local-copy!
+  [var doc-string]
   `(let [var-name# (:name (meta ~var))]
      (alter-meta! ~var assoc :doc ~doc-string)
      (ns-unmap *ns* var-name#)
@@ -403,3 +403,4 @@
    
    The single argument form produces a transducer.
 ")
+

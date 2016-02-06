@@ -6,6 +6,20 @@
             [clojure.pprint :refer [pprint]]
             [midje.sweet :refer :all]))
 
+(fact "confirm that clojure.set imports are really here"
+  (fact index
+    (subject/index [{:a 1}] [:a]) => { {:a 1} #{ {:a 1} }}
+
+    (subject/index [ {:a 1} {:b 1} {:a 1, :b 1} {:c 1}] [:a :b])
+    =>  {  {:a 1, :b 1}    #{ {:a 1 :b 1} }
+           {:a 1      }    #{ {:a 1} }
+           {      :b 1}    #{ {:b 1} }
+           {          }    #{ {:c 1} }})
+
+
+  )
+
+
 (when>=1-7
 
 

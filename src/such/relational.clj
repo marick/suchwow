@@ -14,11 +14,61 @@
 
    This is only available for Clojure 1.7 and later."
   (:require [clojure.set :as set]
+            [such.better-doc :as doc]
             [such.maps :as map]
             [such.imperfection :refer :all]
             [such.shorthand :refer :all]
             [such.wrongness :refer [boom!]]
             [such.metadata :as meta]))
+
+
+
+(doc/update-and-make-local-copy! #'clojure.set/index
+  "`xrel` is a collection of maps; consider it the result of an SQL SELECT.
+   `ks` is a collection of values assumed to be keys of the maps (think table columns).
+   The result maps from particular key-value pairs to a set of all the
+   maps in `xrel` that contain them.
+
+   Consider this `xrel`:
+
+       (def xrel [ {:first \"Brian\" :order 1 :count 4}
+                   {:first \"Dawn\" :order 1 :count 6}
+                   {:first \"Paul\" :order 1 :count 5}
+                   {:first \"Sophie\" :order 2 :count 9} ])
+
+    Then `(index xrel [:order])` is:
+
+       {{:order 1}
+         #{{:first \"Paul\", :order 1, :count 5}
+           {:first \"Dawn\", :order 1, :count 6}
+           {:first \"Brian\", :order 1, :count 4}},
+         {:order 2}
+           #{{:first \"Sophie\", :order 2, :count 9}}}
+
+    ... and `(index xrel [:order :count])` is:
+
+       {{:order 1, :count 4}   #{ {:first \"Brian\", :order 1, :count 4} },
+        {:order 1, :count 6}   #{ {:first \"Dawn\", :order 1, :count 6} },
+        {:order 1, :count 5}   #{ {:first \"Paul\", :order 1, :count 5} },
+        {:order 2, :count 9}   #{ {:first \"Sophie\", :order 2, :count 9} }}
+
+   If one of the `xrel` maps doesn't have an key, it is assigned to an index without
+   that key. Consider this `xrel`:
+
+       (def xrel [ {:a 1, :b 1} {:a 1} {:b 1} {:c 1}])
+
+   Then `(index xrel [:a b])` is:
+
+       {  {:a 1, :b 1}    #{ {:a 1 :b 1} }
+          {:a 1      }    #{ {:a 1} }
+          {      :b 1}    #{ {:b 1} }
+          {          }    #{ {:c 1} }})
+")
+
+
+
+;;; Extensions
+
 
 (defn- force-sequential [v]
   (if (sequential? v) v (vector v)))
@@ -108,7 +158,7 @@
   [table keyseq]
   (if (sequential? keyseq)
     (-> table
-        (set/index keyseq)
+        (index keyseq)
         (with-one-to-one-metadata keyseq))
     (one-to-one-index-on table [keyseq])))
 
@@ -130,7 +180,7 @@
   "
   (if (sequential? keyseq)
     (-> table
-        (set/index keyseq)
+        (index keyseq)
         (with-one-to-many-metadata keyseq))
     (one-to-many-index-on table [keyseq])))
 
