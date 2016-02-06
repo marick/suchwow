@@ -16,7 +16,13 @@
            {      :b 1}    #{ {:b 1} }
            {          }    #{ {:c 1} }})
 
-
+  (fact join
+    (let [has-a-and-b [{:a 1, :b 2} {:a 2, :b 1} {:a 2, :b 2}]
+          has-b-and-c [{:blike 1, :c 2} {:blike 2, :c 1} {:blike 2, :c 2}]]
+      (subject/join has-a-and-b has-b-and-c {:b :blike})
+      => #{{:a 1, :b 2, :blike 2, :c 1} {:a 1, :b 2, :blike 2, :c 2}
+           {:a 2, :b 1, :blike 1, :c 2} {:a 2, :b 2, :blike 2, :c 1}
+           {:a 2, :b 2, :blike 2, :c 2}}))
   )
 
 

@@ -66,6 +66,46 @@
 ")
 
 
+(doc/update-and-make-local-copy! #'clojure.set/join
+  "`xrel` and `yrel` are collections of maps (think SQL SELECT).
+   In the first form, produces the [natural join](https://en.wikipedia.org/wiki/Join_%28SQL%29#Natural_join).
+   That is, it joins on the shared keys. In the following, `:b` is shared:
+
+         (def has-a-and-b [{:a 1, :b 2} {:a 2, :b 1} {:a 2, :b 2}])
+         (def has-b-and-c [{:b 1, :c 2} {:b 2, :c 1} {:b 2, :c 2}])
+         (join has-a-and-b has-b-and-c) => #{{:a 1, :b 2, :c 1}
+                                             {:a 1, :b 2, :c 2}
+
+                                             {:a 2, :b 1, :c 2}
+
+                                             {:a 2, :b 2, :c 1}
+                                             {:a 2, :b 2, :c 2}}}
+
+   Alternately, can describe which left-hand-side keys should map to which
+   right-hand-side keys with a map. In the above case, the sharing could be
+   made explicit with `(join has-a-and-b has-b-and-c {:b :b})`.
+
+   A more likely example is one where the two relations have slightly different
+   \"b\" keys, like this:
+
+         (def has-a-and-b [{:a 1, :b 2} {:a 2, :b 1} {:a 2, :b 2}])
+         (def has-b-and-c [{:blike 1, :c 2} {:blike 2, :c 1} {:blike 2, :c 2}])
+
+   In such a case, the join would look like this:
+
+                                           #{{:a 1, :b 2, :blike 2, :c 1}
+                                             {:a 1, :b 2, :blike 2, :c 2}
+
+                                             {:a 2, :b 1, :blike 1, :c 2}
+
+                                             {:a 2, :b 2, :blike 2, :c 1}
+                                             {:a 2, :b 2, :blike 2, :c 2}}
+
+   Notice that the `:b` and `:blike` keys are duplicated.
+
+   For more details, you'll have to try your own examples.
+")
+
 
 ;;; Extensions
 

@@ -2,7 +2,8 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
-## [4.5]
+## [5.0]
+- CHANGED: No longer support Clojure 1.5
 - ADD: such.control-flow/let-maybe
 
 ## [4.4.3]
