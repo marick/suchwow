@@ -1,18 +1,11 @@
 (ns such.relational
-  "If you work with sequences of maps of the sort gotten by slurping
-   up relational database tables or CVS files, here are some functions
-   that allow you join-like behavior for one-to-one and one-to-many
-   relationships.
+  "This namespace provides two things: better documentation for relational
+   functions in `clojure.set`, and an *experimental* set of functions for
+   \"pre-joining\" relational tables for a more tree-structured or path-based
+   lookup. See [the wiki](https://github.com/marick/suchwow/wiki/such.relational)
+   for more about the latter.
 
-   The core idea is that you create indexes for all the access patterns
-   you use often - as you would with relational database tables - and
-   use them to follow foreign keys and merge the results (approximating
-   a join).
-
-   A WORK IN PROGRESS. Note: will eventually contain the relational parts of
-   clojure.set, with better documentation.
-
-   This is only available for Clojure 1.7 and later."
+   The API for the experimental functions may change without triggering a [semver](http://semver.org/) major number change."
   (:require [clojure.set :as set]
             [such.better-doc :as doc]
             [such.maps :as map]
@@ -133,7 +126,7 @@
 
         (rename [{:a 1, :b 2}] {:b :replacement}) => #{{:a 1, :replacement 2}}
 
-    `rename` differs from `(map #(rename-keys % kmap) ...)` in two ways:
+    `rename` differs from `(map #(set/rename-keys % kmap) ...)` in two ways:
 
     1. It returns a set, rather than a lazy sequence.
     2. Any metadata on the original `xrel` is preserved. (It shares this behavior
@@ -236,7 +229,7 @@
     (one-to-one-index-on table [keyseq])))
 
 
-(defn one-to-many-index-on [table keyseq]
+(defn one-to-many-index-on
   "`table` should be a sequence of maps. `keyseq` is either a single value
   (corresponding to a traditional `:id` or `:pk` entry) or a sequence of
   values (corresponding to a compound key).
@@ -251,6 +244,7 @@
 
   Keys may be either Clojure keywords or strings.
   "
+  [table keyseq]
   (if (sequential? keyseq)
     (-> table
         (index keyseq)

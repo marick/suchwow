@@ -256,6 +256,7 @@
         foreign-index (subject/one-to-one-index-on foreign-table [:alpha :id])]
 
     ;; TODO: This test fails under 1.6, but not 1.7 or 1.8.
+    (future-fact "why does this test fail 1.6 but not 1.7 or 1.8?")
     (subject/extend-map original-map :using foreign-index :via [:foreign_id_alpha :foreign_id_num]
                         :keys [:val] :prefix "foreign-")
     => {:id 1 :foreign_id_alpha "a" :foreign_id_num 1 :rest ..rest1..
