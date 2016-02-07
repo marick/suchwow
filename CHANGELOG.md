@@ -5,6 +5,7 @@ See [here](http://keepachangelog.com/) for the change log format.
 ## [5.0]
 - CHANGED: No longer support Clojure 1.5
 - ADD: such.control-flow/let-maybe
+- ADD: An *experimental* such.relational namespace
 
 ## [4.4.3]
 - DEPRECATION: In upcoming release, immigration functions will not `require` namespaces themselves.
