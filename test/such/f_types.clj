@@ -27,13 +27,7 @@
   (subject/classic-map? (R. 1)) => false
   (subject/classic-map? (hash-map)) => true
   (subject/classic-map? (sorted-map)) => true
-  (subject/classic-map? 1) => false
-
-  (when<=1-5
-   (subject/record? (R. 1)) => true
-   (subject/record? (hash-map)) => false
-   (subject/record? (sorted-map)) => false
-   (subject/record? 1) => false))
+  (subject/classic-map? 1) => false)
 
 (facts "about bigdecimal"
   (subject/big-decimal? 1) => false

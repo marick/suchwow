@@ -2,12 +2,12 @@
   "Stringify nested structures such that all functions - and particular values of your
    choice - are displayed in a more readable way. [[value-string]] and [[fn-symbol]] are
    the key functions."
-  (:use [such.versions :only [when>=1-6]])
   (:refer-clojure :exclude [print])
   (:require [such.symbols :as symbol]
             [such.types :as type]
             [clojure.string :as str]
-            [clojure.repl :as repl]))
+            [clojure.repl :as repl]
+            [com.rpl.specter :as specter]))
 
 ;;; What is stringified is controlled by two dynamically-bound variables.
 
@@ -37,8 +37,6 @@
   [{:keys [anonymous-name surroundings] :as all} & body]
   `(binding [*function-elaborations* ~all]
      ~@body))
-
-(when>=1-6
 
 (def ^:private ^:dynamic *translations*
   "This atom contains the map from values->names that [[with-translations]] and
@@ -78,9 +76,6 @@
     (doseq [pair# (partition 2 ~let-style)]
       (apply instead-of pair#))
     ~@body))
-
-) ; 1-6
-
 
 (defn rename
   "Produce a new function from `f`. It has the same behavior and metadata,
@@ -176,10 +171,6 @@
   (str (fn-symbol f)))
   
 
-(when>=1-6
-
-(require '[com.rpl.specter :as specter])
-
 (defn- better-aliases [x aliases]
   (specter/transform (specter/walker translatable?)
                      translate
@@ -211,9 +202,7 @@
         x))
 
 (defn value-string 
-  "Currently available only for Clojure 1.6+.
-   
-   Except for special values, converts `x` into a string as with `pr-str`.
+  "Except for special values, converts `x` into a string as with `pr-str`.
    Exceptions (which apply anywhere within collections):
    
    * If a value was given an alternate name in [[with-translations]] or [[instead-of]],
@@ -240,6 +229,3 @@
 "
   [x]
   (pr-str (value x)))
-
-) ; 1-6
-

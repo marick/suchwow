@@ -1,5 +1,5 @@
 (ns such.f-relational
-  (:require [such.versions :refer [when>=1-7 when>=1-6]]
+  (:require [such.versions :refer [when>=1-7]]
             [such.relational :as subject]
             [such.metadata :as meta]
             [clojure.set :as set]

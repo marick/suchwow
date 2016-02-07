@@ -1,7 +1,7 @@
 (ns such.f-readable
-  (:require [such.readable :as subject])
-  (:use midje.sweet)
-  (:use [such.versions :only [when>=1-6]]))
+  (:require [such.readable :as subject]
+            [com.rpl.specter :as specter])
+  (:use midje.sweet))
 
 (defmulti multi identity)
 (subject/set-function-elaborations! subject/default-function-elaborations)
@@ -58,9 +58,6 @@
   (fact letfn
     (letfn [(x [a] a)]
       (subject/fn-string x) => "<x>")))
-
-(when>=1-6
- (require '[com.rpl.specter :as specter])
 
  (fact value-string
    (fact "plain output"
@@ -151,6 +148,3 @@
     (subject/value-string {even? odd?,
                            :deep [(fn []) 3 5 [specter/ALL + specter/ALL]]})
     => "{<odd?> <odd?>, :deep [<fn> 3 :five [ALL <+> ALL]]}"))
-
-
-)

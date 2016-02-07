@@ -17,12 +17,6 @@
   [x]
   (instance? clojure.lang.APersistentMap x))
 
-(when<=1-5
-  (defn record?
-    "Is x a record?"
-    [x]
-    (instance? clojure.lang.IRecord x)))
-
 (defn big-decimal?
   "Is x a Java BigDecimal?"
   [x]

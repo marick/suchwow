@@ -1,14 +1,9 @@
 (ns such.imperfection
   "Were we perfect, we wouldn't need to test or debug. Since we're not, a
-   few helpers, especially for code written in flow style.
-   
-   These functions are only available for Clojure 1.6+
-"
-  (:require [clojure.pprint :refer [pprint]]
-            [such.readable :as readable]
-            [such.versions :refer [when>=1-6]]))
+   few helpers, especially for code written in flow style."
 
-(when>=1-6
+  (:require [clojure.pprint :refer [pprint]]
+            [such.readable :as readable]))
 
 (defmacro val-and-output
   "Execute the body. Instead of just returning the resulting value,
@@ -83,5 +78,3 @@
              tag))
   value)
   
-  
-) ; when>=1-6
