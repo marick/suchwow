@@ -81,9 +81,10 @@
                                              {:a 2, :b 2, :c 1}
                                              {:a 2, :b 2, :c 2}}}
 
-   Alternately, can describe which left-hand-side keys should map to which
-   right-hand-side keys with a map. In the above case, the sharing could be
-   made explicit with `(join has-a-and-b has-b-and-c {:b :b})`.
+   Alternately, you can describe which left-hand-side keys should be
+   considered the same as which right-hand-side keys with a map. In
+   the above case, the sharing could be made explicit with `(join
+   has-a-and-b has-b-and-c {:b :b})`.
 
    A more likely example is one where the two relations have slightly different
    \"b\" keys, like this:
@@ -103,9 +104,41 @@
 
    Notice that the `:b` and `:blike` keys are duplicated.
 
-   For more details, you'll have to try your own examples.
+   The join when there are no keys shared is the cross-product of the relations.
+
+         (clojure.set/join [{:a 1} {:a 2}] [{:b 1} {:b 2}])
+         => #{{:a 1, :b 2} {:a 2, :b 1} {:a 1, :b 1} {:a 2, :b 2}}
+
+   The behavior when maps are missing keys is probably not something you should
+   depend on.
 ")
 
+(doc/update-and-make-local-copy! #'clojure.set/project
+   "`xrel` is a collection of maps (think SQL `SELECT *`). This function
+    produces a set of maps, each of which contains only the keys in `ks`.
+
+        (project [{:a 1, :b 1} {:a 2, :b 2}] [:b]) => #{{:b 1} {:b 2}}
+
+    `project` differs from `(map #(select-keys % ks) ...)` in two ways:
+
+    1. It returns a set, rather than a lazy sequence.
+    2. Any metadata on the original `xrel` is preserved. (It shares this behavior
+       with [[rename]] but with no other relational functions.)
+")
+
+(doc/update-and-make-local-copy! #'clojure.set/rename
+  "`xrel` is a collection of maps. Transform each map according to the
+   keys and values in `kmap`. Each map key that matches a `kmap` key is
+   replaced with that `kmap` key's value.
+
+        (rename [{:a 1, :b 2}] {:b :replacement}) => #{{:a 1, :replacement 2}}
+
+    `rename` differs from `(map #(rename-keys % kmap) ...)` in two ways:
+
+    1. It returns a set, rather than a lazy sequence.
+    2. Any metadata on the original `xrel` is preserved. (It shares this behavior
+       with [[project]] but with no other relational functions.)
+")
 
 ;;; Extensions
 
