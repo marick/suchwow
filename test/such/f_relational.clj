@@ -300,6 +300,8 @@
 
 
 
-(future-fact "error handling")
+(future-fact "error handling"
+  (fact "bad keyword passed in `:using`, etc.")
+  (fact "try to `extend-map` through a :key that doesn't exist"))
 
 ) ; when>=1-7
