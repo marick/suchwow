@@ -7,9 +7,9 @@
             :distribution :repo}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [potemkin "0.4.2" :exclusions [org.clojure/clojure]]
-                 [com.rpl/specter "0.9.0" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
-                 [environ "1.0.1" :exclusions [org.clojure/clojure]]
+                 [potemkin "0.4.3" :exclusions [org.clojure/clojure]]
+                 [com.rpl/specter "0.9.2" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
+                 [environ "1.0.2" :exclusions [org.clojure/clojure]]
                  [commons-codec/commons-codec "1.10"]]
 
   :repl-options {:init (do (require 'such.doc)
