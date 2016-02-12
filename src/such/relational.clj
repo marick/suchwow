@@ -74,8 +74,8 @@
                                              {:a 2, :b 2, :c 1}
                                              {:a 2, :b 2, :c 2}}}
 
-   Alternately, you can describe which left-hand-side keys should be
-   considered the same as which right-hand-side keys with a map. In
+   Alternately, you can use a map to describe which left-hand-side keys should be
+   considered the same as which right-hand-side keys. In
    the above case, the sharing could be made explicit with `(join
    has-a-and-b has-b-and-c {:b :b})`.
 
@@ -87,6 +87,7 @@
 
    In such a case, the join would look like this:
 
+         (join has-a-and-b has-b-and-c {:b :blike}) =>
                                            #{{:a 1, :b 2, :blike 2, :c 1}
                                              {:a 1, :b 2, :blike 2, :c 2}
 
@@ -95,7 +96,7 @@
                                              {:a 2, :b 2, :blike 2, :c 1}
                                              {:a 2, :b 2, :blike 2, :c 2}}
 
-   Notice that the `:b` and `:blike` keys are duplicated.
+   Notice that the `:b` and `:blike` keys are both included.
 
    The join when there are no keys shared is the cross-product of the relations.
 
@@ -254,20 +255,20 @@
 (defn index-select
   "Produce a map by looking a key up in an index.
 
-  See <<someplace>> for examples.
+  See [the wiki](https://github.com/marick/suchwow/wiki/such.relational) for examples.
 
   `key` is a unique or compound key that's been indexed with [[one-to-one-index-on]]
   or [[one-to-many-index-on]]. The `options` may be given as N keys and values
   following `key` (Smalltalk style) or as a single map. They are:
 
-  :using <index>
-    (required) The index to use.
-  :keys <[keys...]>
-    (optional) Keys you're interested in (default is all of them)
-  :prefix <prefix>
-    (optional) Prepend the given prefix to all the keys in the selected map.
-    The prefix may be either a string or keyword. The resulting key will be
-    of the same type (string or keyword) as the original.
+      :using <index>
+        (required) The index to use.
+      :keys <[keys...]>
+        (optional) Keys you're interested in (default is all of them)
+      :prefix <prefix>
+        (optional) Prepend the given prefix to all the keys in the selected map.
+        The prefix may be either a string or keyword. The resulting key will be
+        of the same type (string or keyword) as the original.
 
   The return value depends on the index. If it is `one-to-one`, a map is returned.
   If it is `one-to-many`, a vector of maps is returned.
@@ -298,27 +299,27 @@
   "Add more key/value pairs to `kvs`. They are found by looking up values
   in a [[one-to-one-index-on]] or [[one-to-many-index-on]] index.
 
-  See <<someplace>> for examples.
+  See [the wiki](https://github.com/marick/suchwow/wiki/such.relational) for examples.
 
   The `options` control what maps are returned and how they're merged into the
   original `kvs`. They may be given as N keys and values
-  following `kvs` (Smalltalk style) or as a single map. They are:
+  following the `kvs` argument (Smalltalk style) or as a single map. They are:
 
-  :using <index>
-    (required) The index to use.
-  :via <key>
-    (required) A single foreign key or a sequence of them that is used to
-    look up a map in the <index>.
-  :into <key>
-    (optional, relevant only to a one-to-many map). Since a one-to-many map
-    can't be [[merge]]d into the `kvs`, it has to be added \"under\" (as the
-    value of) a particular `key`.
-  :keys <[keys...]>
-    (optional) Keys you're interested in (default is all of them)
-  :prefix <prefix>
-    (optional) Prepend the given prefix to all the keys in the selected map.
-    The prefix may be either a string or keyword. The resulting key will be
-    of the same type (string or keyword) as the original.
+      :using <index>
+        (required) The index to use.
+      :via <key>
+        (required) A single foreign key or a sequence of them that is used to
+        look up a map in the <index>.
+      :into <key>
+        (optional, relevant only to a one-to-many map). Since a one-to-many map
+        can't be merged into the `kvs`, it has to be added \"under\" (as the
+        value of) a particular `key`.
+      :keys [key1 key2 key3 ...]
+        (optional) Keys you're interested in (default is all of them)
+      :prefix <prefix>
+        (optional) Prepend the given prefix to all the keys in the selected map.
+        The prefix may be either a string or keyword. The resulting key will be
+        of the same type (string or keyword) as the original.
   "
 
   ([kvs options]
@@ -364,13 +365,13 @@
    in the last of the list of indexes, following keys to move from index to index.
    Example:
 
-      (let [index:countries-by-person-id (subject/combined-index-on index:rulership-by-person-id
-                                                                    :country_code
-                                                                    index:country-by-country-code)]
-        (subject/index-select 1 :using index:countries-by-person-id :keys [:gdp])
-        => [{:gdp 1690}])
+        (let [index:countries-by-person-id (subject/combined-index-on index:rulership-by-person-id
+                                                                      :country_code
+                                                                      index:country-by-country-code)]
+          (subject/index-select 1 :using index:countries-by-person-id :keys [:gdp])
+          => [{:gdp 1690}])
 
-   (See ..someplace.. for details..)
+   (See [the wiki](https://github.com/marick/suchwow/wiki/such.relational) for details.)
   "
   {:arglists '([starting-index foreign-key next-index ...])}
   [starting-index & path-pairs]
