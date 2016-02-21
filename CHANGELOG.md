@@ -2,6 +2,10 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [5.1]
+- ADD: such.imperfection has variants that print to *err* of these functions:
+  `pr`, `prn`, `print`, `println`, `pprint`, `-pprint-`, `-prn-`, `tag-`, and `-tag`.
+
 ## [5.0]
 - CHANGED: No longer support Clojure 1.5
 - ADD: such.control-flow/let-maybe
