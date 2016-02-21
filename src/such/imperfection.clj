@@ -1,9 +1,10 @@
 (ns such.imperfection
   "Were we perfect, we wouldn't need to test or debug. Since we're not, a
-   few helpers, especially for code written in flow style."
-
+   few helpers organized around printing."
   (:require [clojure.pprint :refer [pprint]]
-            [such.readable :as readable]))
+            [such.readable :as readable]
+            [such.metadata :as meta]
+            [such.ns :as ns]))
 
 (defmacro val-and-output
   "Execute the body. Instead of just returning the resulting value,
@@ -77,4 +78,31 @@
              (apply format tag args)
              tag))
   value)
-  
+
+
+(defn- one-e [[existing-sym prefix suffix]]
+  (let [outsym '*out*
+        errsym '*err*
+        args 'args
+        new-sym (symbol (str "e" existing-sym))
+        docstring (format "Like %s, but prints to `*err*`.
+  Useful for keeping debug output from being captured by [[val-and-output]]."
+                          (str prefix existing-sym suffix))]
+    `(defn ~new-sym ~docstring [& ~args]
+       (binding [~outsym ~errsym]
+         (apply ~existing-sym ~args)))))
+
+(defmacro e
+  {:private true}
+  [& pairs]
+  `(do ~@(map one-e pairs)))
+
+(e [pr "`" "`"]
+   [prn "`" "`"]
+   [print "`" "`"]
+   [println "`" "`"]
+   [pprint "`" "`"]
+   [-pprint- "[[" "]]"]
+   [-prn- "[[" "]]"]
+   [tag- "[[" "]]"]
+   [-tag "[[" "]]"])
