@@ -8,8 +8,7 @@
             [clojure.string :as str]
             [clojure.repl :as repl]
             [com.rpl.specter :as specter]
-            [com.rpl.specter.macros :refer [transform]]
-            ))
+            [com.rpl.specter.macros :refer [transform]]))
 
 ;;; What is stringified is controlled by two dynamically-bound variables.
 
