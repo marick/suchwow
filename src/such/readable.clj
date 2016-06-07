@@ -7,7 +7,8 @@
             [such.types :as type]
             [clojure.string :as str]
             [clojure.repl :as repl]
-            [com.rpl.specter :as specter]))
+            [com.rpl.specter :as specter]
+            [com.rpl.specter.macros :refer [transform]]))
 
 ;;; What is stringified is controlled by two dynamically-bound variables.
 
@@ -169,15 +170,15 @@
   "`str` applied to the result of [[fn-symbol]]."
   [f]
   (str (fn-symbol f)))
-  
+
 
 (defn- better-aliases [x aliases]
-  (specter/transform (specter/walker translatable?)
+  (transform (specter/walker translatable?)
                      translate
                      x))
 
 (defn- better-function-names [x anonymous-names]
-  (specter/transform (specter/walker type/extended-fn?)
+  (transform (specter/walker type/extended-fn?)
                      #(elaborate-fn-symbol % *function-elaborations* anonymous-names)
                      x))
 
