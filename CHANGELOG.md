@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [5.1.2]
+- CHANGE: Update `structural-typing` because of annoying circular dependency.
+
 ## [5.1.1]
 - CHANGE: Update versions, most notably `specter`, but also `environ`,
   `combinatorics`, `structural-typing`, and `compojure`.
