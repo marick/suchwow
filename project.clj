@@ -38,8 +38,8 @@
           :output-dir "/var/tmp/suchwow-doc"
           :defaults {:doc/format :markdown}}
 
-  :aliases {"compatibility" ["with-profile" "+1.6:+1.7:+1.8" "midje" ":config" ".compatibility-test-config"]
-            "travis" ["with-profile" "+1.6:+1.7:+1.8" "midje"]}
+  :aliases {"compatibility" ["with-profile" "+1.6:+1.7:+1.8:+1.9" "midje" ":config" ".compatibility-test-config"]
+            "travis" ["with-profile" "+1.6:+1.7:+1.8:+1.9" "midje"]}
 
   ;; For Clojure snapshots
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
