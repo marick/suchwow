@@ -33,6 +33,11 @@ The files [test/such/clojure/f_immigration.clj](https://github.com/marick/suchwo
 This software is covered by the [Unlicense](http://unlicense.org/)
 and, as such, is in the public domain.
 
+## Such Contributors
+
+* Bahadir Cambel
+* Brian Marick
+
 ## Such Contributing
 
 Pull requests accepted, provided:
