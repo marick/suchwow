@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [5.1.3]
+- CHANGE: Bump structural typing dependency
+
 ## [5.1.2]
 - CHANGE: Update `structural-typing` because of annoying circular dependency.
 

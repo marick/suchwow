@@ -1,4 +1,4 @@
-(defproject marick/suchwow "5.1.2"
+(defproject marick/suchwow "5.1.3"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -22,7 +22,7 @@
                                   ;; tell us to upgrade, which might alert us that
                                   ;; compojure now depends on a more-modern version of
                                   ;; commons-codec.
-                                  [marick/structural-typing "2.0.2" :exclusions [marick/suchwow]]
+                                  [marick/structural-typing "2.0.3" :exclusions [marick/suchwow]]
                                   [compojure "1.5.0" :exclusions [org.clojure/clojure]]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}

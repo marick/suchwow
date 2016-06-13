@@ -17,7 +17,7 @@ This package offers three types of functions:
 ## Such Usage
 
 Available via [clojars](https://clojars.org/marick/suchwow) for Clojure 1.6+  
-For lein: [marick/suchwow "5.1.2"]
+For lein: [marick/suchwow "5.1.3"]
 
 [Much API doc](http://marick.github.io/suchwow/)
 
