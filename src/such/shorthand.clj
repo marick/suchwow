@@ -1,7 +1,8 @@
 (ns such.shorthand
   "Explicit functions for what could be done easily - but less clearly -
    by composing clojure.core functions. Anti-shibboleths such as using
-   `not-empty?` instead of `seq`.")
+   `not-empty?` instead of `seq`."
+  (:refer-clojure :exclude [any?]))
 
 
 (def ^:no-doc this-var-has-no-value-and-is-used-in-testing)
