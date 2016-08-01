@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [5.1.4]
+- CHANGE: Guard against Clojure 1.9's `any?` - Børge Svingen
+
 ## [5.1.3]
 - CHANGE: Bump structural typing dependency
 
