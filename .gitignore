@@ -11,7 +11,7 @@ pom.xml.asc
 .lein-failures
 .nrepl-port
 doc
-
+.pre-commit-config.yaml
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion
 
