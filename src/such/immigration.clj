@@ -25,6 +25,35 @@
       (println "does not work with uberjars - and fails in puzzling way.")))
   (require sym))
 
+;; I hope to remove this fairly soon.
+(defmacro ^:no-doc next-version-potemkin-import-vars
+  "Imports a list of vars from other namespaces."
+  [& syms]
+  (let [unravel (fn unravel [x]
+                  (if (sequential? x)
+                    (->> x
+                         rest
+                         (mapcat unravel)
+                         (map
+                          #(symbol
+                            (str (first x)
+                                 (when-let [n (namespace %)]
+                                   (str "." n)))
+                            (name %))))
+                    [x]))
+        syms (mapcat unravel syms)]
+    `(do
+       ~@(map
+          (fn [sym]
+            (let [vr (resolve sym)
+                  m (meta vr)]
+              (cond
+               (nil? vr) `(throw (ex-info (format "`%s` does not exist" '~sym) {}))
+               (:macro m) `(potemkin/import-macro ~sym)
+               (:arglists m) `(potemkin/import-fn ~sym)
+               :else `(potemkin/import-def ~sym))))
+          syms))))
+
 (defmacro import-vars
   "Import named vars from the named namespaces and make them (1) public in this
    namespace and (2) available for `refer` by namespaces that require this one.
@@ -39,7 +68,7 @@
   (let [namespaces (map first namespace-and-var-descriptions)
         requires (map (fn [ns] `(require '~ns)) namespaces)]
     (doseq [ns namespaces] (warning-require ns))
-    `(potemkin/import-vars ~@namespace-and-var-descriptions)))
+    `(next-version-potemkin-import-vars ~@namespace-and-var-descriptions)))
 
 
 (defmacro import-all-vars

@@ -22,6 +22,10 @@
 
   (write-str [1 2]) => "[1,2]")
 
+(fact "Immigrating a nonexistent var blows up with a nice error message"
+  (immigrate/import-vars [clojure.math.combinatorics combinations no-such-var])
+  => (throws "`clojure.math.combinatorics/no-such-var` does not exist"))
+
 
 ;;; Importing everything
 (immigrate/import-all-vars clojure.set)
