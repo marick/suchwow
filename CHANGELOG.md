@@ -4,6 +4,7 @@ See [here](http://keepachangelog.com/) for the change log format.
 
 ## [5.2.0]
 - ADD: Better error message when trying to immigrate a variable that does not exist.
+- Update dependencies
 
 ## [5.1.4]
 - CHANGE: Guard against Clojure 1.9's `any?` - Børge Svingen
