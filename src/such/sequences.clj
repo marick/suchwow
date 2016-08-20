@@ -1,5 +1,5 @@
 (ns such.sequences
-  (require [such.wrongness :as !]))
+  (:require [such.wrongness :as !]))
 
 (defn vertical-slices
   "Given N sequences, return one sequence whose first element
