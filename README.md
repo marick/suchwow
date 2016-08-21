@@ -35,6 +35,7 @@ and, as such, is in the public domain.
 
 ## Such Contributors
 
+* Alex Miller
 * Bahadir Cambel
 * Børge Svingen
 * Brian Marick
