@@ -1,4 +1,4 @@
-(defproject marick/suchwow "5.2.3"
+(defproject marick/suchwow "5.2.4"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -15,14 +15,14 @@
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
 
-  :profiles {:dev {:dependencies [[midje "1.9.0-alpha4" :exclusions [org.clojure/clojure]]
+  :profiles {:dev {:dependencies [[midje "1.9.0-alpha5" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.3"]
                                   [org.clojure/data.json "0.2.6"]
                                   ;; Including compojure so that `lein ancient` will
                                   ;; tell us to upgrade, which might alert us that
                                   ;; compojure now depends on a more-modern version of
                                   ;; commons-codec.
-                                  [marick/structural-typing "2.0.3" :exclusions [marick/suchwow]]
+                                  [marick/structural-typing "2.0.4" :exclusions [marick/suchwow]]
                                   [compojure "1.5.1" :exclusions [org.clojure/clojure]]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}

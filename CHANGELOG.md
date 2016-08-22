@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [5.2.4]
+- Update dependencies.
+
 ## [5.2.3]
 - Fixes bad `ns` form. @puredanger
 

@@ -12,7 +12,8 @@
             [such.imperfection :refer :all]
             [such.shorthand :refer :all]
             [such.wrongness :refer [boom!]]
-            [such.metadata :as meta]))
+            [such.metadata :as meta])
+  (:refer-clojure :exclude [any?]))
 
 
 
