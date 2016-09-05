@@ -30,7 +30,7 @@
              :1.9 {:dependencies [[org.clojure/clojure "1.9.0-alpha10"]]}
              }
 
-  :plugins [[lein-midje "3.2"]
+  :plugins [[lein-midje "3.2.1"]
             [codox "0.8.11"]]
 
   :codox {:src-dir-uri "https://github.com/marick/suchwow/blob/master/"
