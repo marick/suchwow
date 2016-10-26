@@ -1,5 +1,5 @@
 (ns such.f-shorthand (:require [such.shorthand :as subject])
-  (use midje.sweet))
+  (:use midje.sweet))
 
 (facts "any?"
   (fact "first arg is a function"

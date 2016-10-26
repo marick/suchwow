@@ -1,5 +1,5 @@
 (ns such.f-symbols (:require [such.symbols :as symbol])
-  (use midje.sweet))
+  (:use midje.sweet))
 
 (def d)
 

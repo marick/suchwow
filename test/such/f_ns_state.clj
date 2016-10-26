@@ -1,5 +1,5 @@
 (ns such.f-ns-state (:require [such.ns-state :as subject])
-    (use midje.sweet))
+    (:use midje.sweet))
 
 (subject/dissoc!)
 
