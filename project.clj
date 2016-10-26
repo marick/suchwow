@@ -1,4 +1,4 @@
-(defproject marick/suchwow "5.2.5-alpha2"
+(defproject marick/suchwow "6.0.0-alpha1"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -6,7 +6,7 @@
             :url "http://unlicense.org/"
             :distribution :repo}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
                  [potemkin "0.4.3" :exclusions [org.clojure/clojure]]
                  [com.rpl/specter "0.13.0" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
                  [environ "1.1.0" :exclusions [org.clojure/clojure]]
@@ -24,10 +24,9 @@
                                   ;; commons-codec.
                                   [marick/structural-typing "2.0.4" :exclusions [marick/suchwow]]
                                   [compojure "1.5.1" :exclusions [org.clojure/clojure]]]}
-             :1.6 {:dependencies [[org.clojure/clojure "1.6.0"]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0"]]}
-             :1.9 {:dependencies [[org.clojure/clojure "1.9.0-alpha10"]]}
+             :1.9 {:dependencies [[org.clojure/clojure "1.9.0-alpha13"]]}
              }
 
   :plugins [[lein-midje "3.2.1"]
@@ -38,8 +37,8 @@
           :output-dir "/var/tmp/suchwow-doc"
           :defaults {:doc/format :markdown}}
 
-  :aliases {"compatibility" ["with-profile" "+1.6:+1.7:+1.8:+1.9" "midje" ":config" ".compatibility-test-config"]
-            "travis" ["with-profile" "+1.6:+1.7:+1.8:+1.9" "midje"]}
+  :aliases {"compatibility" ["with-profile" "+1.7:+1.8:+1.9" "midje" ":config" ".compatibility-test-config"]
+            "travis" ["with-profile" "+1.7:+1.8:+1.9" "midje"]}
 
   ;; For Clojure snapshots
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
