@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [5.2.5-alpha]
+- Upgrade to Specter 0.13
+
 ## [5.2.4]
 - Update dependencies.
 
