@@ -15,14 +15,14 @@
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
 
-  :profiles {:dev {:dependencies [[midje "1.9.0-alpha5" :exclusions [org.clojure/clojure]]
+  :profiles {:dev {:dependencies [[midje "1.9.0-alpha6" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.3"]
                                   [org.clojure/data.json "0.2.6"]
                                   ;; Including compojure so that `lein ancient` will
                                   ;; tell us to upgrade, which might alert us that
                                   ;; compojure now depends on a more-modern version of
                                   ;; commons-codec.
-                                  [marick/structural-typing "2.0.4" :exclusions [marick/suchwow]]
+                                  [marick/structural-typing "2.0.5" :exclusions [marick/suchwow]]
                                   [compojure "1.5.1" :exclusions [org.clojure/clojure]]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0"]]}
