@@ -6,7 +6,7 @@
             :url "http://unlicense.org/"
             :distribution :repo}
 
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [potemkin "0.4.3" :exclusions [org.clojure/clojure]]
                  [com.rpl/specter "1.0.4" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
                  [environ "1.1.0" :exclusions [org.clojure/clojure]]
@@ -15,7 +15,7 @@
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
 
-  :profiles {:dev {:dependencies [[midje "1.9.0-alpha9" :exclusions [org.clojure/clojure]]
+  :profiles {:dev {:dependencies [[midje "1.9.0" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.3"]
                                   [org.clojure/data.json "0.2.6"]
                                   ;; Including compojure so that `lein ancient` will
@@ -26,7 +26,7 @@
                                   [compojure "1.5.1" :exclusions [org.clojure/clojure]]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0"]]}
-             :1.9 {:dependencies [[org.clojure/clojure "1.9.0-beta4"]]}}
+             :1.9 {:dependencies [[org.clojure/clojure "1.9.0"]]}}
 
   :plugins [[lein-midje "3.2.1"]
             [codox "0.8.11"]]
