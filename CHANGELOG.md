@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [6.0.1] - 2017-11-1
+- Upgrade to Specter 1.0.4 to avoid `any? in com.rpl.specter.impl` warning
+
 ## [6.0.0] - 2016-10-26
 - Upgrade to Specter 0.13
 - ... which caused Clojure 1.6 to be abandoned, so major version bump.

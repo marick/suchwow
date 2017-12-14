@@ -1,4 +1,4 @@
-(defproject marick/suchwow "6.0.0"
+(defproject marick/suchwow "6.0.1"
   :description "Such functions! Such doc strings! Much utility!"
   :url "https://github.com/marick/suchwow"
   :pedantic? :warn
@@ -6,16 +6,16 @@
             :url "http://unlicense.org/"
             :distribution :repo}
 
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [potemkin "0.4.3" :exclusions [org.clojure/clojure]]
-                 [com.rpl/specter "0.13.0" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
+                 [com.rpl/specter "1.0.4" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
                  [environ "1.1.0" :exclusions [org.clojure/clojure]]
                  [commons-codec/commons-codec "1.10"]]
 
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
 
-  :profiles {:dev {:dependencies [[midje "1.9.0-alpha6" :exclusions [org.clojure/clojure]]
+  :profiles {:dev {:dependencies [[midje "1.9.0" :exclusions [org.clojure/clojure]]
                                   [org.clojure/math.combinatorics "0.1.3"]
                                   [org.clojure/data.json "0.2.6"]
                                   ;; Including compojure so that `lein ancient` will
@@ -26,8 +26,7 @@
                                   [compojure "1.5.1" :exclusions [org.clojure/clojure]]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0"]]}
-             :1.9 {:dependencies [[org.clojure/clojure "1.9.0-alpha13"]]}
-             }
+             :1.9 {:dependencies [[org.clojure/clojure "1.9.0"]]}}
 
   :plugins [[lein-midje "3.2.1"]
             [codox "0.8.11"]]
@@ -42,5 +41,4 @@
 
   ;; For Clojure snapshots
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
-  :deploy-repositories [["releases" :clojars]]
-)
+  :deploy-repositories [["releases" :clojars]])
