@@ -1,5 +1,8 @@
 ## Such Wow
 
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
+[![Current Version](https://img.shields.io/clojars/v/marick/suchwow.svg)](https://clojars.org/marick/suchwow)
+
 The [API documentation index](http://marick.github.io/suchwow) gives an overview of what this library offers.
 
 Snippets from serious work, wrapped in a whimsical container. A bit of a tribute to the spirit of [_why](http://en.wikipedia.org/wiki/Why_the_lucky_stiff), but with a [Shiba Inu](http://en.wikipedia.org/wiki/Shiba_Inu) instead of [foxes](http://mislav.uniqpath.com/poignant-guide/images/the.foxes-3.png).
