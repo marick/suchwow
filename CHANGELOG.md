@@ -2,8 +2,10 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
-## [6.0.1] - 2017-11-1
+## [6.0.1] - 2017-12-27
 - Upgrade to Specter 1.0.4 to avoid `any? in com.rpl.specter.impl` warning
+- Fix reflection warnings
+- Bump libs
 
 ## [6.0.0] - 2016-10-26
 - Upgrade to Specter 0.13

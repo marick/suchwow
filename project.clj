@@ -7,23 +7,23 @@
             :distribution :repo}
 
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [potemkin "0.4.3" :exclusions [org.clojure/clojure]]
-                 [com.rpl/specter "1.0.4" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
+                 [potemkin "0.4.4" :exclusions [org.clojure/clojure]]
+                 [com.rpl/specter "1.0.5" :exclusions [org.clojure/clojure org.clojure/clojurescript]]
                  [environ "1.1.0" :exclusions [org.clojure/clojure]]
-                 [commons-codec/commons-codec "1.10"]]
+                 [commons-codec/commons-codec "1.11"]]
 
   :repl-options {:init (do (require 'such.doc)
                            (such.doc/apis))}
 
-  :profiles {:dev {:dependencies [[midje "1.9.0" :exclusions [org.clojure/clojure]]
-                                  [org.clojure/math.combinatorics "0.1.3"]
+  :profiles {:dev {:dependencies [[midje "1.9.1" :exclusions [org.clojure/clojure]]
+                                  [org.clojure/math.combinatorics "0.1.4"]
                                   [org.clojure/data.json "0.2.6"]
                                   ;; Including compojure so that `lein ancient` will
                                   ;; tell us to upgrade, which might alert us that
                                   ;; compojure now depends on a more-modern version of
                                   ;; commons-codec.
                                   [marick/structural-typing "2.0.5" :exclusions [marick/suchwow]]
-                                  [compojure "1.5.1" :exclusions [org.clojure/clojure]]]}
+                                  [compojure "1.6.0" :exclusions [org.clojure/clojure]]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0"]]}
              :1.9 {:dependencies [[org.clojure/clojure "1.9.0"]]}}

@@ -4,21 +4,21 @@
   "In the first case, throw a java.lang.Exception whose message was constructed
    by applying `format` to `fmt` and the `args`. In the second case, the exception
    thrown is given by `exception-class`.
-   
+
        (boom! \"wow\")
        (boom! \"wow: %s\" (cons 1 (cons 2 nil)))
-       (boom! NumberFormatException \"wow: %s\" input)
-"
+       (boom! NumberFormatException \"wow: %s\" input)"
   {:arglists '([fmt & args] [exception-class fmt & args])}
   [& args]
   (if (instance? java.lang.Class (first args))
     (let [[klass fmt & vals] args
-          constructor (.getConstructor klass (doto (make-array Class 1) (aset 0 String)))
-          message (apply format fmt vals)
-          exception (.newInstance constructor (doto (make-array String 1) (aset 0 message)))]
+          arglist-fmt        (into-array java.lang.Class [java.lang.String])
+          constructor        (.getConstructor ^Class klass arglist-fmt)
+          message            (apply format fmt vals)
+          arglist            (into-array java.lang.String [message])
+          exception          (.newInstance constructor arglist)]
       (throw exception))
     (apply boom! (cons Exception args))))
-
 
 (def ^:no-doc not-namespace-and-name
   (partial boom! "%s can't be interpreted as having a namespace and name"))
