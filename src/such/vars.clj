@@ -15,10 +15,10 @@
   (has-root-value? [var] (.hasRoot var))
   (root-value [var] (alter-var-root var identity)))
 
-(defn name-as-symbol 
+(defn name-as-symbol
   "Unlike symbols and keywords, the \"name\" of a var is a symbol. This function
    returns that symbol. See also [[name-as-string]].
-   
+
         (var/name-as-symbol #'clojure.core/even?) => 'even?)
 
    Note that the symbol does not have a namespace."
@@ -29,8 +29,7 @@
   "Unlike symbols and keywords, the \"name\" of a var is a symbol. This function
    returns the string name of that symbol. See also [[name-as-symbol]].
 
-        (var/name-as-string #'clojure.core/even?) => \"even?\")
-"
+        (var/name-as-string #'clojure.core/even?) => \"even?\")"
   [var]
   (name (name-as-symbol var)))
 
@@ -49,4 +48,4 @@
 (defn has-plain-value?
   "Does the var point to something not a macro nor a function?"
   [v]
-  ( (complement (some-fn has-macro? has-function?)) v))
+  ((complement (some-fn has-macro? has-function?)) v))
