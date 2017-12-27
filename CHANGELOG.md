@@ -2,6 +2,9 @@
 This project adheres to [Semantic Versioning](http://semver.org/).
 See [here](http://keepachangelog.com/) for the change log format.
 
+## [6.0.2] - 2017-12-27
+- Move `defalias` and `alias-var` code over from `clojure-commons`
+
 ## [6.0.1] - 2017-12-27
 - Upgrade to Specter 1.0.4 to avoid `any? in com.rpl.specter.impl` warning
 - Fix reflection warnings
