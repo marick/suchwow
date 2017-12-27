@@ -142,11 +142,11 @@
      (let [candidate (if (contains? (meta f) ::name)
                        (get (meta f) ::name)
                        (super-demunge f))]
-       (symbol/from-concatenation [(.substring surroundings 0 (/ (count surroundings) 2))
+       (symbol/from-concatenation [(subs surroundings 0 (/ (count surroundings) 2))
                                    (if (show-as-anonymous? candidate)
                                      (generate-name f anonymous-name anonymous-names)
                                      candidate)
-                                   (.substring surroundings (/ (count surroundings) 2))])))
+                                   (subs surroundings (/ (count surroundings) 2))])))
   ([f]
      (elaborate-fn-symbol f *function-elaborations* (atom {}))))
 

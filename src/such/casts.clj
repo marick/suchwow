@@ -135,7 +135,8 @@
           (pairify (remove nil? ((juxt namespace name) val)))
 
           (var? val)
-          (vector (ns-name (.ns val)) (.sym val))
+          (let [var-val ^clojure.lang.Var val]
+            (vector (ns-name (.ns var-val)) (.sym var-val)))
 
           :else
           (!/not-namespace-and-name val))))

@@ -22,7 +22,7 @@
         (var/name-as-symbol #'clojure.core/even?) => 'even?)
 
    Note that the symbol does not have a namespace."
-  [var]
+  [^clojure.lang.Var var]
   (.sym var))
 
 (defn name-as-string
