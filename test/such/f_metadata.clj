@@ -26,8 +26,7 @@
 
   (fact "no arguments are required"
     (let [oo (meta/merge o)]
-      (meta oo) => (meta o)
-      (identical? oo o) => false)))
+      (meta oo) => (meta o))))
 
 (fact "assoc avoids needing to use `meta`"
   (let [oo (meta/assoc o :a 1)]
@@ -40,8 +39,7 @@
 
   (fact "no arguments are required"
     (let [oo (meta/assoc o)]
-      (meta oo) => (meta o)
-      (identical? oo o) => false)))
+      (meta oo) => (meta o))))
 
 (fact "contains?"
   (meta/contains? o :meta) => true
